@@ -24,6 +24,18 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+
+		<repository>
+			<id>org.tuxfamily.maven</id>
+			<name>Arakhne (vecmath)</name>
+			<url>http://download.tuxfamily.org/arakhne/maven/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 
 	<!-- ======================================= -->
@@ -36,6 +48,13 @@
 			<groupId>org.janus-project.kernel</groupId>
 			<artifactId>kernel</artifactId>
 			<version>1.0</version>
+		</dependency>
+
+		<!-- Vecmath -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>vecmath</artifactId>
+			<version>1.5.2</version>
 		</dependency>
 	</dependencies>
 </project>
