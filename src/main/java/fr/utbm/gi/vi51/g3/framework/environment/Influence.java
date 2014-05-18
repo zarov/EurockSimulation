@@ -29,7 +29,7 @@ import org.janusproject.kernel.address.AgentAddress;
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public abstract class Influence<IO extends AbstractSituatedObject> {
+public abstract class Influence<IO extends AbstractWorldObject> {
 
 	private AgentAddress emitter = null;
 	private final IO influencedObject;

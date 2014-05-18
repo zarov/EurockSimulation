@@ -31,7 +31,7 @@ import fr.utbm.gi.vi51.g3.framework.util.GeometryUtil;
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public abstract class AbstractSituatedObject implements SituatedObject {
+public abstract class AbstractWorldObject implements WorldObject {
 
 	private final double size;
 	private final Point2d position = new Point2d();
@@ -40,7 +40,7 @@ public abstract class AbstractSituatedObject implements SituatedObject {
 	/**
 	 * @param size of the object.
 	 */
-	public AbstractSituatedObject(double size) {
+	public AbstractWorldObject(double size) {
 		this.size = size;
 	}
 	
@@ -49,7 +49,7 @@ public abstract class AbstractSituatedObject implements SituatedObject {
 	 * @param position is the position of the object.
 	 * @param orientation is the orientation of the object.
 	 */
-	public AbstractSituatedObject(double size, Point2d position, double orientation) {
+	public AbstractWorldObject(double size, Point2d position, double orientation) {
 		assert(position!=null);
 		this.size = size;
 		this.position.set(position);
@@ -62,7 +62,7 @@ public abstract class AbstractSituatedObject implements SituatedObject {
 	 * @param y is the position of the object.
 	 * @param orientation is the orientation of the object.
 	 */
-	public AbstractSituatedObject(double size, double x, double y, double orientation) { 
+	public AbstractWorldObject(double size, double x, double y, double orientation) { 
 		this.size = size;
 		this.position.set(x, y);
 		this.angle = orientation;
@@ -72,7 +72,7 @@ public abstract class AbstractSituatedObject implements SituatedObject {
 	 * @param size of the object.
 	 * @param position is the position of the object.
 	 */
-	public AbstractSituatedObject(double size, Point2d position) {
+	public AbstractWorldObject(double size, Point2d position) {
 		assert(position!=null);
 		this.size = size;
 		this.position.set(position);
@@ -83,7 +83,7 @@ public abstract class AbstractSituatedObject implements SituatedObject {
 	 * @param x is the position of the object.
 	 * @param y is the position of the object.
 	 */
-	public AbstractSituatedObject(double size, double x, double y) {
+	public AbstractWorldObject(double size, double x, double y) {
 		this.size = size;
 		this.position.set(x, y);
 	}
@@ -92,7 +92,7 @@ public abstract class AbstractSituatedObject implements SituatedObject {
 	 * @param size of the object.
 	 * @param orientation is the orientation of the object.
 	 */
-	public AbstractSituatedObject(double size, double orientation) {
+	public AbstractWorldObject(double size, double orientation) {
 		this.size = size;
 		this.angle = orientation;
 	}

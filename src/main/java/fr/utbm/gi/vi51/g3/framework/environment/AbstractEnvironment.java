@@ -189,7 +189,7 @@ public abstract class AbstractEnvironment implements Environment {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<AbstractSituatedObject> getOtherObjects() {
+	public Collection<AbstractWorldObject> getOtherObjects() {
 		return Collections.emptyList();
 	}
 

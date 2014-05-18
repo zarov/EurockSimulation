@@ -31,7 +31,7 @@ import fr.utbm.gi.vi51.g3.framework.util.GeometryUtil;
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public abstract class AbstractMobileObject extends AbstractSituatedObject implements MobileObject {
+public abstract class AbstractMobileObject extends AbstractWorldObject implements MobileObject {
 
 	private final double maxLinearSpeed;
 	private final double maxLinearAcceleration;

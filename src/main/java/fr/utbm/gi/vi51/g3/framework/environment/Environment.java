@@ -69,7 +69,7 @@ public interface Environment {
 	 * 
 	 * @return the objects in the environment that are not bodies.
 	 */
-	public Collection<AbstractSituatedObject> getOtherObjects();
+	public Collection<AbstractWorldObject> getOtherObjects();
 
 	/** Run the environment behaviour: apply influences, compute perceptions.
 	 */

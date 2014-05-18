@@ -60,7 +60,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	 */
 	@Override
 	public String toString() {
-		return Locale.getString(AbstractSituatedObject.class, "BODY_OF", this.owner); //$NON-NLS-1$
+		return Locale.getString(AbstractWorldObject.class, "BODY_OF", this.owner); //$NON-NLS-1$
 	}
 	
 

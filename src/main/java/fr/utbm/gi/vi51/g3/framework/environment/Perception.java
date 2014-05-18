@@ -28,12 +28,12 @@ package fr.utbm.gi.vi51.g3.framework.environment;
  */
 public class Perception {
 
-	private final SituatedObject perceivedObject;
+	private final WorldObject perceivedObject;
 	
 	/**
 	 * @param perceivedObject is the perceived object.
 	 */
-	public Perception(SituatedObject perceivedObject) {
+	public Perception(WorldObject perceivedObject) {
 		this.perceivedObject = perceivedObject;
 	}
 	
@@ -41,7 +41,7 @@ public class Perception {
 	 * 
 	 * @return the perceived object.
 	 */
-	public SituatedObject getPerceivedObject() {
+	public WorldObject getPerceivedObject() {
 		return this.perceivedObject;
 	}
 		

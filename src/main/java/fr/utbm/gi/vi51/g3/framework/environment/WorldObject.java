@@ -29,7 +29,7 @@ import javax.vecmath.Vector2d;
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public interface SituatedObject {
+public interface WorldObject {
 
 	/** Replies the size of the object.
 	 * 
