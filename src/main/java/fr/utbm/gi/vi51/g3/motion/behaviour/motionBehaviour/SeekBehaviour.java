@@ -18,31 +18,26 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * This program is free software; you can redistribute it and/or modify
  */
-package fr.utbm.gi.vi51.g3.framework.environment;
+package fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour;
+
+import javax.vecmath.Point2d;
 
 /**
- * Defined an unit perception.
+ * Seek Behavior.
  * 
+ * @param <OUT> is the type of output.
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public class Perception {
+public interface SeekBehaviour<OUT extends BehaviourOutput> {
 
-	private final SituatedObject perceivedObject;
-	
 	/**
-	 * @param perceivedObject is the perceived object.
+	 * @param position is the current position of the entity.
+	 * @param linearSpeed is the current linear speed of the entity.
+	 * @param maxLinear is the maximal linear speed or acceleration (depending on getType()) of the entity.
+	 * @param target is the point to reach.
+	 * @return the behaviour output.
 	 */
-	public Perception(SituatedObject perceivedObject) {
-		this.perceivedObject = perceivedObject;
-	}
+	public OUT runSeek(Point2d position, double linearSpeed, double maxLinear, Point2d target);
 	
-	/** Replies the perceived object.
-	 * 
-	 * @return the perceived object.
-	 */
-	public SituatedObject getPerceivedObject() {
-		return this.perceivedObject;
-	}
-		
 }

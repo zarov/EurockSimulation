@@ -18,31 +18,40 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * This program is free software; you can redistribute it and/or modify
  */
-package fr.utbm.gi.vi51.g3.framework.environment;
+package fr.utbm.gi.vi51.g3.motion.environment;
+
+import javax.vecmath.Point2d;
 
 /**
- * Defined an unit perception.
+ * State provider for the world model.  
  * 
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public class Perception {
+public interface WorldModelStateProvider {
 
-	private final SituatedObject perceivedObject;
-	
-	/**
-	 * @param perceivedObject is the perceived object.
-	 */
-	public Perception(SituatedObject perceivedObject) {
-		this.perceivedObject = perceivedObject;
-	}
-	
-	/** Replies the perceived object.
+	/** Set the mouse target.
 	 * 
-	 * @return the perceived object.
+	 * @param target
 	 */
-	public SituatedObject getPerceivedObject() {
-		return this.perceivedObject;
-	}
-		
+	public void setMouseTarget(Point2d target);
+
+	/** Replies the width of the environment.
+	 * 
+	 * @return the width of the environment.
+	 */
+	public double getWidth();
+	
+	/** Replies the height of the environment.
+	 * 
+	 * @return the height of the environment.
+	 */
+	public double getHeight();
+	
+	/** Replies the state of the world model.
+	 * 
+	 * @return the state of the world model.
+	 */
+	public WorldModelState getState();
+
 }

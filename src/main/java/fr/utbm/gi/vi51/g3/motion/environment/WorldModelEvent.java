@@ -1,4 +1,4 @@
-/* 
+/*
  * $Id$
  * 
  * Copyright (c) 2007-13 Stephane GALLAND.
@@ -18,31 +18,33 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * This program is free software; you can redistribute it and/or modify
  */
-package fr.utbm.gi.vi51.g3.framework.environment;
+package fr.utbm.gi.vi51.g3.motion.environment;
+
+import fr.utbm.gi.vi51.g3.framework.environment.EnvironmentEvent;
 
 /**
- * Defined an unit perception.
+ * Event in environment.
  * 
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public class Perception {
+public class WorldModelEvent extends EnvironmentEvent {
 
-	private final SituatedObject perceivedObject;
-	
+	private static final long serialVersionUID = -6509766221474126438L;
+
 	/**
-	 * @param perceivedObject is the perceived object.
+	 * @param source
 	 */
-	public Perception(SituatedObject perceivedObject) {
-		this.perceivedObject = perceivedObject;
+	public WorldModelEvent(WorldModel source) {
+		super(source);
 	}
-	
-	/** Replies the perceived object.
+
+	/** Replies the state provider.
 	 * 
-	 * @return the perceived object.
+	 * @return the state provider.
 	 */
-	public SituatedObject getPerceivedObject() {
-		return this.perceivedObject;
+	public WorldModelStateProvider getStateProvider() {
+		return (WorldModelStateProvider)getSource();
 	}
-		
+
 }

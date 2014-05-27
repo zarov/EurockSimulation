@@ -1,4 +1,4 @@
-/* 
+/*
  * $Id$
  * 
  * Copyright (c) 2007-13 Stephane GALLAND.
@@ -18,31 +18,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * This program is free software; you can redistribute it and/or modify
  */
-package fr.utbm.gi.vi51.g3.framework.environment;
+package fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering;
+
+import fr.utbm.gi.vi51.g3.framework.environment.DynamicType;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
 
 /**
- * Defined an unit perception.
+ * Output for a steering behaviour.
  * 
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public class Perception {
+public final class SteeringBehaviourOutput extends BehaviourOutput {
 
-	private final SituatedObject perceivedObject;
-	
 	/**
-	 * @param perceivedObject is the perceived object.
 	 */
-	public Perception(SituatedObject perceivedObject) {
-		this.perceivedObject = perceivedObject;
+	public SteeringBehaviourOutput() {
+		super(DynamicType.STEEERING);
 	}
-	
-	/** Replies the perceived object.
-	 * 
-	 * @return the perceived object.
+
+	/**
+	 * @param outputToCopy is the output to copy.
 	 */
-	public SituatedObject getPerceivedObject() {
-		return this.perceivedObject;
+	public SteeringBehaviourOutput(SteeringBehaviourOutput outputToCopy) {
+		super(outputToCopy);
 	}
-		
+
 }

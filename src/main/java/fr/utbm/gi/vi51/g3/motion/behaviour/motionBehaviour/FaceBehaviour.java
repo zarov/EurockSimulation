@@ -18,31 +18,28 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * This program is free software; you can redistribute it and/or modify
  */
-package fr.utbm.gi.vi51.g3.framework.environment;
+package fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour;
+
+import javax.vecmath.Point2d;
+import javax.vecmath.Vector2d;
 
 /**
- * Defined an unit perception.
+ * Face Behaviour.
  * 
+ * @param <OUT> is the type of output.
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public class Perception {
+public interface FaceBehaviour<OUT extends BehaviourOutput> {
 
-	private final SituatedObject perceivedObject;
-	
 	/**
-	 * @param perceivedObject is the perceived object.
+	 * @param position is the current position of the entity.
+	 * @param orientation is the current orientation of the entity.
+	 * @param angularSpeed is the current angular speed of the entity.
+	 * @param maxAngular is the maximal angular speed or acceleration (depending on getType()) of the entity.
+	 * @param target is the point to face to.
+	 * @return the behaviour output.
 	 */
-	public Perception(SituatedObject perceivedObject) {
-		this.perceivedObject = perceivedObject;
-	}
+	public OUT runFace(Point2d position, Vector2d orientation, double angularSpeed, double maxAngular, Point2d target);
 	
-	/** Replies the perceived object.
-	 * 
-	 * @return the perceived object.
-	 */
-	public SituatedObject getPerceivedObject() {
-		return this.perceivedObject;
-	}
-		
 }

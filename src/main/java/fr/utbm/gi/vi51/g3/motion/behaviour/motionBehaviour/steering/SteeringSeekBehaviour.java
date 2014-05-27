@@ -1,4 +1,4 @@
-/* 
+/*
  * $Id$
  * 
  * Copyright (c) 2007-13 Stephane GALLAND.
@@ -18,31 +18,37 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * This program is free software; you can redistribute it and/or modify
  */
-package fr.utbm.gi.vi51.g3.framework.environment;
+package fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering;
+
+import javax.vecmath.Point2d;
+import javax.vecmath.Vector2d;
+
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
 
 /**
- * Defined an unit perception.
+ * Steering Seek Behaviour.
  * 
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public class Perception {
+public class SteeringSeekBehaviour implements SeekBehaviour<SteeringBehaviourOutput> {
 
-	private final SituatedObject perceivedObject;
-	
 	/**
-	 * @param perceivedObject is the perceived object.
+	 * {@inheritDoc}
 	 */
-	public Perception(SituatedObject perceivedObject) {
-		this.perceivedObject = perceivedObject;
+	@Override
+	public SteeringBehaviourOutput runSeek(Point2d position, double linearSpeed, double maxLinearAcc, Point2d target) {
+		SteeringBehaviourOutput output = new SteeringBehaviourOutput();
+
+		Vector2d direction = new Vector2d();
+		direction.sub(target,position);
+
+		direction.normalize();
+		direction.scale(maxLinearAcc);
+
+		output.setLinear(direction.getX(), direction.getY());
+
+		return output;
 	}
-	
-	/** Replies the perceived object.
-	 * 
-	 * @return the perceived object.
-	 */
-	public SituatedObject getPerceivedObject() {
-		return this.perceivedObject;
-	}
-		
+
 }

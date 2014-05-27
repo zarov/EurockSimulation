@@ -1,18 +1,18 @@
-/*
+/* 
  * $Id$
- *
+ * 
  * Copyright (c) 2007-13 Stephane GALLAND.
- *
+ * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- *
+ * 
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -20,63 +20,51 @@
  */
 package fr.utbm.gi.vi51.g3.framework.environment;
 
+import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 /**
  * Object on the environment.
- *
+ * 
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public interface MobileObject extends SituatedObject {
+public interface SituatedObject {
 
-	/**
-	 * Replies the max linear speed.
-	 *
-	 * @return the max linear speed.
+	/** Replies the size of the object.
+	 * 
+	 * @return the size of this object.
 	 */
-	public double getMaxLinearSpeed();
+	public double getSize();
 
-	/**
-	 * Replies the max angular speed.
-	 *
-	 * @return the max angular speed.
+	/** Replies the position of the object.
+	 * 
+	 * @return the x-coordinate of the position of this object.
 	 */
-	public double getMaxAngularSpeed();
+	public double getX();
+	
+	/** Replies the position of the object.
+	 * 
+	 * @return the y-coordinate of the position of this object.
+	 */
+	public double getY();
 
-	/**
-	 * Replies the max linear acceleration.
-	 *
-	 * @return the max linear acceleration.
+	/** Replies the position of the object.
+	 * 
+	 * @return the position of the object.
 	 */
-	public double getMaxLinearAcceleration();
+	public Point2d getPosition();
 
-	/**
-	 * Replies the max angular acceleration.
-	 *
-	 * @return the max angular acceleration.
+	/** Replies the orientation of the object.
+	 * 
+	 * @return the angle of orientation from (1,0).
 	 */
-	public double getMaxAngularAcceleration();
-
-	/**
-	 * Replies the current angular speed.
-	 *
-	 * @return the current angular speed.
+	public double getAngle();
+	
+	/** Replies the orientation of the object.
+	 * 
+	 * @return the orientation direction.
 	 */
-	public double getCurrentAngularSpeed();
-
-	/**
-	 * Replies the current linear speed.
-	 *
-	 * @return the current linear speed.
-	 */
-	public double getCurrentLinearSpeed();
-
-	/**
-	 * Replies the current linear motion.
-	 *
-	 * @return the current linear motion.
-	 */
-	public Vector2d getCurrentLinearMotion();
+	public Vector2d getDirection();
 
 }

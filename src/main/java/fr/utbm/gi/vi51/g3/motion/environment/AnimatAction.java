@@ -1,4 +1,4 @@
-/* 
+/*
  * $Id$
  * 
  * Copyright (c) 2007-13 Stephane GALLAND.
@@ -18,31 +18,57 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * This program is free software; you can redistribute it and/or modify
  */
-package fr.utbm.gi.vi51.g3.framework.environment;
+package fr.utbm.gi.vi51.g3.motion.environment;
+
+import javax.vecmath.Vector2d;
+
+import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 
 /**
- * Defined an unit perception.
+ * Real action to apply in the world.
  * 
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public class Perception {
+class AnimatAction {
 
-	private final SituatedObject perceivedObject;
-	
+	private final AgentBody body;
+	private final Vector2d move;
+	private final double rotation;
+
 	/**
-	 * @param perceivedObject is the perceived object.
+	 * @param object is the animat body.
+	 * @param move is the translation.
+	 * @param rotation is the rotation.
 	 */
-	public Perception(SituatedObject perceivedObject) {
-		this.perceivedObject = perceivedObject;
+	public AnimatAction(AgentBody object, Vector2d move, double rotation) {
+		this.body = object;
+		this.move = move;
+		this.rotation = rotation;
 	}
-	
-	/** Replies the perceived object.
+
+	/** Replies the moved object.
 	 * 
-	 * @return the perceived object.
+	 * @return the moved object.
 	 */
-	public SituatedObject getPerceivedObject() {
-		return this.perceivedObject;
+	public AgentBody getObjectToMove() {
+		return this.body;
 	}
-		
+
+	/** Replies the translation.
+	 * 
+	 * @return the translation.
+	 */
+	public Vector2d getTranslation() {
+		return this.move;
+	}
+
+	/** Replies the rotation.
+	 * 
+	 * @return the rotation.
+	 */
+	public double getRotation() {
+		return this.rotation;
+	}
+
 }

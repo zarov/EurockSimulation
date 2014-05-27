@@ -1,4 +1,4 @@
-/* 
+/*
  * $Id$
  * 
  * Copyright (c) 2007-13 Stephane GALLAND.
@@ -38,8 +38,9 @@ import fr.utbm.gi.vi51.g3.framework.util.GeometryUtil;
  */
 public class AgentBody extends AbstractMobileObject implements Body {
 
+	private final long perceptionRange;
 	private final AgentAddress owner;
-	
+
 	private MotionInfluence motionInfluence = null;
 	private List<Perception> perceptions = Collections.emptyList();
 
@@ -51,18 +52,19 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	 * @param maxAngularSpeed is the maximal angular speed.
 	 * @param maxAngularAcceleration is the maximal angular acceleration.
 	 */
-	public AgentBody(AgentAddress owner, double size, double maxLinearSpeed, double maxLinearAcceleration, double maxAngularSpeed, double maxAngularAcceleration) {
+	public AgentBody(AgentAddress owner, double size, double maxLinearSpeed, double maxLinearAcceleration, double maxAngularSpeed, double maxAngularAcceleration, long perceptionRange) {
 		super(size, maxLinearSpeed, maxLinearAcceleration, maxAngularSpeed, maxAngularAcceleration);
 		this.owner = owner;
+		this.perceptionRange = perceptionRange;
 	}
-	
+
 	/** {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
 		return Locale.getString(AbstractWorldObject.class, "BODY_OF", this.owner); //$NON-NLS-1$
 	}
-	
+
 
 	/** Replies the owner of this body.
 	 * 
@@ -95,7 +97,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 		double ai = GeometryUtil.clamp(angularInfluence, -getMaxAngularSpeed(), getMaxAngularSpeed());
 		this.motionInfluence = new MotionInfluence(DynamicType.KINEMATIC, this, li, ai);
 	}
-	
+
 	/** Invoked to send the influence to the environment.
 	 * 
 	 * @param linearInfluence is the linear influence to apply on the object.
@@ -127,7 +129,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	public void influenceKinematic(Vector2d linearInfluence) {
 		influenceKinematic(linearInfluence, 0.);
 	}
-	
+
 	/** Invoked to send the influence to the environment.
 	 * 
 	 * @param linearInfluence is the linear influence to apply on the object.
@@ -136,7 +138,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	public void influenceSteering(Vector2d linearInfluence) {
 		influenceSteering(linearInfluence, 0.);
 	}
-	
+
 	/** Invoked to send the influence to the environment.
 	 * 
 	 * @param angularInfluence is the angular influence to apply on the object.
@@ -145,7 +147,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	public void influenceKinematic(double angularInfluence) {
 		influenceKinematic(null, angularInfluence);
 	}
-	
+
 	/** Invoked to send the influence to the environment.
 	 * 
 	 * @param angularInfluence is the angular influence to apply on the object.
@@ -154,7 +156,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	public void influenceSteering(double angularInfluence) {
 		influenceSteering(null, angularInfluence);
 	}
-	
+
 	/** Replies all the perceived objects.
 	 * 
 	 * @return the perceived objects.
@@ -174,7 +176,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 		if (i!=null) i.setEmitter(getOwner());
 		return i;
 	}
-	
+
 	/** Set the perceptions.
 	 * 
 	 * @param perceptions
@@ -182,6 +184,10 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	void setPerceptions(List<Perception> perceptions) {
 		assert(perceptions!=null);
 		this.perceptions = perceptions;
+	}
+
+	public double getPerceptionRange() {
+		return this.perceptionRange;
 	}
 
 }
