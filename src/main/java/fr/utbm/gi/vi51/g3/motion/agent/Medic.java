@@ -23,9 +23,6 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWand
 
 public class Medic extends Animat<AgentBody> {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 4416989095632710549L;
 
 	private final static double SIZE = 20.;

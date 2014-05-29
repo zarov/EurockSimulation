@@ -38,14 +38,13 @@ import fr.utbm.gi.vi51.g3.motion.environment.WorldModelStateProvider;
 
 public class GUI extends JFrame implements FrameworkGUI {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -7098278003853923071L;
 
 	private static final double DIRECTION_RADIUS = 60.;
 
 	private static final boolean SHOW_ICON = true;
+
+	private static final String IMG_DIR = "images/";
 
 	private static final Icon MAN_ICON;
 	private static final Icon WOMAN_ICON;
@@ -63,37 +62,37 @@ public class GUI extends JFrame implements FrameworkGUI {
 	private static final int ICON_HEIGHT;
 
 	static {
-		URL url = Resources.getResource(GUI.class, "small_man.png"); //$NON-NLS-1$
+		URL url = Resources.getResource(GUI.class, IMG_DIR + "small_man.png"); //$NON-NLS-1$
 		assert (url != null);
 		MAN_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, "small_woman.png"); //$NON-NLS-1$
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_woman.png"); //$NON-NLS-1$
 		assert (url != null);
 		WOMAN_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, "small_seller.png"); //$NON-NLS-1$
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_seller.png"); //$NON-NLS-1$
 		assert (url != null);
 		SELLER_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, "small_med.png"); //$NON-NLS-1$
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_med.png"); //$NON-NLS-1$
 		assert (url != null);
 		MED_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, "small_bodyguard.png"); //$NON-NLS-1$
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_bodyguard.png"); //$NON-NLS-1$
 		assert (url != null);
 		BODYGUARD_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, "small_barrier.png"); //$NON-NLS-1$
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_barrier.png"); //$NON-NLS-1$
 		assert (url != null);
 		BARRIER_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, "small_tree.png"); //$NON-NLS-1$
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
 		assert (url != null);
 		TREE_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, "small_tree.png"); //$NON-NLS-1$
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
 		assert (url != null);
 		TOILET_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, "small_tree.png"); //$NON-NLS-1$
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
 		assert (url != null);
 		FOODSTAND_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, "small_tree.png"); //$NON-NLS-1$
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
 		assert (url != null);
 		DRINKSTAND_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, "small_tree.png"); //$NON-NLS-1$
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
 		assert (url != null);
 		STAGE_ICON = new ImageIcon(url);
 
