@@ -9,7 +9,7 @@ import java.util.Stack;
 
 import fr.utbm.gi.vi51.g3.framework.environment.AABB;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
-import fr.utbm.gi.vi51.g3.framework.environment.WorldObject;
+import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 
 /**
  * @author zarov
@@ -63,7 +63,7 @@ public class QuadTree implements Tree<QuadTreeNode> {
 	class FrustrumCuller implements Iterator<Perception> {
 		private final AABB frustrum;
 		private final Iterator<QuadTreeNode> nodeIterator;
-		private Iterator<WorldObject> objectIterator;
+		private Iterator<SituatedObject> objectIterator;
 		private Perception next;
 
 		public FrustrumCuller(Iterator<QuadTreeNode> ni, AABB frustrum) {
@@ -101,7 +101,7 @@ public class QuadTree implements Tree<QuadTreeNode> {
 
 				assert (objectIterator != null);
 				if (objectIterator.hasNext()) {
-					WorldObject o = objectIterator.next();
+					SituatedObject o = objectIterator.next();
 					if (o.getBox().intersects(frustrum)) {
 						next = o.toPerception();
 					}

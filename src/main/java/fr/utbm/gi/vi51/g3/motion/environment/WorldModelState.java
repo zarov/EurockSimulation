@@ -28,7 +28,7 @@ import org.janusproject.kernel.address.AgentAddress;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
-import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Tree;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 
 /**
@@ -68,7 +68,7 @@ public class WorldModelState {
 	}
 
 	public String getObjectType(SituatedObject o) {
-		if (o instanceof Tree){
+		if (o instanceof Flora){
 			return "TREE";
 		} else if(o instanceof Barrier){
 			return "BARRIER";

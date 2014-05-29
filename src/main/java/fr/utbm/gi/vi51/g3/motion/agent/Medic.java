@@ -1,8 +1,9 @@
 package fr.utbm.gi.vi51.g3.motion.agent;
 
+import java.util.List;
+
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
-import java.util.List;
 
 import org.arakhne.afc.vmutil.locale.Locale;
 import org.janusproject.kernel.status.Status;
@@ -11,8 +12,8 @@ import org.janusproject.kernel.status.StatusFactory;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
+import fr.utbm.gi.vi51.g3.framework.environment.MobileObject;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
-import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.PursueBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
@@ -23,15 +24,15 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWand
 public class Medic extends Animat<AgentBody> {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 4416989095632710549L;
 
 	private final static double SIZE = 20.;
 
 	private final static double STOP_DISTANCE = 3.;
-	private final static double STOP_RADIUS = Math.PI/10.;
-	private final static double SLOW_RADIUS = Math.PI/4.;
+	private final static double STOP_RADIUS = Math.PI / 10.;
+	private final static double SLOW_RADIUS = Math.PI / 4.;
 
 	// WARNING the following parameters optimize a steering use of the program
 	// especially the wander behaviour part : the kinematic wander behaviour
@@ -43,23 +44,21 @@ public class Medic extends Animat<AgentBody> {
 
 	private final static int MAX_LINEAR = 5;
 	private final static double MAX_ANGULAR = 0.5;
-	
+
 	private final PursueBehaviour<?> pursueBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
 
-
-	public Medic(){
+	public Medic() {
 
 		this.pursueBehaviour = new SteeringPursueBehaviour();
-		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(
-				STOP_RADIUS, SLOW_RADIUS);
+		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(STOP_RADIUS,
+				SLOW_RADIUS);
 
-		SteeringFaceBehaviour faceB = new SteeringFaceBehaviour(STOP_DISTANCE, alignB);
+		SteeringFaceBehaviour faceB = new SteeringFaceBehaviour(STOP_DISTANCE,
+				alignB);
 		this.wanderBehaviour = new SteeringWanderBehaviour(
-				WANDER_CIRCLE_DISTANCE,
-				WANDER_CIRCLE_RADIUS,
-				WANDER_MAX_ROTATION,
-				faceB);
+				WANDER_CIRCLE_DISTANCE, WANDER_CIRCLE_RADIUS,
+				WANDER_MAX_ROTATION, faceB);
 
 	}
 
@@ -74,13 +73,11 @@ public class Medic extends Animat<AgentBody> {
 
 	@Override
 	protected AgentBody createBody(Environment in) {
-		return new AgentBody(getAddress(),
-				SIZE,
-				5,						// max linear speed m/s
-				.5,						// max linear acceleration (m/s)/s
-				Math.PI/4,				// max angular speed r/s
-				Math.PI/10,
-				PERCEPTION_RANGE);			// max angular acceleration (r/s)/s
+		return new AgentBody(getAddress(), SIZE, 5, // max linear speed m/s
+				.5, // max linear acceleration (m/s)/s
+				Math.PI / 4, // max angular speed r/s
+				Math.PI / 10, PERCEPTION_RANGE); // max angular acceleration
+													// (r/s)/s
 
 	}
 
@@ -93,22 +90,23 @@ public class Medic extends Animat<AgentBody> {
 
 		List<Perception> perc = getPerceivedObjects();
 
-		for(Perception p : perc)
-		{
-			SituatedObject o = p.getPerceivedObject();
-			if(o.isAttendant() && !o.isOK())
-				this.pursueBehaviour.runPursue(position, linearSpeed, MAX_LINEAR, o.getPosition(), o.getVelocity(), o.getDirection());
-			else
-				this.wanderBehaviour.runWander(position, orientation, linearSpeed, MAX_LINEAR, angularSpeed, MAX_ANGULAR);
+		for (Perception p : perc) {
+			MobileObject o = (MobileObject) p.getPerceivedObject();
+			if (o.isAttendant() && !o.isOK()) {
+				this.pursueBehaviour.runPursue(position, linearSpeed,
+						MAX_LINEAR, o.getPosition(), o.getCurrentLinearSpeed(),
+						o.getDirection());
+			} else {
+				this.wanderBehaviour.runWander(position, orientation,
+						linearSpeed, MAX_LINEAR, angularSpeed, MAX_ANGULAR);
+			}
 		}
-		
+
 		return StatusFactory.ok(this);
 	}
 
-	
 	public static double getPerceptionRange() {
 		return PERCEPTION_RANGE;
 	}
-
 
 }

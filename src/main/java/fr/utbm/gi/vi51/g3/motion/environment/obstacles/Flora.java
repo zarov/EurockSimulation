@@ -6,9 +6,9 @@ import fr.utbm.gi.vi51.g3.framework.environment.AABB;
 import fr.utbm.gi.vi51.g3.framework.environment.AbstractSituatedObject;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 
-public class Barrier extends AbstractSituatedObject {
+public class Flora extends AbstractSituatedObject {
 
-	public Barrier(double size, Point2d position) {
+	public Flora(double size, Point2d position) {
 		super(size, position);
 	}
 

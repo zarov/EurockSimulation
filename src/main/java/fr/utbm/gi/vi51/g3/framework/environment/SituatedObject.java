@@ -72,23 +72,17 @@ public interface SituatedObject {
 	 * @return the orientation direction.
 	 */
 	public Vector2d getDirection();
-	
-	public boolean isAttendant();
-	
-	public boolean isOK();
-	
-	public double getVelocity();
 
 	/**
-	 * Converts a WorldObject to a Perception.
+	 * Converts a StuatedObject to a Perception.
 	 *
 	 * @return
 	 */
 	public Perception toPerception();
 
 	/**
-	 * Return the AABB box of a WorldObject.
-	 * 
+	 * Return the AABB box of a SituatedObject.
+	 *
 	 * @return
 	 */
 	public AABB getBox();
