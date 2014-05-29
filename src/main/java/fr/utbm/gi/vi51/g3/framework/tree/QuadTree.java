@@ -5,7 +5,9 @@ package fr.utbm.gi.vi51.g3.framework.tree;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Spliterator;
 import java.util.Stack;
+import java.util.function.Consumer;
 
 import fr.utbm.gi.vi51.g3.framework.environment.AABB;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
@@ -58,6 +60,18 @@ public class QuadTree implements Tree<QuadTreeNode> {
 
 			return n;
 		}
+
+		@Override
+		public void remove() {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void forEachRemaining(Consumer<? super QuadTreeNode> action) {
+			// TODO Auto-generated method stub
+
+		}
 	}
 
 	class FrustrumCuller implements Iterator<Perception> {
@@ -108,10 +122,34 @@ public class QuadTree implements Tree<QuadTreeNode> {
 				}
 			}
 		}
+
+		@Override
+		public void remove() {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void forEachRemaining(Consumer<? super Perception> action) {
+			// TODO Auto-generated method stub
+
+		}
 	}
 
 	@Override
 	public Iterator<TreeNode<QuadTreeNode>> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void forEach(Consumer<? super TreeNode<QuadTreeNode>> action) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Spliterator<TreeNode<QuadTreeNode>> spliterator() {
 		// TODO Auto-generated method stub
 		return null;
 	}
