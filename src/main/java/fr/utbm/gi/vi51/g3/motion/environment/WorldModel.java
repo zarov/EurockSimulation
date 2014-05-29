@@ -33,6 +33,7 @@ import fr.utbm.gi.vi51.g3.framework.environment.DynamicType;
 import fr.utbm.gi.vi51.g3.framework.environment.EnvironmentEvent;
 import fr.utbm.gi.vi51.g3.framework.environment.MotionInfluence;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
+import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
 
 /**
@@ -51,6 +52,12 @@ public class WorldModel extends AbstractEnvironment implements WorldModelStatePr
 	 */
 	public WorldModel(double width, double height) {
 		super(width, height, new SimulationTimeManager(500));
+		build();
+	}
+
+	private void build(){
+		// Build stages
+
 	}
 
 	/** {@inheritDoc}
@@ -102,8 +109,15 @@ public class WorldModel extends AbstractEnvironment implements WorldModelStatePr
 					}
 				}
 			}
+			for(SituatedObject o1 : getOtherObjects()) {
+				double x2 = o1.getX();
+				double y2 = o1.getY();
+				double distance = new Vector2d(x2-x1,y2-y1).length();
+				if (distance<agent.getPerceptionRange()) {
+					allPercepts.add(new Perception(o1));
+				}
+			}
 		}
-
 		return allPercepts;
 	}
 
