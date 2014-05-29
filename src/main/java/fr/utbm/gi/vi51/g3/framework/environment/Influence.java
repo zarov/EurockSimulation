@@ -1,4 +1,4 @@
-/* 
+/*
  * $Id$
  * 
  * Copyright (c) 2007-13 Stephane GALLAND.
@@ -29,18 +29,18 @@ import org.janusproject.kernel.address.AgentAddress;
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public abstract class Influence<IO extends AbstractWorldObject> {
+public abstract class Influence<IO extends AbstractSituatedObject> {
 
 	private AgentAddress emitter = null;
 	private final IO influencedObject;
-	
+
 	/**
 	 * @param influencedObject is the influenced object.
 	 */
 	protected Influence(IO influencedObject) {
 		this.influencedObject = influencedObject;
 	}
-	
+
 	/** Replies the emitter of the influence.
 	 * 
 	 * @return the emitter of the influence.
@@ -48,7 +48,7 @@ public abstract class Influence<IO extends AbstractWorldObject> {
 	public AgentAddress getEmitter() {
 		return this.emitter;
 	}
-	
+
 	/** Set the emitter of the influence.
 	 * 
 	 * @param emitter is the emitter of the influence.
@@ -65,5 +65,5 @@ public abstract class Influence<IO extends AbstractWorldObject> {
 	public IO getInfluencedObject() {
 		return this.influencedObject;
 	}
-	
+
 }

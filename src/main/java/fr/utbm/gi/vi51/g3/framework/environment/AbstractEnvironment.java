@@ -1,4 +1,4 @@
-/* 
+/*
  * $Id$
  * 
  * Copyright (c) 2007-13 Stephane GALLAND.
@@ -23,8 +23,10 @@ package fr.utbm.gi.vi51.g3.framework.environment;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -34,11 +36,10 @@ import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.util.random.RandomNumber;
 
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
-import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 
 
 /**
- * Abstract implementation of a situated environment.  
+ * Abstract implementation of a situated environment.
  * 
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
@@ -46,13 +47,14 @@ import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 public abstract class AbstractEnvironment implements Environment {
 
 	private final Map<AgentAddress,AgentBody> bodies = new TreeMap<AgentAddress,AgentBody>();
+	private final Set<SituatedObject> objects = new HashSet<SituatedObject>();
 	private final SimulationTimeManager timeManager;
 	private final double width;
 	private final double height;
 	private final Collection<EnvironmentListener> listeners = new ArrayList<EnvironmentListener>();
 	private final AtomicBoolean changed = new AtomicBoolean();
 	private final AtomicBoolean init = new AtomicBoolean(true);
-	
+
 	/**
 	 * @param width is the width of the environment.
 	 * @param height is the height of the environment.
@@ -63,6 +65,13 @@ public abstract class AbstractEnvironment implements Environment {
 		this.height = height;
 		this.timeManager = timeManager;
 	}
+
+	public void implantSituatedObject(SituatedObject object){
+		if(object != null){
+			this.objects.add(object);
+		}
+	}
+
 
 	/**
 	 * {@inheritDoc}
@@ -79,13 +88,13 @@ public abstract class AbstractEnvironment implements Environment {
 			}
 		}
 	}
-	
+
 	private double rnd(double s, double w) {
 		double r = w - 3. * s;
 		r = RandomNumber.nextDouble() * r;
 		return r + s;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -93,7 +102,7 @@ public abstract class AbstractEnvironment implements Environment {
 	public void killAgentBody(AgentAddress animat) {
 		this.bodies.remove(animat);
 	}
-	
+
 	/** {@inheritDoc}
 	 */
 	@Override
@@ -119,7 +128,7 @@ public abstract class AbstractEnvironment implements Environment {
 	protected EnvironmentEvent createEnvironmentEvent() {
 		return new EnvironmentEvent(this);
 	}
-	
+
 	/** Notifies listeners about changes in environment.
 	 */
 	protected void fireEnvironmentChange() {
@@ -133,7 +142,7 @@ public abstract class AbstractEnvironment implements Environment {
 			listener.environmentChanged(event);
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -149,7 +158,7 @@ public abstract class AbstractEnvironment implements Environment {
 	public double getWidth() {
 		return this.width;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -157,7 +166,7 @@ public abstract class AbstractEnvironment implements Environment {
 	public double getHeight() {
 		return this.height;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -165,7 +174,7 @@ public abstract class AbstractEnvironment implements Environment {
 	public Collection<AgentBody> getAgentBodies() {
 		return Collections.unmodifiableCollection(this.bodies.values());
 	}
-	
+
 	/**
 	 * Clone the list of agents in the environment.
 	 *
@@ -189,8 +198,8 @@ public abstract class AbstractEnvironment implements Environment {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<AbstractWorldObject> getOtherObjects() {
-		return Collections.emptyList();
+	public Collection<SituatedObject> getOtherObjects() {
+		return Collections.unmodifiableCollection(this.objects);
 	}
 
 	/**
@@ -230,14 +239,14 @@ public abstract class AbstractEnvironment implements Environment {
 	 * @return the list of the perceived object, never <code>null</code>
 	 */
 	protected abstract List<Perception> computePerceptionsFor(AgentBody agent);
-		
+
 	/** Detects conflicts between influences and applied resulting actions.
 	 * 
 	 * @param influences are the influences to apply.
 	 * @param timeManager is the time manager of the environment.
 	 */
 	protected abstract void applyInfluences(Collection<MotionInfluence> influences, SimulationTimeManager timeManager);
-	
+
 	/** Compute a steering move according to the linear move and to
 	 * the internal attributes of this object.
 	 * 

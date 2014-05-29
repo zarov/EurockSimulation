@@ -23,7 +23,13 @@ package fr.utbm.gi.vi51.g3.motion.environment;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.janusproject.kernel.address.AgentAddress;
+
+import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Tree;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 
 /**
  * State of the world model.
@@ -50,21 +56,25 @@ public class WorldModelState {
 		return this.objects;
 	}
 
-	//	/** Replies if the object is a predator.
-	//	 *
-	//	 * @param o
-	//	 * @return the predator flag.
-	//	 */
-	//	public boolean isPrey(SituatedObject o) {
-	//		if (o instanceof AgentBody) {
-	//			AgentBody body = (AgentBody)o;
-	//			AgentAddress adr = body.getOwner();
-	//			if (adr!=null) {
-	//				String s = Locale.getString(Prey.class, "PREY"); //$NON-NLS-1$
-	//				return s!=null && s.equals(adr.getName());
-	//			}
-	//		}
-	//		return false;
-	//	}
+	public String getAgentType(SituatedObject o) {
+		if (o instanceof AgentBody) {
+			AgentBody body = (AgentBody)o;
+			AgentAddress adr = body.getOwner();
+			if (adr!=null) {
+				return adr.getName();
+			}
+		}
+		return null;
+	}
 
+	public String getObjectType(SituatedObject o) {
+		if (o instanceof Tree){
+			return "TREE";
+		} else if(o instanceof Barrier){
+			return "BARRIER";
+		} else if(o instanceof Stand){
+			return ((Stand) o).getName();
+		}
+		return null;
+	}
 }

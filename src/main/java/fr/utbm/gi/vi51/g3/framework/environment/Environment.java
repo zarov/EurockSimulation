@@ -1,4 +1,4 @@
-/* 
+/*
  * $Id$
  * 
  * Copyright (c) 2007-13 Stephane GALLAND.
@@ -27,7 +27,7 @@ import org.janusproject.kernel.address.AgentAddress;
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
 
 /**
- * Situated environment.  
+ * Situated environment.
  * 
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
@@ -39,42 +39,42 @@ public interface Environment {
 	 * @return the time manager of this environment.
 	 */
 	public SimulationTimeManager getTimeManager();
-	
+
 	/** Replies the width of the environment.
 	 * 
 	 * @return the width of the environment.
 	 */
 	public double getWidth();
-	
+
 	/** Replies the height of the environment.
 	 * 
 	 * @return the height of the environment.
 	 */
 	public double getHeight();
-	
+
 	/** Replies the bodies in the environment.
 	 * 
 	 * @return the bodies in the environment.
 	 */
 	public Collection<AgentBody> getAgentBodies();
-	
+
 	/** Replies the agent body associated to the given agent.
 	 * 
 	 * @param agentId
 	 * @return the agent body or <code>null</code>.
 	 */
 	public AgentBody getAgentBodyFor(AgentAddress agentId);
-	
+
 	/** Replies the objects in the environment that are not bodies.
 	 * 
 	 * @return the objects in the environment that are not bodies.
 	 */
-	public Collection<AbstractWorldObject> getOtherObjects();
+	public Collection<SituatedObject> getOtherObjects();
 
 	/** Run the environment behaviour: apply influences, compute perceptions.
 	 */
 	public void runBehaviour();
-	
+
 	/** Add listener on environment events.
 	 * 
 	 * @param listener
@@ -86,17 +86,17 @@ public interface Environment {
 	 * @param listener
 	 */
 	public void removeEnvironmentListener(EnvironmentListener listener);
-	
+
 	/** Spawn an body for the given agent.
 	 * 
 	 * @param animat
 	 */
 	public void spawnAgentBody(Animat<?> animat);
-	
+
 	/** Remove the body for the given agent.
 	 * 
 	 * @param animat
 	 */
 	public void killAgentBody(AgentAddress animat);
-	
+
 }

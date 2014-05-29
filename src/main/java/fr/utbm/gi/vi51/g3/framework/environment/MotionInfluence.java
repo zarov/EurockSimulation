@@ -1,4 +1,4 @@
-/* 
+/*
  * $Id$
  * 
  * Copyright (c) 2007-13 Stephane GALLAND.
@@ -28,25 +28,25 @@ import javax.vecmath.Vector2d;
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public class MotionInfluence extends Influence<AbstractWorldObject> {
+public class MotionInfluence extends Influence<AbstractSituatedObject> {
 
 	private final DynamicType type;
 	private final Vector2d linearInfluence = new Vector2d();
 	private double angularInfluence = 0.;
-	
+
 	/**
 	 * @param type indicates if the influence is kinematic or steering.
 	 * @param influencedObject is the influenced object.
 	 * @param linearInfluence is the linear influence to apply on the object.
 	 * @param angularInfluence is the angular influence to apply on the object.
 	 */
-	protected MotionInfluence(DynamicType type, AbstractWorldObject influencedObject, Vector2d linearInfluence, double angularInfluence) {
+	protected MotionInfluence(DynamicType type, AbstractSituatedObject influencedObject, Vector2d linearInfluence, double angularInfluence) {
 		super(influencedObject);
 		this.type = type;
 		setLinarInfluence(linearInfluence);
 		setAngularInfluence(angularInfluence);
 	}
-	
+
 	/**
 	 * @param type indicates if the influence is kinematic or steering.
 	 * @param influencedObject is the influenced object.
@@ -54,7 +54,7 @@ public class MotionInfluence extends Influence<AbstractWorldObject> {
 	 * @param linearInfluenceY is the linear influence to apply on the object.
 	 * @param angularInfluence is the angular influence to apply on the object.
 	 */
-	protected MotionInfluence(DynamicType type, AbstractWorldObject influencedObject, double linearInfluenceX, double linearInfluenceY, double angularInfluence) {
+	protected MotionInfluence(DynamicType type, AbstractSituatedObject influencedObject, double linearInfluenceX, double linearInfluenceY, double angularInfluence) {
 		super(influencedObject);
 		this.type = type;
 		setLinarInfluence(linearInfluenceX, linearInfluenceY);
@@ -66,19 +66,19 @@ public class MotionInfluence extends Influence<AbstractWorldObject> {
 	 * @param influencedObject is the influenced object.
 	 * @param linearInfluence is the linear influence to apply on the object.
 	 */
-	protected MotionInfluence(DynamicType type, AbstractWorldObject influencedObject, Vector2d linearInfluence) {
+	protected MotionInfluence(DynamicType type, AbstractSituatedObject influencedObject, Vector2d linearInfluence) {
 		super(influencedObject);
 		this.type = type;
 		setLinarInfluence(linearInfluence);
 	}
-	
+
 	/**
 	 * @param type indicates if the influence is kinematic or steering.
 	 * @param influencedObject is the influenced object.
 	 * @param linearInfluenceX is the linear influence to apply on the object.
 	 * @param linearInfluenceY is the linear influence to apply on the object.
 	 */
-	protected MotionInfluence(DynamicType type, AbstractWorldObject influencedObject, double linearInfluenceX, double linearInfluenceY) {
+	protected MotionInfluence(DynamicType type, AbstractSituatedObject influencedObject, double linearInfluenceX, double linearInfluenceY) {
 		super(influencedObject);
 		this.type = type;
 		setLinarInfluence(linearInfluenceX, linearInfluenceY);
@@ -89,17 +89,17 @@ public class MotionInfluence extends Influence<AbstractWorldObject> {
 	 * @param influencedObject is the influenced object.
 	 * @param angularInfluence is the angular influence to apply on the object.
 	 */
-	protected MotionInfluence(DynamicType type, AbstractWorldObject influencedObject, double angularInfluence) {
+	protected MotionInfluence(DynamicType type, AbstractSituatedObject influencedObject, double angularInfluence) {
 		super(influencedObject);
 		this.type = type;
 		setAngularInfluence(angularInfluence);
 	}
-	
+
 	/**
 	 * @param type indicates if the influence is kinematic or steering.
 	 * @param influencedObject is the influenced object.
 	 */
-	protected MotionInfluence(DynamicType type, AbstractWorldObject influencedObject) {
+	protected MotionInfluence(DynamicType type, AbstractSituatedObject influencedObject) {
 		super(influencedObject);
 		this.type = type;
 	}
@@ -115,7 +115,7 @@ public class MotionInfluence extends Influence<AbstractWorldObject> {
 		setLinarInfluence(linearInfluence);
 		setAngularInfluence(angularInfluence);
 	}
-	
+
 	/**
 	 * @param type indicates if the influence is kinematic or steering.
 	 * @param linearInfluenceX is the linear influence to apply on the object.
@@ -138,7 +138,7 @@ public class MotionInfluence extends Influence<AbstractWorldObject> {
 		this.type = type;
 		setLinarInfluence(linearInfluence);
 	}
-	
+
 	/**
 	 * @param type indicates if the influence is kinematic or steering.
 	 * @param linearInfluenceX is the linear influence to apply on the object.
@@ -159,7 +159,7 @@ public class MotionInfluence extends Influence<AbstractWorldObject> {
 		this.type = type;
 		setAngularInfluence(angularInfluence);
 	}
-	
+
 	/**
 	 * @param type indicates if the influence is kinematic or steering.
 	 */
@@ -176,7 +176,7 @@ public class MotionInfluence extends Influence<AbstractWorldObject> {
 		assert(l!=null);
 		this.linearInfluence.set(l);
 	}
-		
+
 	/** Set the linear influence.
 	 * 
 	 * @param dx is the linear influence
@@ -201,7 +201,7 @@ public class MotionInfluence extends Influence<AbstractWorldObject> {
 	public Vector2d getLinearInfluence() {
 		return this.linearInfluence;
 	}
-		
+
 	/** Replies the angular influence.
 	 * 
 	 * @return the angular influence
@@ -209,7 +209,7 @@ public class MotionInfluence extends Influence<AbstractWorldObject> {
 	public double getAngularInfluence() {
 		return this.angularInfluence;
 	}
-	
+
 	/** Replies the type of the influence.
 	 * 
 	 * @return the type of the influence.

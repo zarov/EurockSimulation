@@ -1,5 +1,8 @@
 package fr.utbm.gi.vi51.g3.motion.agent;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
@@ -29,22 +32,21 @@ public class Attendant extends Animat<AgentBody> {
 	private final static double STOP_DISTANCE = 3.;
 	private final static double STOP_RADIUS = Math.PI/10.;
 	private final static double SLOW_RADIUS = Math.PI/4.;
-
-	// WARNING the following parameters optimize a steering use of the program
-	// especially the wander behaviour part : the kinematic wander behaviour
-	// would require different parameters.
 	private final static double WANDER_CIRCLE_DISTANCE = 30.;
 	private final static double WANDER_CIRCLE_RADIUS = 30.;
 	private final static double WANDER_MAX_ROTATION = Math.PI;
 	private final static long PERCEPTION_RANGE = 200;
 
+	private final AttendantGender GENDER;
+	private Set<Need> needs;
+
 	private final EvadeBehaviour<?> evadeBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
 
+	public Attendant(AttendantGender gender){
 
-	public Attendant(){
-
-		//if (this.isSteering) {
+		initNeeds();
+		this.GENDER = gender;
 		this.evadeBehaviour = new SteeringEvadeBehaviour();
 		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(
 				STOP_RADIUS, SLOW_RADIUS);
@@ -62,11 +64,18 @@ public class Attendant extends Animat<AgentBody> {
 
 	}
 
+	private void initNeeds(){
+		this.needs = new HashSet<Need>();
+		for(NeedType elem : NeedType.values())
+			this.needs.add(new Need(elem, (int) Math.random()*10));
+	}
+
 	@Override
 	public Status activate(Object... activationParameters) {
 		Status s = super.activate(activationParameters);
 		if (s.isSuccess()) {
-			setName(Locale.getString(Attendant.class, "ATTENDANT")); //$NON-NLS-1$
+			setName(Locale.getString(Attendant.class, this.GENDER.getName()));
+			System.out.println(getName());
 		}
 		return s;
 	}
@@ -80,7 +89,6 @@ public class Attendant extends Animat<AgentBody> {
 				Math.PI/4,				// max angular speed r/s
 				Math.PI/10,
 				PERCEPTION_RANGE);			// max angular acceleration (r/s)/s
-
 	}
 
 	@Override

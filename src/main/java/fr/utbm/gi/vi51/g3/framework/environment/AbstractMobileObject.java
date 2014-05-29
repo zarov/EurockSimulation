@@ -1,4 +1,4 @@
-/* 
+/*
  * $Id$
  * 
  * Copyright (c) 2007-13 Stephane GALLAND.
@@ -31,13 +31,13 @@ import fr.utbm.gi.vi51.g3.framework.util.GeometryUtil;
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-public abstract class AbstractMobileObject extends AbstractWorldObject implements MobileObject {
+public abstract class AbstractMobileObject extends AbstractSituatedObject implements MobileObject {
 
 	private final double maxLinearSpeed;
 	private final double maxLinearAcceleration;
 	private final double maxAngularSpeed;
 	private final double maxAngularAcceleration;
-	
+
 	private double currentAngularSpeed = 0;
 	private final Vector2d linearMove = new Vector2d();
 
@@ -55,7 +55,7 @@ public abstract class AbstractMobileObject extends AbstractWorldObject implement
 		this.maxAngularAcceleration = Math.abs(maxAngularAcceleration);
 		this.maxAngularSpeed = Math.abs(maxAngularSpeed);
 	}
-	
+
 	/** {@inheritDoc}
 	 */
 	@Override
@@ -83,7 +83,7 @@ public abstract class AbstractMobileObject extends AbstractWorldObject implement
 	public double getMaxAngularAcceleration() {
 		return this.maxAngularAcceleration;
 	}
-	
+
 	/** {@inheritDoc}
 	 */
 	@Override
@@ -150,7 +150,7 @@ public abstract class AbstractMobileObject extends AbstractWorldObject implement
 		}
 		return r;
 	}
-	
+
 	/** {@inheritDoc}
 	 */
 	@Override
@@ -179,7 +179,7 @@ public abstract class AbstractMobileObject extends AbstractWorldObject implement
 		double lSpeed = m.length();
 		if (lSpeed<0) lSpeed = 0.;
 		if (lSpeed>this.maxLinearSpeed) lSpeed = this.maxLinearSpeed;
-		
+
 		return scaleVector(m, lSpeed, clock);
 	}
 
@@ -194,7 +194,7 @@ public abstract class AbstractMobileObject extends AbstractWorldObject implement
 		double lSpeed = move.length();
 		if (lSpeed<0) lSpeed = 0.;
 		if (lSpeed>this.maxLinearSpeed) lSpeed = this.maxLinearSpeed;
-		
+
 		return scaleVector(move, lSpeed, clock);
 	}
 

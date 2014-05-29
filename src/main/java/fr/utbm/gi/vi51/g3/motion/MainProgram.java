@@ -26,14 +26,17 @@ import fr.utbm.gi.vi51.g3.framework.FrameworkLauncher;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.gui.FrameworkGUI;
 import fr.utbm.gi.vi51.g3.motion.agent.Attendant;
+import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
+import fr.utbm.gi.vi51.g3.motion.agent.Worker;
+import fr.utbm.gi.vi51.g3.motion.agent.WorkerTask;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModel;
 import fr.utbm.gi.vi51.g3.motion.gui.GUI;
 
 
 public class MainProgram {
 
-	private static double WORLD_SIZE_X = 700;
-	private static double WORLD_SIZE_Y = 700;
+	private static double WORLD_SIZE_X = 1200;
+	private static double WORLD_SIZE_Y = 400;
 	private static long EXECUTION_DELAY = 50;
 
 	/** Main program.
@@ -50,16 +53,25 @@ public class MainProgram {
 		//				JOptionPane.YES_NO_OPTION,
 		//				JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION;
 
+		System.out.println("--- Init. GUI");
 		FrameworkGUI gui = new GUI(WORLD_SIZE_X, WORLD_SIZE_Y);
 
+		System.out.println("--- Init. Environment");
 		Environment environment = new WorldModel(WORLD_SIZE_X, WORLD_SIZE_Y);
 
 		FrameworkLauncher.launchEnvironment(environment, gui, EXECUTION_DELAY);
 
-
-		Attendant a = new Attendant() ;
-		FrameworkLauncher.launchAgent(a) ;
-
+		System.out.println("--- Init. Agents");
+		Attendant a = new Attendant(AttendantGender.MAN);
+		FrameworkLauncher.launchAgent(a);
+		Attendant b = new Attendant(AttendantGender.WOMAN);
+		FrameworkLauncher.launchAgent(b);
+		Worker c = new Worker(WorkerTask.BODYGUARD);
+		FrameworkLauncher.launchAgent(c);
+		Worker d = new Worker(WorkerTask.MED);
+		FrameworkLauncher.launchAgent(d);
+		Worker e = new Worker(WorkerTask.SELLER);
+		FrameworkLauncher.launchAgent(e);
 		FrameworkLauncher.startSimulation();
 	}
 
