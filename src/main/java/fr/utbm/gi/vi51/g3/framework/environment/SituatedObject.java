@@ -66,5 +66,11 @@ public interface SituatedObject {
 	 * @return the orientation direction.
 	 */
 	public Vector2d getDirection();
+	
+	public boolean isAttendant();
+	
+	public boolean isOK();
+	
+	public double getVelocity();
 
 }

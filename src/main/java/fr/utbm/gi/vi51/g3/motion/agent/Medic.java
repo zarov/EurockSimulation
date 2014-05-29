@@ -2,6 +2,7 @@ package fr.utbm.gi.vi51.g3.motion.agent;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
+import java.util.List;
 
 import org.arakhne.afc.vmutil.locale.Locale;
 import org.janusproject.kernel.status.Status;
@@ -10,14 +11,16 @@ import org.janusproject.kernel.status.StatusFactory;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.EvadeBehaviour;
+import fr.utbm.gi.vi51.g3.framework.environment.Perception;
+import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.PursueBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringEvadeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringPursueBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
 
-public class Attendant extends Animat<AgentBody> {
+public class Medic extends Animat<AgentBody> {
 
 	/**
 	 * 
@@ -37,17 +40,17 @@ public class Attendant extends Animat<AgentBody> {
 	private final static double WANDER_CIRCLE_RADIUS = 30.;
 	private final static double WANDER_MAX_ROTATION = Math.PI;
 	private final static long PERCEPTION_RANGE = 200;
-	
-	private boolean isOK;
 
-	private final EvadeBehaviour<?> evadeBehaviour;
+	private final static int MAX_LINEAR = 5;
+	private final static double MAX_ANGULAR = 0.5;
+	
+	private final PursueBehaviour<?> pursueBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
 
 
-	public Attendant(){
-		this.isOK=true;
-		//if (this.isSteering) {
-		this.evadeBehaviour = new SteeringEvadeBehaviour();
+	public Medic(){
+
+		this.pursueBehaviour = new SteeringPursueBehaviour();
 		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(
 				STOP_RADIUS, SLOW_RADIUS);
 
@@ -57,10 +60,6 @@ public class Attendant extends Animat<AgentBody> {
 				WANDER_CIRCLE_RADIUS,
 				WANDER_MAX_ROTATION,
 				faceB);
-		//		} else {
-		//			this.evadeBehaviour = new KinematicEvadeBehaviour();
-		//			this.wanderBehaviour = new KinematicWanderBehaviour();
-		//		}
 
 	}
 
@@ -68,7 +67,7 @@ public class Attendant extends Animat<AgentBody> {
 	public Status activate(Object... activationParameters) {
 		Status s = super.activate(activationParameters);
 		if (s.isSuccess()) {
-			setName(Locale.getString(Attendant.class, "ATTENDANT")); //$NON-NLS-1$
+			setName(Locale.getString(Medic.class, "MEDIC")); //$NON-NLS-1$
 		}
 		return s;
 	}
@@ -92,50 +91,23 @@ public class Attendant extends Animat<AgentBody> {
 		double linearSpeed = getCurrentLinearSpeed();
 		double angularSpeed = getCurrentAngularSpeed();
 
+		List<Perception> perc = getPerceivedObjects();
 
-		//BehaviourOutput globalOutput = null;
-		//List<Perception> perceptions = getPerceivedObjects();
-		//
-		//		if(!perceptions.isEmpty()) {
-		//			for(Perception percept: perceptions)
-		//			{
-		//
-		//			}
-		//		} else {
-		//
-		//			//if no object is perceived then wander
-		//			globalOutput = this.wanderBehaviour.runWander(position, orientation, linearSpeed, getMaxLinear(), angularSpeed, getMaxAngular());
-		//		}
-		//
-		//		//send influences to the environment
-		//		if (globalOutput!=null) {
-		//			if (this.isSteering)
-		//				influenceSteering(globalOutput.getLinear(),globalOutput.getAngular());
-		//			else
-		//				influenceKinematic(globalOutput.getLinear(),globalOutput.getAngular());
-		//		}
-		//
+		for(Perception p : perc)
+		{
+			SituatedObject o = p.getPerceivedObject();
+			if(o.isAttendant() && !o.isOK())
+				this.pursueBehaviour.runPursue(position, linearSpeed, MAX_LINEAR, o.getPosition(), o.getVelocity(), o.getDirection());
+			else
+				this.wanderBehaviour.runWander(position, orientation, linearSpeed, MAX_LINEAR, angularSpeed, MAX_ANGULAR);
+		}
+		
 		return StatusFactory.ok(this);
 	}
 
-	//	private double getMaxLinear() {
-	//		return this.isSteering ? getMaxLinearAcceleration() : getMaxLinearSpeed();
-	//	}
-	//
-	//	private double getMaxAngular() {
-	//		return this.isSteering ? getMaxAngularAcceleration() : getMaxAngularSpeed();
-	//	}
-
+	
 	public static double getPerceptionRange() {
 		return PERCEPTION_RANGE;
-	}
-	
-	public boolean isOK(){
-		return this.isOK;
-	}
-	
-	public boolean isAttendant(){
-		return true;
 	}
 
 

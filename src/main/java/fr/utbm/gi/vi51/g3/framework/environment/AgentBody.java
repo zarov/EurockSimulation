@@ -189,5 +189,19 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	public double getPerceptionRange() {
 		return this.perceptionRange;
 	}
+	public double getVelocity(){
+		return 0;
+	}
 
+	@Override
+	public boolean isAttendant() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOK() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
