@@ -36,10 +36,10 @@ import fr.utbm.gi.vi51.g3.motion.environment.WorldModelEvent;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelState;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelStateProvider;
 
-public class GUI extends JFrame implements FrameworkGUI{
+public class GUI extends JFrame implements FrameworkGUI {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -7098278003853923071L;
 
@@ -64,37 +64,37 @@ public class GUI extends JFrame implements FrameworkGUI{
 
 	static {
 		URL url = Resources.getResource(GUI.class, "small_man.png"); //$NON-NLS-1$
-		assert(url!=null);
+		assert (url != null);
 		MAN_ICON = new ImageIcon(url);
 		url = Resources.getResource(GUI.class, "small_woman.png"); //$NON-NLS-1$
-		assert(url!=null);
+		assert (url != null);
 		WOMAN_ICON = new ImageIcon(url);
 		url = Resources.getResource(GUI.class, "small_seller.png"); //$NON-NLS-1$
-		assert(url!=null);
+		assert (url != null);
 		SELLER_ICON = new ImageIcon(url);
 		url = Resources.getResource(GUI.class, "small_med.png"); //$NON-NLS-1$
-		assert(url!=null);
+		assert (url != null);
 		MED_ICON = new ImageIcon(url);
 		url = Resources.getResource(GUI.class, "small_bodyguard.png"); //$NON-NLS-1$
-		assert(url!=null);
+		assert (url != null);
 		BODYGUARD_ICON = new ImageIcon(url);
 		url = Resources.getResource(GUI.class, "small_barrier.png"); //$NON-NLS-1$
-		assert(url!=null);
+		assert (url != null);
 		BARRIER_ICON = new ImageIcon(url);
 		url = Resources.getResource(GUI.class, "small_tree.png"); //$NON-NLS-1$
-		assert(url!=null);
+		assert (url != null);
 		TREE_ICON = new ImageIcon(url);
 		url = Resources.getResource(GUI.class, "small_tree.png"); //$NON-NLS-1$
-		assert(url!=null);
+		assert (url != null);
 		TOILET_ICON = new ImageIcon(url);
 		url = Resources.getResource(GUI.class, "small_tree.png"); //$NON-NLS-1$
-		assert(url!=null);
+		assert (url != null);
 		FOODSTAND_ICON = new ImageIcon(url);
 		url = Resources.getResource(GUI.class, "small_tree.png"); //$NON-NLS-1$
-		assert(url!=null);
+		assert (url != null);
 		DRINKSTAND_ICON = new ImageIcon(url);
 		url = Resources.getResource(GUI.class, "small_tree.png"); //$NON-NLS-1$
-		assert(url!=null);
+		assert (url != null);
 		STAGE_ICON = new ImageIcon(url);
 
 		ICON_WIDTH = MAN_ICON.getIconWidth();
@@ -122,7 +122,7 @@ public class GUI extends JFrame implements FrameworkGUI{
 		this.world = new World();
 
 		JScrollPane scroll = new JScrollPane(this.world);
-		content.add(BorderLayout.CENTER,scroll);
+		content.add(BorderLayout.CENTER, scroll);
 
 		JButton closeBt = new JButton("Quit"); //$NON-NLS-1$
 		closeBt.addActionListener(new ActionListener() {
@@ -133,7 +133,8 @@ public class GUI extends JFrame implements FrameworkGUI{
 		});
 		content.add(BorderLayout.SOUTH, closeBt);
 
-		this.world.setPreferredSize(new Dimension((int)worldWidth, (int)worldHeight));
+		this.world.setPreferredSize(new Dimension((int) worldWidth,
+				(int) worldHeight));
 
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -145,11 +146,12 @@ public class GUI extends JFrame implements FrameworkGUI{
 		this.world.addMouseMotionListener(new MouseMotionListener() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				//setMouseTarget(new Point2d(e.getX(), e.getY()));
+				// setMouseTarget(new Point2d(e.getX(), e.getY()));
 			}
+
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				//setMouseTarget(new Point2d(e.getX(), e.getY()));
+				// setMouseTarget(new Point2d(e.getX(), e.getY()));
 			}
 		});
 
@@ -158,18 +160,22 @@ public class GUI extends JFrame implements FrameworkGUI{
 			public void mouseClicked(MouseEvent e) {
 				//
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				//setMouseTarget(new Point2d(e.getX(), e.getY()));
+				// setMouseTarget(new Point2d(e.getX(), e.getY()));
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
-				//setMouseTarget(null);
+				// setMouseTarget(null);
 			}
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				//
 			}
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				//
@@ -186,9 +192,10 @@ public class GUI extends JFrame implements FrameworkGUI{
 	 */
 	@Override
 	public void environmentChanged(EnvironmentEvent event) {
-		synchronized(getTreeLock()) {
-			if (event instanceof WorldModelEvent && this.environment==null) {
-				WorldModelEvent e = (WorldModelEvent)event;
+		synchronized (getTreeLock()) {
+			if ((event instanceof WorldModelEvent)
+					&& (this.environment == null)) {
+				WorldModelEvent e = (WorldModelEvent) event;
 				this.environment = e.getStateProvider();
 			}
 			this.lastState = this.environment.getState();
@@ -200,15 +207,17 @@ public class GUI extends JFrame implements FrameworkGUI{
 	 * @param p
 	 */
 	protected void setMouseTarget(Point2d p) {
-		synchronized(getTreeLock()) {
+		synchronized (getTreeLock()) {
 			this.target = p;
-			if (this.environment!=null)
+			if (this.environment != null) {
 				this.environment.setMouseTarget(this.target);
+			}
 		}
 	}
 
-	/** Replies the last environment state.
-	 * 
+	/**
+	 * Replies the last environment state.
+	 *
 	 * @return the last environment state.
 	 */
 	protected WorldModelState getLastState() {
@@ -233,7 +242,7 @@ public class GUI extends JFrame implements FrameworkGUI{
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
-			Graphics2D g2d = (Graphics2D)g;
+			Graphics2D g2d = (Graphics2D) g;
 
 			Dimension currentDim = getPreferredSize();
 
@@ -242,73 +251,87 @@ public class GUI extends JFrame implements FrameworkGUI{
 
 		private void drawAgents(Graphics2D g2d, Dimension currentDim) {
 			WorldModelState state = getLastState();
-			if (state!=null) {
+			if (state != null) {
 				for (SituatedObject p : state.getObjects()) {
-					if(p instanceof Animat<?>){
+					if (p instanceof Animat<?>) {
 						drawAgent(
 								g2d,
-								(int)p.getX(), (int)p.getY(),
-								(int)(p.getDirection().getX()*DIRECTION_RADIUS),
-								(int)(p.getDirection().getY()*DIRECTION_RADIUS),
+								(int) p.getX(),
+								(int) p.getY(),
+								(int) (p.getDirection().getX() * DIRECTION_RADIUS),
+								(int) (p.getDirection().getY() * DIRECTION_RADIUS),
 								state.getAgentType(p));
 					} else {
-						drawObject(g2d, (int)p.getX(), (int)p.getY(), state.getObjectType(p));
+						drawObject(g2d, (int) p.getX(), (int) p.getY(),
+								state.getObjectType(p));
 					}
 				}
 			}
 		}
 
 		private void drawObject(Graphics2D g2d, int x, int y, String objectType) {
-			if (SHOW_ICON) {
-				switch(objectType){
-				case "STAGE":
-					STAGE_ICON.paintIcon(this, g2d, x-ICON_WIDTH/2, y-ICON_HEIGHT/2);
-					break;
-				case "FOODSTAND":
-					FOODSTAND_ICON.paintIcon(this, g2d, x-ICON_WIDTH/2, y-ICON_HEIGHT/2);
-					break;
-				case "DRINKSTAND":
-					DRINKSTAND_ICON.paintIcon(this, g2d, x-ICON_WIDTH/2, y-ICON_HEIGHT/2);
-					break;
-				case "TOILET":
-					TOILET_ICON.paintIcon(this, g2d, x-ICON_WIDTH/2, y-ICON_HEIGHT/2);
-					break;
-				default:
-					System.out.println("GUI.drawObject - pas de type trouvé");
-					break;
+			if (SHOW_ICON && (objectType != null)) {
+				switch (objectType) {
+					case "STAGE":
+						STAGE_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
+								- (ICON_HEIGHT / 2));
+						break;
+					case "FOODSTAND":
+						FOODSTAND_ICON.paintIcon(this, g2d, x
+								- (ICON_WIDTH / 2), y - (ICON_HEIGHT / 2));
+						break;
+					case "DRINKSTAND":
+						DRINKSTAND_ICON.paintIcon(this, g2d, x
+								- (ICON_WIDTH / 2), y - (ICON_HEIGHT / 2));
+						break;
+					case "TOILET":
+						TOILET_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2),
+								y - (ICON_HEIGHT / 2));
+						break;
+					default:
+						System.out
+								.println("GUI.drawObject - pas de type trouvï¿½");
+						break;
 				}
 
 			}
 		}
 
 		@SuppressWarnings("synthetic-access")
-		private void drawAgent(Graphics2D g2d, int x, int y, int dx, int dy, String agentType) {
-			//			g2d.setColor(Color.BLUE);
-			//			g2d.drawLine(x,y,x+dx,y+dy);
-			if (SHOW_ICON) {
-				switch(agentType){
-				case "MAN":
-					MAN_ICON.paintIcon(this, g2d, x-ICON_WIDTH/2, y-ICON_HEIGHT/2);
-					break;
-				case "WOMAN":
-					WOMAN_ICON.paintIcon(this, g2d, x-ICON_WIDTH/2, y-ICON_HEIGHT/2);
-					break;
-				case "MED":
-					MED_ICON.paintIcon(this, g2d, x-ICON_WIDTH/2, y-ICON_HEIGHT/2);
-					break;
-				case "BODYGUARD":
-					BODYGUARD_ICON.paintIcon(this, g2d, x-ICON_WIDTH/2, y-ICON_HEIGHT/2);
-					break;
-				case "SELLER":
-					SELLER_ICON.paintIcon(this, g2d, x-ICON_WIDTH/2, y-ICON_HEIGHT/2);
-					break;
-				default:
-					System.out.println("GUI.drawAgent - pas de type trouvé");
-					break;
+		private void drawAgent(Graphics2D g2d, int x, int y, int dx, int dy,
+				String agentType) {
+			// g2d.setColor(Color.BLUE);
+			// g2d.drawLine(x,y,x+dx,y+dy);
+			if (SHOW_ICON && (agentType != null)) {
+				switch (agentType) {
+					case "MAN":
+						MAN_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
+								- (ICON_HEIGHT / 2));
+						break;
+					case "WOMAN":
+						WOMAN_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
+								- (ICON_HEIGHT / 2));
+						break;
+					case "MED":
+						MED_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
+								- (ICON_HEIGHT / 2));
+						break;
+					case "BODYGUARD":
+						BODYGUARD_ICON.paintIcon(this, g2d, x
+								- (ICON_WIDTH / 2), y - (ICON_HEIGHT / 2));
+						break;
+					case "SELLER":
+						SELLER_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2),
+								y - (ICON_HEIGHT / 2));
+						break;
+					default:
+						System.out
+								.println("GUI.drawAgent - pas de type trouvï¿½");
+						break;
 				}
-			}
-			else {
-				g2d.drawOval(x-ICON_WIDTH/2, y-ICON_HEIGHT/2, ICON_WIDTH, ICON_HEIGHT);
+			} else {
+				g2d.drawOval(x - (ICON_WIDTH / 2), y - (ICON_HEIGHT / 2),
+						ICON_WIDTH, ICON_HEIGHT);
 			}
 		}
 
