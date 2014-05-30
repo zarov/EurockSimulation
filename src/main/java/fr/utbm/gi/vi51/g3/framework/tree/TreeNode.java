@@ -43,7 +43,7 @@ public interface TreeNode<N extends TreeNode<N>> {
 	 * @param children
 	 *            the list of children
 	 */
-	void setChildren(List<TreeNode<N>> children);
+	void setChildren(List<N> children);
 
 	/**
 	 * Get the AABB box contained in the node.

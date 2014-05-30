@@ -21,7 +21,7 @@ public interface Tree<N extends TreeNode<N>> extends Iterable<TreeNode<N>> {
 	 * @param root
 	 *            the treenode which is the root
 	 */
-	void setRoot(TreeNode<N> root);
+	void setRoot(N root);
 
 	/**
 	 * Get the root of the tree.
