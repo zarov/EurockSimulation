@@ -3,13 +3,13 @@
  */
 package fr.utbm.gi.vi51.g3.framework.tree;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
 import fr.utbm.gi.vi51.g3.framework.environment.AABB;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
-import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 
 /**
  * @author zarov
@@ -19,112 +19,152 @@ public class QuadTree implements Tree<QuadTreeNode> {
 
 	private QuadTreeNode root;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setRoot(QuadTreeNode root) {
 		this.root = root;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public QuadTreeNode getRoot() {
-		return this.root;
+		return root;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Perception> cull(AABB box) {
-		// TODO Auto-generated method stub
-		return null;
+		FrustumCuller fc = new FrustumCuller(iterator(), box);
+		List<Perception> percepts = new ArrayList<>();
+
+		while (fc.hasNext()) {
+			percepts.add(fc.next());
+		}
+
+		return percepts;
 	}
 
-	class NodeIterator implements Iterator<QuadTreeNode> {
-
-		private final Stack<QuadTreeNode> s = new Stack<>();
-
-		public NodeIterator() {
-			this.s.push(QuadTree.this.getRoot());
-		}
-
-		@Override
-		public boolean hasNext() {
-			return !this.s.isEmpty();
-		}
-
-		@Override
-		public QuadTreeNode next() {
-			QuadTreeNode n = this.s.pop();
-
-			for (QuadTreeNode c : n.getChildren()) {
-				this.s.push(c);
-			}
-
-			return n;
-		}
-
-		@Override
-		public void remove() {
-			// TODO Auto-generated method stub
-
-		}
-	}
-
-	class FrustrumCuller implements Iterator<Perception> {
+	/**
+	 * A Frustum Culler is used to remove from the perception list of an agent,
+	 * the object that are completely outside the view frustums.
+	 *
+	 * @author zarov
+	 *
+	 */
+	class FrustumCuller implements Iterator<Perception> {
 		private final AABB frustrum;
-		private final Iterator<QuadTreeNode> nodeIterator;
-		private Iterator<SituatedObject> objectIterator;
+		private final Iterator<TreeNode<QuadTreeNode>> nodeIterator;
 		private Perception next;
 
-		public FrustrumCuller(Iterator<QuadTreeNode> ni, AABB frustrum) {
+		public FrustumCuller(Iterator<TreeNode<QuadTreeNode>> ni, AABB frustrum) {
 			this.frustrum = frustrum;
-			this.nodeIterator = ni;
-			searchNext();
+			nodeIterator = ni;
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public boolean hasNext() {
-			return this.next != null;
+			return next != null;
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public Perception next() {
-			Perception n = this.next;
+			Perception n = next;
+			// Compute the next object (perception)
 			searchNext();
 			return n;
 		}
 
+		/**
+		 * Search the next available element from this iterator.
+		 */
 		private void searchNext() {
-			this.next = null;
-			while (this.next == null) {
-				if ((this.objectIterator == null) || !this.objectIterator.hasNext()) {
-					while (this.objectIterator.hasNext()) {
-						QuadTreeNode n = this.nodeIterator.next();
-						if (n.getBox().intersects(this.frustrum)) {
-							// TODO this.objectIterator = n.getData().iterator();
-						}
-					}
-				} else {
-					return;
-				}
+			next = null;
 
-				assert (this.objectIterator != null);
-				if (this.objectIterator.hasNext()) {
-					SituatedObject o = this.objectIterator.next();
-					// TODO if (o.getPosition().intersects(this.frustrum)) {
-					//	this.next = o.toPerception();
-					//}
+			if (nodeIterator != null) {
+				while ((next == null) && nodeIterator.hasNext()) {
+					TreeNode<QuadTreeNode> node = nodeIterator.next();
+					// If the box of the object contained in the node intersects
+					// with the frustum, then it is in the perception field
+					if (node.getObject().getBox().intersects(frustrum)) {
+						next = node.getObject().toPerception();
+					}
 				}
 			}
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void remove() {
-			// TODO Auto-generated method stub
-
+			throw new UnsupportedOperationException("remove");
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Iterator<TreeNode<QuadTreeNode>> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new NodeIterator();
+	}
+
+	/**
+	 * The Iterator of the tree.
+	 *
+	 * @author zarov
+	 *
+	 */
+	class NodeIterator implements Iterator<TreeNode<QuadTreeNode>> {
+
+		private final Stack<QuadTreeNode> s = new Stack<>();
+		private QuadTreeNode n;
+
+		public NodeIterator() {
+			s.push(getRoot());
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public boolean hasNext() {
+			return !s.isEmpty();
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public QuadTreeNode next() {
+			n = s.pop();
+
+			for (QuadTreeNode c : n.getChildren()) {
+				s.push(c);
+			}
+
+			return n;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void remove() {
+			s.removeElement(n);
+		}
 	}
 
 }

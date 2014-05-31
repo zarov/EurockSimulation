@@ -10,67 +10,119 @@ import fr.utbm.gi.vi51.g3.framework.environment.AABB;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 
 /**
+ * A node of a QuadTree.
+ *
  * @author zarov
  *
  */
 public class QuadTreeNode implements TreeNode<QuadTreeNode> {
 
-	private AABB box;
+	private final AABB box;
 	private SituatedObject object;
+
+	private QuadTreeNode parent;
 
 	private QuadTreeNode northWestChild = null;
 	private QuadTreeNode northEastChild = null;
 	private QuadTreeNode southWestChild = null;
 	private QuadTreeNode southEastChild = null;
 
-	public QuadTreeNode(AABB box){
+	public QuadTreeNode(AABB box) {
 		this.box = box;
-		this.object = null;
+		setObject(null);
+		parent = null;
 	}
 
+	public QuadTreeNode(AABB box, QuadTreeNode parent) {
+		this.box = box;
+		setObject(null);
+		this.parent = parent;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public TreeNode<QuadTreeNode> getParent() {
-		// TODO Auto-generated method stub
-		return null;
+		return parent;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void setParent(TreeNode<QuadTreeNode> parent) {
-		// TODO Auto-generated method stub
+	public void setParent(QuadTreeNode parent) {
+		this.parent = parent;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<QuadTreeNode> getChildren() {
 		List<QuadTreeNode> children = new ArrayList<>();
-		children.add(this.northWestChild);
-		children.add(this.northEastChild);
-		children.add(this.southWestChild);
-		children.add(this.southEastChild);
+		children.add(northWestChild);
+		children.add(northEastChild);
+		children.add(southWestChild);
+		children.add(southEastChild);
 		return children;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setChildren(List<QuadTreeNode> children) {
-		// TODO Auto-generated method stub
+		northWestChild = children.get(0);
+		northEastChild = children.get(1);
+		southWestChild = children.get(2);
+		southEastChild = children.get(3);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AABB getBox() {
-		return this.box;
+		return object.getBox();
 	}
 
-	public boolean insert(SituatedObject object){
-		if(this.box.contains(object)) {
-			if(object == null){
-				this.object = object;
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public SituatedObject getObject() {
+		return object;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setObject(SituatedObject object) {
+		this.object = object;
+	}
+
+	public boolean insert(SituatedObject object) {
+		if (box.contains(object)) {
+			if (object == null) {
+				setObject(object);
 				return true;
 			} else {
-				if(this.northWestChild == null){
+				if (northWestChild == null) {
 					subdivide();
-					if(this.northWestChild.insert(object)) return true;
-					if(this.northEastChild.insert(object)) return true;
-					if(this.southWestChild.insert(object)) return true;
-					if(this.southEastChild.insert(object)) return true;
+					if (northWestChild.insert(object)) {
+						return true;
+					}
+					if (northEastChild.insert(object)) {
+						return true;
+					}
+					if (southWestChild.insert(object)) {
+						return true;
+					}
+					if (southEastChild.insert(object)) {
+						return true;
+					}
 				}
 			}
 		}
@@ -78,11 +130,15 @@ public class QuadTreeNode implements TreeNode<QuadTreeNode> {
 		return false;
 	}
 
-	private void subdivide(){
-		this.northWestChild = new QuadTreeNode(new AABB(this.box.getXlow(),this.box.getXmid(),this.box.getYmid(),this.box.getYup()));
-		this.northEastChild = new QuadTreeNode(new AABB(this.box.getXmid(),this.box.getXup(),this.box.getYmid(),this.box.getYup()));
-		this.southWestChild = new QuadTreeNode(new AABB(this.box.getXlow(),this.box.getXmid(),this.box.getYlow(),this.box.getYmid()));
-		this.southEastChild = new QuadTreeNode(new AABB(this.box.getXmid(),this.box.getXup(),this.box.getYlow(),this.box.getYmid()));
+	private void subdivide() {
+		northWestChild = new QuadTreeNode(new AABB(box.getXlow(),
+				box.getXmid(), box.getYmid(), box.getYup()));
+		northEastChild = new QuadTreeNode(new AABB(box.getXmid(), box.getXup(),
+				box.getYmid(), box.getYup()));
+		southWestChild = new QuadTreeNode(new AABB(box.getXlow(),
+				box.getXmid(), box.getYlow(), box.getYmid()));
+		southEastChild = new QuadTreeNode(new AABB(box.getXmid(), box.getXup(),
+				box.getYlow(), box.getYmid()));
 	}
 
 }

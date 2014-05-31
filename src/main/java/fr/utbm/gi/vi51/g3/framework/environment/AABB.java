@@ -1,7 +1,8 @@
 package fr.utbm.gi.vi51.g3.framework.environment;
 
-
 /**
+ * An implementation of an Axis-Aligned minimum Bounding Box.
+ * 
  * @author zarov
  *
  */
@@ -12,7 +13,7 @@ public class AABB {
 	private final double ylow;
 	private final double yup;
 
-	public AABB(double xlow, double xup, double ylow, double yup){
+	public AABB(double xlow, double xup, double ylow, double yup) {
 		this.xlow = xlow;
 		this.xup = xup;
 		this.ylow = ylow;
@@ -20,42 +21,50 @@ public class AABB {
 	}
 
 	public double getXlow() {
-		return this.xlow;
+		return xlow;
 	}
 
 	public double getXup() {
-		return this.xup;
+		return xup;
 	}
 
 	public double getYlow() {
-		return this.ylow;
+		return ylow;
 	}
 
 	public double getYup() {
-		return this.yup;
+		return yup;
 	}
 
 	public double getXmid() {
-		return this.xlow + ((this.xup-this.xlow)/2);
+		return xlow + ((xup - xlow) / 2);
 	}
 
-	public double getYmid(){
-		return this.ylow + ((this.yup-this.ylow)/2);
+	public double getYmid() {
+		return ylow + ((yup - ylow) / 2);
 	}
 
+	/**
+	 * Compares two boxes, frustum and this one, and tell if they intersect.
+	 *
+	 * @param frustrum
+	 * @return true or false
+	 */
 	public boolean intersects(AABB frustrum) {
-		return !(frustrum.xup < this.xlow
-				|| frustrum.xlow > this.xup
-				|| frustrum.yup < this.ylow
-				|| frustrum.ylow > this.yup);
+		return !((frustrum.xup < xlow) || (frustrum.xlow > xup)
+				|| (frustrum.yup < ylow) || (frustrum.ylow > yup));
 	}
 
-
+	/**
+	 * Compares an object and this box, and tell if the object is inside the
+	 * box.
+	 *
+	 * @param object
+	 * @return true or false
+	 */
 	public boolean contains(SituatedObject object) {
-		return !(object.getX() < this.xlow
-				|| object.getX() > this.xup
-				|| object.getY() < this.ylow
-				|| object.getY() > this.yup);
+		return !((object.getX() < xlow) || (object.getX() > xup)
+				|| (object.getY() < ylow) || (object.getY() > yup));
 	}
 
 }

@@ -6,6 +6,7 @@ package fr.utbm.gi.vi51.g3.framework.tree;
 import java.util.List;
 
 import fr.utbm.gi.vi51.g3.framework.environment.AABB;
+import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 
 /**
  *
@@ -28,7 +29,7 @@ public interface TreeNode<N extends TreeNode<N>> {
 	 * @param parent
 	 *            the parent of this node.
 	 */
-	void setParent(TreeNode<N> parent);
+	void setParent(N parent);
 
 	/**
 	 * Get the list of children of this node.
@@ -46,9 +47,23 @@ public interface TreeNode<N extends TreeNode<N>> {
 	void setChildren(List<N> children);
 
 	/**
-	 * Get the AABB box contained in the node.
+	 * Get the AABB box of the node.
 	 *
 	 * @return
 	 */
 	AABB getBox();
+
+	/**
+	 * Get the SituatedObject contained in the node.
+	 * 
+	 * @return
+	 */
+	SituatedObject getObject();
+
+	/**
+	 * Set the SituatedObject contained in the node.
+	 * 
+	 * @param object
+	 */
+	void setObject(SituatedObject object);
 }
