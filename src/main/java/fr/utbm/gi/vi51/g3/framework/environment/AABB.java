@@ -2,7 +2,7 @@ package fr.utbm.gi.vi51.g3.framework.environment;
 
 /**
  * An implementation of an Axis-Aligned minimum Bounding Box.
- * 
+ *
  * @author zarov
  *
  */
@@ -65,6 +65,11 @@ public class AABB {
 	public boolean contains(SituatedObject object) {
 		return !((object.getX() < xlow) || (object.getX() > xup)
 				|| (object.getY() < ylow) || (object.getY() > yup));
+	}
+
+	@Override
+	public String toString() {
+		return "A(" + xlow + ", " + ylow + ") et B(" + xup + ", " + yup + ")";
 	}
 
 }

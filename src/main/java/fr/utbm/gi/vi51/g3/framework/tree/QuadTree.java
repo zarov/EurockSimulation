@@ -10,6 +10,7 @@ import java.util.Stack;
 
 import fr.utbm.gi.vi51.g3.framework.environment.AABB;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
+import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 
 /**
  * @author zarov
@@ -44,7 +45,10 @@ public class QuadTree implements Tree<QuadTreeNode> {
 		List<Perception> percepts = new ArrayList<>();
 
 		while (fc.hasNext()) {
-			percepts.add(fc.next());
+			Perception p = fc.next();
+			if (p != null) {
+				percepts.add(p);
+			}
 		}
 
 		return percepts;
@@ -60,7 +64,6 @@ public class QuadTree implements Tree<QuadTreeNode> {
 	class FrustumCuller implements Iterator<Perception> {
 		private final AABB frustrum;
 		private final Iterator<TreeNode<QuadTreeNode>> nodeIterator;
-		private Perception next;
 
 		public FrustumCuller(Iterator<TreeNode<QuadTreeNode>> ni, AABB frustrum) {
 			this.frustrum = frustrum;
@@ -72,7 +75,7 @@ public class QuadTree implements Tree<QuadTreeNode> {
 		 */
 		@Override
 		public boolean hasNext() {
-			return next != null;
+			return nodeIterator.hasNext();
 		}
 
 		/**
@@ -80,33 +83,30 @@ public class QuadTree implements Tree<QuadTreeNode> {
 		 */
 		@Override
 		public Perception next() {
-			Perception n = next;
-			// Compute the next object (perception)
-			searchNext();
-			return n;
-		}
-
-		/**
-		 * Search the next available element from this iterator.
-		 */
-		private void searchNext() {
-			next = null;
+			Perception next = null;
 
 			if (nodeIterator != null) {
 				while ((next == null) && nodeIterator.hasNext()) {
 					TreeNode<QuadTreeNode> node = nodeIterator.next();
-					// If the box of the node intersects with the frustum, we
-					// can go beyond it
-					if (node.getBox().intersects(frustrum)) {
-						// If the box of the object contained in the node
-						// intersects with the frustum, then it is in the
-						// perception field
-						if (node.getObject().getBox().intersects(frustrum)) {
-							next = node.getObject().toPerception();
+					if (node != null) {
+						AABB nBox = node.getBox();
+						// If the box of the node intersects with the frustum,
+						// we can go beyond it
+						if ((nBox != null) && nBox.intersects(frustrum)) {
+							// If the box of the object contained in the node
+							// intersects with the frustum, then it is in the
+							// perception field
+							SituatedObject object = node.getObject();
+							if ((object != null)
+									&& object.getBox().intersects(frustrum)) {
+								next = object.toPerception();
+							}
 						}
 					}
 				}
 			}
+
+			return next;
 		}
 
 		/**
@@ -155,9 +155,13 @@ public class QuadTree implements Tree<QuadTreeNode> {
 		@Override
 		public QuadTreeNode next() {
 			n = s.pop();
-
-			for (QuadTreeNode c : n.getChildren()) {
-				s.push(c);
+			if (n != null) {
+				List<QuadTreeNode> nChildren = n.getChildren();
+				if ((nChildren != null) && !nChildren.isEmpty()) {
+					for (QuadTreeNode c : nChildren) {
+						s.push(c);
+					}
+				}
 			}
 
 			return n;

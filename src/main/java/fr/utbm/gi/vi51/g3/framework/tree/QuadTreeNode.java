@@ -84,7 +84,7 @@ public class QuadTreeNode implements TreeNode<QuadTreeNode> {
 	 */
 	@Override
 	public AABB getBox() {
-		return object.getBox();
+		return box;
 	}
 
 	/**

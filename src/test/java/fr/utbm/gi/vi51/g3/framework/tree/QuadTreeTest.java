@@ -21,7 +21,7 @@ public class QuadTreeTest {
 		tree = new QuadTree();
 
 		// First level
-		root = new QuadTreeNode(null);
+		root = new QuadTreeNode(new AABB(0, 8, 0, 8));
 
 		// Second level
 		List<QuadTreeNode> children = new ArrayList<>();
@@ -71,7 +71,7 @@ public class QuadTreeTest {
 		testBuild();
 
 		// Let's define a frustum
-		AABB frustum = new AABB(0, 6, 0, 6);
+		AABB frustum = new AABB(0, 8, 0, 8);
 		// When called, cull function should remove 5 little nodes + a big nodes
 		// and return a list of 4 objects
 		List<Perception> percepts = tree.cull(frustum);
@@ -79,7 +79,8 @@ public class QuadTreeTest {
 		System.out.println("Total number of perceived objects : "
 				+ percepts.size());
 		for (Perception p : percepts) {
-			System.out.println(p.getPerceivedObject().getClass().toString());
+			System.out.println(p.getPerceivedObject().getClass().toString()
+					+ " - " + p.getPerceivedObject().getBox().toString());
 		}
 	}
 
