@@ -95,10 +95,15 @@ public class QuadTree implements Tree<QuadTreeNode> {
 			if (nodeIterator != null) {
 				while ((next == null) && nodeIterator.hasNext()) {
 					TreeNode<QuadTreeNode> node = nodeIterator.next();
-					// If the box of the object contained in the node intersects
-					// with the frustum, then it is in the perception field
-					if (node.getObject().getBox().intersects(frustrum)) {
-						next = node.getObject().toPerception();
+					// If the box of the node intersects with the frustum, we
+					// can go beyond it
+					if (node.getBox().intersects(frustrum)) {
+						// If the box of the object contained in the node
+						// intersects with the frustum, then it is in the
+						// perception field
+						if (node.getObject().getBox().intersects(frustrum)) {
+							next = node.getObject().toPerception();
+						}
 					}
 				}
 			}

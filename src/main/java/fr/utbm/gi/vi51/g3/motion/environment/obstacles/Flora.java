@@ -4,7 +4,6 @@ import javax.vecmath.Point2d;
 
 import fr.utbm.gi.vi51.g3.framework.environment.AABB;
 import fr.utbm.gi.vi51.g3.framework.environment.AbstractSituatedObject;
-import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 
 public class Flora extends AbstractSituatedObject {
 
@@ -12,16 +11,14 @@ public class Flora extends AbstractSituatedObject {
 		super(size, position);
 	}
 
-	@Override
-	public Perception toPerception() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	/**
+	 * Returns the box containing the flora. By default it is a square, with a
+	 * width of {@code size}, and his center is {@code position}.
+	 */
 	@Override
 	public AABB getBox() {
-		// TODO Auto-generated method stub
-		return null;
+		return new AABB(getX() - (getSize() / 2), getX() + (getSize() / 2),
+				getY() - (getSize() / 2), getY() + (getSize() / 2));
 	}
 
 }

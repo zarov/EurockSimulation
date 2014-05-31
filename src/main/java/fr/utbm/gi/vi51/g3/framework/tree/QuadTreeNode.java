@@ -105,7 +105,7 @@ public class QuadTreeNode implements TreeNode<QuadTreeNode> {
 
 	public boolean insert(SituatedObject object) {
 		if (box.contains(object)) {
-			if (object == null) {
+			if (this.object == null) {
 				setObject(object);
 				return true;
 			} else {

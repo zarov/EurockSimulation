@@ -4,7 +4,6 @@ import javax.vecmath.Point2d;
 
 import fr.utbm.gi.vi51.g3.framework.environment.AABB;
 import fr.utbm.gi.vi51.g3.framework.environment.AbstractSituatedObject;
-import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 
 public class AbstractSmellyObject extends AbstractSituatedObject {
 
@@ -17,12 +16,6 @@ public class AbstractSmellyObject extends AbstractSituatedObject {
 			double orientation) {
 		super(size, position, orientation);
 		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public Perception toPerception() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
