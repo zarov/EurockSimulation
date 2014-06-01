@@ -40,8 +40,8 @@ public class QuadTree implements Tree<QuadTreeNode> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Perception> cull(AABB box) {
-		FrustumCuller fc = new FrustumCuller(iterator(), box);
+	public List<Perception> cull(AABB frustum) {
+		FrustumCuller fc = new FrustumCuller(iterator(), frustum);
 		List<Perception> percepts = new ArrayList<>();
 
 		while (fc.hasNext()) {
