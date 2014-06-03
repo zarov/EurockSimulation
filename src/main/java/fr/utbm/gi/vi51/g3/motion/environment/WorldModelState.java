@@ -40,18 +40,22 @@ import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 public class WorldModelState {
 
 	private final Collection<? extends SituatedObject> objects;
+	private final Collection<? extends SituatedObject> agents;
 
-	/**
-	 * @param objs
-	 */
+	
 	WorldModelState(Collection<? extends SituatedObject> objs) {
 		this.objects = new ArrayList<SituatedObject>(objs);
+		this.agents = new ArrayList<SituatedObject>();
 	}
-
-	/** Replies the objects in the environment.
-	 * 
-	 * @return the objects in the environment.
-	 */
+	
+	WorldModelState(Collection<? extends SituatedObject> agents, Collection<? extends SituatedObject> objet) {
+		this.agents = new ArrayList<SituatedObject>(agents);
+		this.objects = new ArrayList<SituatedObject>(objet);
+	}
+  
+	public Collection <? extends SituatedObject> getAgents() {
+		return this.agents;
+	}
 	public Collection<? extends SituatedObject> getObjects() {
 		return this.objects;
 	}

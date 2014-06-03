@@ -20,6 +20,7 @@
  */
 package fr.utbm.gi.vi51.g3.motion.environment;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,6 +36,10 @@ import fr.utbm.gi.vi51.g3.framework.environment.MotionInfluence;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
+import fr.utbm.gi.vi51.g3.motion.agent.NeedType;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.StandAction;
 
 /**
  * Model of the world.
@@ -57,9 +62,150 @@ public class WorldModel extends AbstractEnvironment implements WorldModelStatePr
 
 	private void build(){
 		// Build stages
-
+		
+		stands();
+		flora();
 	}
 
+	/** Flora **/
+	private void flora()
+	{
+		/* From top left corner to bottom right corner */
+		forest(5,11,2,6);
+		forest(20,680,3,4);
+		forest(250,180,8,5);
+		forest(400,10,3,5);
+		forest(650,680,3,5);
+		forest(650,300,7,3);
+		forest(650,300,7,3);
+		forest(950,80,5,4);
+		forest(1100,300,2,2);
+		forest(1300,20,3,4);
+		forest(1300,200,2,14);
+		forest(1600,200,6,3);
+		forest(1580,540,7,7);
+		 
+	}
+	
+	private void forest(int x, int y, int height, int width) {
+		
+		int saveX = x;
+		int saveY = y;
+		ArrayList<Point2d> trees = new ArrayList<Point2d>();
+		for(int i=0; i<height;i++)
+		{
+			for(int j=0; j<width ; j++)
+			{
+				trees.add(new Point2d(x,y));
+				x += 25;
+			}
+			y += 35;
+			x = saveX;
+		}
+			for(Point2d a : trees)
+			{
+				Flora Tree = new Flora(50, a);
+				implantSituatedObject(Tree);
+			}
+	}
+	
+	/** Stands **/
+	private void stands()
+	{
+		Point2d FOODXY = new Point2d(180,20);
+		StandAction FOODHunger = new StandAction(NeedType.HUNGER, 10);
+		Stand FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(260,20);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(330,20);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(400,250);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(400,350);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(770,630);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(815,690);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(870,730);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(750,320);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(750,400);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(850,400);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(950,400);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(750,480);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(850,480);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(950,480);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(1550,280);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(1550,350);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(1450,280);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(1450,350);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(1350,280);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(1350,350);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(1120,20);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+		
+		FOODXY = new Point2d(1220,20);
+		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+	}
+	
 	/** {@inheritDoc}
 	 */
 	@Override
@@ -73,7 +219,8 @@ public class WorldModel extends AbstractEnvironment implements WorldModelStatePr
 	 */
 	@Override
 	public WorldModelState getState() {
-		return new WorldModelState(cloneAgentBodies());
+		/* Ici ça envoie le bordel */
+		return new WorldModelState(cloneAgentBodies(), getOtherObjects());
 	}
 
 	/**
@@ -93,11 +240,6 @@ public class WorldModel extends AbstractEnvironment implements WorldModelStatePr
 		if (agent!=null) {
 			double x1 = agent.getX();
 			double y1 = agent.getY();
-
-			// add mouse target in perceptions
-			//			if (this.mouseTarget!=null) {
-			//				allPercepts.add(new Perception(this.mouseTarget));
-			//			}
 
 			for(AgentBody b1 : getAgentBodies()) {
 				if (b1!=agent) {

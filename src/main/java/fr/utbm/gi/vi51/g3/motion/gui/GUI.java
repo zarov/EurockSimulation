@@ -1,10 +1,12 @@
 package fr.utbm.gi.vi51.g3.motion.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -12,8 +14,11 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,6 +32,7 @@ import org.arakhne.afc.vmutil.Resources;
 import org.arakhne.afc.vmutil.locale.Locale;
 
 import fr.utbm.gi.vi51.g3.framework.FrameworkLauncher;
+import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.EnvironmentEvent;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
@@ -65,33 +71,43 @@ public class GUI extends JFrame implements FrameworkGUI {
 		URL url = Resources.getResource(GUI.class, IMG_DIR + "small_man.png"); //$NON-NLS-1$
 		assert (url != null);
 		MAN_ICON = new ImageIcon(url);
+		
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_woman.png"); //$NON-NLS-1$
 		assert (url != null);
 		WOMAN_ICON = new ImageIcon(url);
+		
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_seller.png"); //$NON-NLS-1$
 		assert (url != null);
 		SELLER_ICON = new ImageIcon(url);
+		
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_med.png"); //$NON-NLS-1$
 		assert (url != null);
 		MED_ICON = new ImageIcon(url);
+		
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_bodyguard.png"); //$NON-NLS-1$
 		assert (url != null);
 		BODYGUARD_ICON = new ImageIcon(url);
+		
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_barrier.png"); //$NON-NLS-1$
 		assert (url != null);
 		BARRIER_ICON = new ImageIcon(url);
+		
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
 		assert (url != null);
 		TREE_ICON = new ImageIcon(url);
+		
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
 		assert (url != null);
 		TOILET_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
+		
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_foodstand.png"); //$NON-NLS-1$
 		assert (url != null);
 		FOODSTAND_ICON = new ImageIcon(url);
-		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
+		
+		url = Resources.getResource(GUI.class, IMG_DIR + "small_foodstand.png"); //$NON-NLS-1$
 		assert (url != null);
 		DRINKSTAND_ICON = new ImageIcon(url);
+		
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
 		assert (url != null);
 		STAGE_ICON = new ImageIcon(url);
@@ -232,7 +248,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 		private static final long serialVersionUID = 8516008479029079959L;
 
 		public World() {
-			//
+			
 		}
 
 		/**
@@ -246,24 +262,36 @@ public class GUI extends JFrame implements FrameworkGUI {
 			Dimension currentDim = getPreferredSize();
 
 			drawAgents(g2d, currentDim);
+			
+//			try {
+//				URL url = Resources.getResource(GUI.class, IMG_DIR + "map_tilted.jpg"); //$NON-NLS-1$
+//				assert (url != null);
+//				
+//				Image img = ImageIO.read(url);
+//				g.drawImage(img,0,0,973,585,this);
+//			} catch(IOException e) {
+//				e.printStackTrace();
+//			}
 		}
 
 		private void drawAgents(Graphics2D g2d, Dimension currentDim) {
 			WorldModelState state = getLastState();
 			if (state != null) {
-				for (SituatedObject p : state.getObjects()) {
-					if (p instanceof Animat<?>) {
-						drawAgent(
-								g2d,
-								(int) p.getX(),
-								(int) p.getY(),
-								(int) (p.getDirection().getX() * DIRECTION_RADIUS),
-								(int) (p.getDirection().getY() * DIRECTION_RADIUS),
-								state.getAgentType(p));
-					} else {
-						drawObject(g2d, (int) p.getX(), (int) p.getY(),
-								state.getObjectType(p));
-					}
+//				for (SituatedObject p : state.getAgents()) {
+//					if (p instanceof AgentBody) {
+//						drawAgent(
+//								g2d,
+//								(int) p.getX(),
+//								(int) p.getY(),
+//								(int) (p.getDirection().getX() * DIRECTION_RADIUS),
+//								(int) (p.getDirection().getY() * DIRECTION_RADIUS),
+//								state.getAgentType(p));
+//					} 
+//				
+//				}
+				for(SituatedObject p : state.getObjects()) {
+					drawObject(g2d, (int) p.getX(), (int) p.getY(),
+						state.getObjectType(p));
 				}
 			}
 		}
@@ -271,6 +299,10 @@ public class GUI extends JFrame implements FrameworkGUI {
 		private void drawObject(Graphics2D g2d, int x, int y, String objectType) {
 			if (SHOW_ICON && (objectType != null)) {
 				switch (objectType) {
+					
+					case "TREE":
+						TREE_ICON.paintIcon(this, g2d, x-(ICON_WIDTH / 2), y
+								- (ICON_HEIGHT / 2));
 					case "STAGE":
 						STAGE_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
 								- (ICON_HEIGHT / 2));
@@ -289,7 +321,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 						break;
 					default:
 						System.out
-								.println("GUI.drawObject - pas de type trouvï¿½");
+								.println("GUI.drawObject - pas de type trouvé");
 						break;
 				}
 
