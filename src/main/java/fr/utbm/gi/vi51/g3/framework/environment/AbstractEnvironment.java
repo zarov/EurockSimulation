@@ -36,6 +36,7 @@ import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.util.random.RandomNumber;
 
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
+import fr.utbm.gi.vi51.g3.framework.tree.QuadTree;
 
 
 /**
@@ -46,8 +47,11 @@ import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
  */
 public abstract class AbstractEnvironment implements Environment {
 
+	private final QuadTree worldObjects = new QuadTree();
+	
 	private final Map<AgentAddress,AgentBody> bodies = new TreeMap<AgentAddress,AgentBody>();
 	private final Set<SituatedObject> objects = new HashSet<SituatedObject>();
+	
 	private final SimulationTimeManager timeManager;
 	private final double width;
 	private final double height;
@@ -72,23 +76,38 @@ public abstract class AbstractEnvironment implements Environment {
 		}
 	}
 
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void spawnAgentBody(Animat<?> animat) {
-		if (animat!=null) {
+		if (animat != null) {
 			AgentBody body = animat.spawnBody(this);
-			if (body!=null) {
+			if (body != null) {
 				double size = body.getSize();
 				body.setPosition(rnd(size, getWidth()), rnd(size, getHeight()));
-				body.setAngle(RandomNumber.nextDouble() * 2.* Math.PI);
+				body.setAngle(RandomNumber.nextDouble() * 2. * Math.PI);
 				this.bodies.put(animat.getAddress(), body);
 			}
 		}
 	}
 
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public void spawnAgentBody(Animat<?> animat) {
+//		if (animat!=null) {
+//			AgentBody body = animat.spawnBody(this);
+//			if (body!=null) {
+//				double size = body.getSize();
+//				body.setPosition(rnd(size, getWidth()), rnd(size, getHeight()));
+//				body.setAngle(RandomNumber.nextDouble() * 2.* Math.PI);
+	// this.worldObjects.insert(body);
+//			}
+//		}
+//	}
+	
 	private double rnd(double s, double w) {
 		double r = w - 3. * s;
 		r = RandomNumber.nextDouble() * r;
