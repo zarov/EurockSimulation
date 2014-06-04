@@ -232,7 +232,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	@Override
 	public boolean isOK() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -245,5 +245,10 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	public AABB getBox() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public boolean isBomb(){
+		return false;
 	}
 }

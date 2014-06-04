@@ -1,6 +1,7 @@
 package fr.utbm.gi.vi51.g3.motion.agent;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.vecmath.Point2d;
@@ -13,10 +14,12 @@ import org.janusproject.kernel.status.StatusFactory;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.EvadeBehaviour;
+import fr.utbm.gi.vi51.g3.framework.environment.MobileObject;
+import fr.utbm.gi.vi51.g3.framework.environment.Perception;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringEvadeBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
 
@@ -38,7 +41,7 @@ public class Attendant extends Animat<AgentBody> {
 	private final AttendantGender GENDER;
 	private Set<Need> needs;
 
-	private final EvadeBehaviour<?> evadeBehaviour;
+	private final FleeBehaviour<?> fleeBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
 
 	public Attendant(AttendantGender gender) {
@@ -46,7 +49,7 @@ public class Attendant extends Animat<AgentBody> {
 		// if (this.isSteering) {
 		initNeeds();
 		this.GENDER = gender;
-		this.evadeBehaviour = new SteeringEvadeBehaviour();
+		this.fleeBehaviour = new SteeringFleeBehaviour();
 		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(STOP_RADIUS,
 				SLOW_RADIUS);
 
@@ -95,42 +98,16 @@ public class Attendant extends Animat<AgentBody> {
 		double linearSpeed = getCurrentLinearSpeed();
 		double angularSpeed = getCurrentAngularSpeed();
 
-		// BehaviourOutput globalOutput = null;
-		// List<Perception> perceptions = getPerceivedObjects();
-		//
-		// if(!perceptions.isEmpty()) {
-		// for(Perception percept: perceptions)
-		// {
-		//
-		// }
-		// } else {
-		//
-		// //if no object is perceived then wander
-		// globalOutput = this.wanderBehaviour.runWander(position, orientation,
-		// linearSpeed, getMaxLinear(), angularSpeed, getMaxAngular());
-		// }
-		//
-		// //send influences to the environment
-		// if (globalOutput!=null) {
-		// if (this.isSteering)
-		// influenceSteering(globalOutput.getLinear(),globalOutput.getAngular());
-		// else
-		// influenceKinematic(globalOutput.getLinear(),globalOutput.getAngular());
-		// }
-		//
+		List<Perception> perc = getPerceivedObjects();
+
+		for (Perception p : perc) {
+			MobileObject o = (MobileObject) p.getPerceivedObject();
+			if (o.isBomb()) 
+				this.fleeBehaviour.runFlee(position, linearSpeed, 0.5, o.getPosition());
+		}
 		return StatusFactory.ok(this);
 	}
-
-	// private double getMaxLinear() {
-	// return this.isSteering ? getMaxLinearAcceleration() :
-	// getMaxLinearSpeed();
-	// }
-	//
-	// private double getMaxAngular() {
-	// return this.isSteering ? getMaxAngularAcceleration() :
-	// getMaxAngularSpeed();
-	// }
-
+	
 	public static double getPerceptionRange() {
 		return PERCEPTION_RANGE;
 	}
@@ -141,6 +118,23 @@ public class Attendant extends Animat<AgentBody> {
 
 	public boolean isAttendant() {
 		return true;
+	}
+
+	public boolean hasNeed(NeedType needType) {
+		for(Need n : this.needs){
+			if(n.getType() == needType && n.getValue() == 10)
+				return true;
+
+		}
+		return false;
+	}
+
+	public void updateNeeds(NeedType needType) {
+		for(Need n : this.needs){
+			if(n.getType() == needType && n.getValue() == 10)
+				n.setValue(0);
+		}
+		
 	}
 
 }
