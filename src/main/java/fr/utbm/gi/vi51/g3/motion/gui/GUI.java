@@ -59,10 +59,15 @@ public class GUI extends JFrame implements FrameworkGUI {
 	private static final Icon BODYGUARD_ICON;
 	private static final Icon BARRIER_ICON;
 	private static final Icon TREE_ICON;
-	private static final Icon STAGE_ICON;
 	private static final Icon FOODSTAND_ICON;
 	private static final Icon DRINKSTAND_ICON;
 	private static final Icon TOILET_ICON;
+	private static final Icon LOGGIASTAGE_ICON;
+	private static final Icon BEACHSTAGE_ICON;
+	private static final Icon MAINSTAGE_ICON;
+	private static final Icon GREENSTAGE_ICON;
+	
+	
 
 	private static final int ICON_WIDTH;
 	private static final int ICON_HEIGHT;
@@ -108,9 +113,21 @@ public class GUI extends JFrame implements FrameworkGUI {
 		assert (url != null);
 		DRINKSTAND_ICON = new ImageIcon(url);
 		
-		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
+		url = Resources.getResource(GUI.class, IMG_DIR + "beach_stage_empty.jpg");
 		assert (url != null);
-		STAGE_ICON = new ImageIcon(url);
+		BEACHSTAGE_ICON = new ImageIcon(url);
+		
+		url = Resources.getResource(GUI.class, IMG_DIR + "main_stage.jpg");
+		assert (url != null);
+		MAINSTAGE_ICON = new ImageIcon(url);
+		
+		url = Resources.getResource(GUI.class, IMG_DIR + "greenRoom_stage.jpg");
+		assert (url != null);
+		GREENSTAGE_ICON = new ImageIcon(url);
+		
+		url = Resources.getResource(GUI.class, IMG_DIR + "Loggia_stage.jpg");
+		assert (url != null);
+		LOGGIASTAGE_ICON = new ImageIcon(url);
 
 		ICON_WIDTH = MAN_ICON.getIconWidth();
 		ICON_HEIGHT = MAN_ICON.getIconHeight();
@@ -277,18 +294,18 @@ public class GUI extends JFrame implements FrameworkGUI {
 		private void drawAgents(Graphics2D g2d, Dimension currentDim) {
 			WorldModelState state = getLastState();
 			if (state != null) {
-//				for (SituatedObject p : state.getAgents()) {
-//					if (p instanceof AgentBody) {
-//						drawAgent(
-//								g2d,
-//								(int) p.getX(),
-//								(int) p.getY(),
-//								(int) (p.getDirection().getX() * DIRECTION_RADIUS),
-//								(int) (p.getDirection().getY() * DIRECTION_RADIUS),
-//								state.getAgentType(p));
-//					} 
-//				
-//				}
+				for (SituatedObject p : state.getAgents()) {
+					if (p instanceof AgentBody) {
+						drawAgent(
+								g2d,
+								(int) p.getX(),
+								(int) p.getY(),
+								(int) (p.getDirection().getX() * DIRECTION_RADIUS),
+								(int) (p.getDirection().getY() * DIRECTION_RADIUS),
+								state.getAgentType(p));
+					} 
+				
+				}
 				for(SituatedObject p : state.getObjects()) {
 					drawObject(g2d, (int) p.getX(), (int) p.getY(),
 						state.getObjectType(p));
@@ -303,10 +320,13 @@ public class GUI extends JFrame implements FrameworkGUI {
 					case "TREE":
 						TREE_ICON.paintIcon(this, g2d, x-(ICON_WIDTH / 2), y
 								- (ICON_HEIGHT / 2));
-					case "STAGE":
-						STAGE_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
+						break;
+						
+					case "Beach":
+						BEACHSTAGE_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
 								- (ICON_HEIGHT / 2));
 						break;
+						
 					case "FOODSTAND":
 						FOODSTAND_ICON.paintIcon(this, g2d, x
 								- (ICON_WIDTH / 2), y - (ICON_HEIGHT / 2));

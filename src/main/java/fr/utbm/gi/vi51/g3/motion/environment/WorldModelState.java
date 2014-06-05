@@ -27,6 +27,7 @@ import org.janusproject.kernel.address.AgentAddress;
 
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
+import fr.utbm.gi.vi51.g3.motion.RelevantSpot.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
@@ -78,6 +79,8 @@ public class WorldModelState {
 			return "BARRIER";
 		} else if(o instanceof Stand){
 			return ((Stand) o).getName();
+		} else if(o instanceof Stage){
+			return ((Stage) o).getName();
 		}
 		return null;
 	}

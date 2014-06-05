@@ -35,8 +35,8 @@ import fr.utbm.gi.vi51.g3.motion.gui.GUI;
 
 public class MainProgram {
 
-	private static double WORLD_SIZE_X = 1200;
-	private static double WORLD_SIZE_Y = 400;
+	private static double WORLD_SIZE_X = 1780;
+	private static double WORLD_SIZE_Y = 780;
 	private static long EXECUTION_DELAY = 50;
 
 	/** Main program.
@@ -64,14 +64,19 @@ public class MainProgram {
 		System.out.println("--- Init. Agents");
 		Attendant a = new Attendant(AttendantGender.MAN);
 		FrameworkLauncher.launchAgent(a);
+		
 		Attendant b = new Attendant(AttendantGender.WOMAN);
 		FrameworkLauncher.launchAgent(b);
+		
 		Worker c = new Worker(WorkerTask.BODYGUARD);
 		FrameworkLauncher.launchAgent(c);
+		
 		Worker d = new Worker(WorkerTask.MED);
 		FrameworkLauncher.launchAgent(d);
+		
 		Worker e = new Worker(WorkerTask.SELLER);
 		FrameworkLauncher.launchAgent(e);
+		
 		FrameworkLauncher.startSimulation();
 	}
 

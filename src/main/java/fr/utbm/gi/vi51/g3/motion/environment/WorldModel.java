@@ -36,6 +36,7 @@ import fr.utbm.gi.vi51.g3.framework.environment.MotionInfluence;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
+import fr.utbm.gi.vi51.g3.motion.RelevantSpot.Stage;
 import fr.utbm.gi.vi51.g3.motion.agent.NeedType;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
@@ -63,10 +64,17 @@ public class WorldModel extends AbstractEnvironment implements WorldModelStatePr
 	private void build(){
 		// Build stages
 		
+		stages();
 		stands();
 		flora();
+		
 	}
-
+	/** Stages **/
+	private void stages() {
+		Point2d STAGEXY = new Point2d(1150,650);
+		Stage STAGE = new Stage(15, STAGEXY, 15, "Beach");	
+		implantSituatedObject(STAGE);
+	}
 	/** Flora **/
 	private void flora()
 	{
@@ -112,100 +120,45 @@ public class WorldModel extends AbstractEnvironment implements WorldModelStatePr
 	/** Stands **/
 	private void stands()
 	{
-		Point2d FOODXY = new Point2d(180,20);
-		StandAction FOODHunger = new StandAction(NeedType.HUNGER, 10);
-		Stand FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
+		graille(180,20, "food");
+		graille(260,20, "food");
+		graille(330,20,"food");	
 		
-		FOODXY = new Point2d(260,20);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
+		graille(400,250,"food");
+		graille(400,350,"food");
 		
-		FOODXY = new Point2d(330,20);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
+		graille(770,640,"food");
+		graille(815,690,"food");
+		graille(870,730,"food");
 		
-		FOODXY = new Point2d(400,250);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
+		graille(750,480,"food");
+		graille(750,400,"food");
+		graille(850,400,"food");
+		graille(950,400,"food");
+		graille(850,480,"food");
+		graille(950,480,"food");
 		
-		FOODXY = new Point2d(400,350);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
+		graille(1550,280,"food");
+		graille(1550,350,"food");
 		
-		FOODXY = new Point2d(770,630);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(815,690);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(870,730);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(750,320);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(750,400);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(850,400);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(950,400);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(750,480);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(850,480);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(950,480);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(1550,280);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(1550,350);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(1450,280);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(1450,350);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(1350,280);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(1350,350);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(1120,20);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
-		
-		FOODXY = new Point2d(1220,20);
-		FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
-		implantSituatedObject(FOOD);
+		graille(1450,280,"food");
+		graille(1450,350,"food");
+		graille(1350,280,"food");
+		graille(1350,350,"food");
+		graille(1120,20,"food");
+		graille(1220,20,"food");
 	}
 	
+	private void graille(int x, int y, String type)
+	{
+		Point2d FOODXY = new Point2d(x,y);
+		StandAction FOODHunger;
+		
+		if(type == "food") {  FOODHunger = new StandAction(NeedType.HUNGER, 10); }
+		else {  FOODHunger = new StandAction(NeedType.THIRST, 10); }
+		Stand FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);	
+		implantSituatedObject(FOOD);
+	}
 	/** {@inheritDoc}
 	 */
 	@Override

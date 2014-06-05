@@ -17,10 +17,12 @@ import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.environment.MobileObject;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
 
 public class Attendant extends Animat<AgentBody> {
@@ -43,6 +45,7 @@ public class Attendant extends Animat<AgentBody> {
 
 	private final FleeBehaviour<?> fleeBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
+	private final SeekBehaviour<?> seekBehaviour;
 
 	public Attendant(AttendantGender gender) {
 		this.isOK = true;
@@ -50,6 +53,7 @@ public class Attendant extends Animat<AgentBody> {
 		initNeeds();
 		this.GENDER = gender;
 		this.fleeBehaviour = new SteeringFleeBehaviour();
+		this.seekBehaviour = new SteeringSeekBehaviour();
 		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(STOP_RADIUS,
 				SLOW_RADIUS);
 
@@ -58,6 +62,8 @@ public class Attendant extends Animat<AgentBody> {
 		this.wanderBehaviour = new SteeringWanderBehaviour(
 				WANDER_CIRCLE_DISTANCE, WANDER_CIRCLE_RADIUS,
 				WANDER_MAX_ROTATION, faceB);
+		
+		
 		// } else {
 		// this.evadeBehaviour = new KinematicEvadeBehaviour();
 		// this.wanderBehaviour = new KinematicWanderBehaviour();
@@ -103,7 +109,7 @@ public class Attendant extends Animat<AgentBody> {
 		for (Perception p : perc) {
 			MobileObject o = (MobileObject) p.getPerceivedObject();
 			if (o.isBomb()) 
-				this.fleeBehaviour.runFlee(position, linearSpeed, 0.5, o.getPosition());
+			{	this.fleeBehaviour.runFlee(position, linearSpeed, 0.5, o.getPosition()); }
 		}
 		return StatusFactory.ok(this);
 	}
