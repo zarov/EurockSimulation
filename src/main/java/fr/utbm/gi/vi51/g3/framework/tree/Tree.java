@@ -14,7 +14,7 @@ import fr.utbm.gi.vi51.g3.framework.environment.Perception;
  *
  * @param <N>
  */
-public interface Tree<N extends TreeNode<N>> extends Iterable<TreeNode<N>> {
+public interface Tree<N extends TreeNode<N>> extends Iterable<N> {
 	/**
 	 * Set the root of the tree.
 	 *

@@ -1,12 +1,10 @@
 package fr.utbm.gi.vi51.g3.motion.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -14,11 +12,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
-import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,11 +27,10 @@ import org.arakhne.afc.vmutil.Resources;
 import org.arakhne.afc.vmutil.locale.Locale;
 
 import fr.utbm.gi.vi51.g3.framework.FrameworkLauncher;
-import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
-import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.EnvironmentEvent;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.framework.gui.FrameworkGUI;
+import fr.utbm.gi.vi51.g3.framework.tree.QuadTreeNode;
 import fr.utbm.gi.vi51.g3.motion.MainProgram;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelEvent;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelState;
@@ -294,21 +288,29 @@ public class GUI extends JFrame implements FrameworkGUI {
 		private void drawAgents(Graphics2D g2d, Dimension currentDim) {
 			WorldModelState state = getLastState();
 			if (state != null) {
-				for (SituatedObject p : state.getAgents()) {
-					if (p instanceof AgentBody) {
-						drawAgent(
-								g2d,
-								(int) p.getX(),
-								(int) p.getY(),
-								(int) (p.getDirection().getX() * DIRECTION_RADIUS),
-								(int) (p.getDirection().getY() * DIRECTION_RADIUS),
-								state.getAgentType(p));
-					} 
-				
-				}
-				for(SituatedObject p : state.getObjects()) {
-					drawObject(g2d, (int) p.getX(), (int) p.getY(),
-						state.getObjectType(p));
+//				for (SituatedObject p : state.getAgents()) {
+//					if (p instanceof AgentBody) {
+//						drawAgent(
+//								g2d,
+//								(int) p.getX(),
+//								(int) p.getY(),
+//								(int) (p.getDirection().getX() * DIRECTION_RADIUS),
+//								(int) (p.getDirection().getY() * DIRECTION_RADIUS),
+//								state.getAgentType(p));
+//					} 
+//				
+//				}
+				for(QuadTreeNode node : state.getWorldObjects()){
+//				QuadTree tree = state.getWorldObjects();
+//				Iterator<QuadTreeNode> it = tree.iterator();
+//				while (it.hasNext()) {
+//					QuadTreeNode node = it.next();
+					if (node != null && node.getObject() != null) {
+						SituatedObject obj = node.getObject();
+						drawObject(g2d, (int) obj.getX(),
+								(int) obj.getY(),
+								state.getObjectType(obj));
+					}
 				}
 			}
 		}

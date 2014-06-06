@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Stack;
 
 import fr.utbm.gi.vi51.g3.framework.environment.AABB;
-import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 
@@ -19,7 +18,11 @@ import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
  */
 public class QuadTree implements Tree<QuadTreeNode> {
 
-	private QuadTreeNode root = null;
+	private QuadTreeNode root;
+
+	public QuadTree(double width, double height) {
+		this.root = new QuadTreeNode(new AABB(0, width, 0, height));
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -68,9 +71,9 @@ public class QuadTree implements Tree<QuadTreeNode> {
 	 */
 	class FrustumCuller implements Iterator<Perception> {
 		private final AABB frustrum;
-		private final Iterator<TreeNode<QuadTreeNode>> nodeIterator;
+		private final Iterator<QuadTreeNode> nodeIterator;
 
-		public FrustumCuller(Iterator<TreeNode<QuadTreeNode>> ni, AABB frustrum) {
+		public FrustumCuller(Iterator<QuadTreeNode> ni, AABB frustrum) {
 			this.frustrum = frustrum;
 			this.nodeIterator = ni;
 		}
@@ -127,7 +130,7 @@ public class QuadTree implements Tree<QuadTreeNode> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Iterator<TreeNode<QuadTreeNode>> iterator() {
+	public Iterator<QuadTreeNode> iterator() {
 		return new NodeIterator();
 	}
 
@@ -137,7 +140,7 @@ public class QuadTree implements Tree<QuadTreeNode> {
 	 * @author zarov
 	 *
 	 */
-	class NodeIterator implements Iterator<TreeNode<QuadTreeNode>> {
+	class NodeIterator implements Iterator<QuadTreeNode> {
 
 		private final Stack<QuadTreeNode> s = new Stack<>();
 		private QuadTreeNode n;
@@ -166,6 +169,10 @@ public class QuadTree implements Tree<QuadTreeNode> {
 					for (QuadTreeNode c : nChildren) {
 						this.s.push(c);
 					}
+				}
+			} else {
+				if (hasNext()) {
+					n = this.next();
 				}
 			}
 			return this.n;

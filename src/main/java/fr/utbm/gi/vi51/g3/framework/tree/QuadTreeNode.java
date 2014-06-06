@@ -22,10 +22,10 @@ public class QuadTreeNode implements TreeNode<QuadTreeNode> {
 
 	private QuadTreeNode parent;
 
-	private QuadTreeNode northWestChild = null;
-	private QuadTreeNode northEastChild = null;
-	private QuadTreeNode southWestChild = null;
-	private QuadTreeNode southEastChild = null;
+	private QuadTreeNode northWestChild;
+	private QuadTreeNode northEastChild;
+	private QuadTreeNode southWestChild;
+	private QuadTreeNode southEastChild;
 
 	public QuadTreeNode(AABB box) {
 		this.box = box;

@@ -95,7 +95,6 @@ public class WorldModel extends AbstractEnvironment implements
 		forest(1300, 200, 2, 14);
 		forest(1600, 200, 6, 3);
 		forest(1580, 540, 7, 7);
-
 	}
 
 	private void forest(int x, int y, int height, int width) {
@@ -111,10 +110,11 @@ public class WorldModel extends AbstractEnvironment implements
 			y += 35;
 			x = saveX;
 		}
-		for (Point2d a : trees) {
-			Flora Tree = new Flora(50, a);
-			implantSituatedObject(Tree);
-		}
+			for(Point2d a : trees)
+			{
+			Flora tree = new Flora(50, a);
+			implantSituatedObject(tree);
+			}
 	}
 
 	/** Stands **/
@@ -176,8 +176,8 @@ public class WorldModel extends AbstractEnvironment implements
 	 */
 	@Override
 	public WorldModelState getState() {
-		/* Ici ï¿½a envoie le bordel */
-		return new WorldModelState(cloneAgentBodies(), getOtherObjects());
+		/* Ici ça envoie le bordel */
+		return new WorldModelState(cloneWorldObjects());
 	}
 
 	/**

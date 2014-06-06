@@ -47,7 +47,7 @@ import fr.utbm.gi.vi51.g3.framework.tree.QuadTree;
  */
 public abstract class AbstractEnvironment implements Environment {
 
-	private final QuadTree worldObjects = new QuadTree();
+	private final QuadTree worldObjects;
 	
 	private final Map<AgentAddress,AgentBody> bodies = new TreeMap<AgentAddress,AgentBody>();
 	private final Set<SituatedObject> objects = new HashSet<SituatedObject>();
@@ -68,13 +68,30 @@ public abstract class AbstractEnvironment implements Environment {
 		this.width = width;
 		this.height = height;
 		this.timeManager = timeManager;
+		this.worldObjects = new QuadTree(width, height);
 	}
 
 	public void implantSituatedObject(SituatedObject object){
 		if(object != null){
-			this.objects.add(object);
+			this.worldObjects.insert(object);
 		}
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	// @Override
+	// public void spawnAgentBody(Animat<?> animat) {
+	// if (animat != null) {
+	// AgentBody body = animat.spawnBody(this);
+	// if (body != null) {
+	// double size = body.getSize();
+	// body.setPosition(rnd(size, getWidth()), rnd(size, getHeight()));
+	// body.setAngle(RandomNumber.nextDouble() * 2. * Math.PI);
+	// this.bodies.put(animat.getAddress(), body);
+	// }
+	// }
+	// }
 
 	/**
 	 * {@inheritDoc}
@@ -87,26 +104,10 @@ public abstract class AbstractEnvironment implements Environment {
 				double size = body.getSize();
 				body.setPosition(rnd(size, getWidth()), rnd(size, getHeight()));
 				body.setAngle(RandomNumber.nextDouble() * 2. * Math.PI);
-				this.bodies.put(animat.getAddress(), body);
+				this.worldObjects.insert(body);
 			}
 		}
 	}
-
-//	/**
-//	 * {@inheritDoc}
-//	 */
-//	@Override
-//	public void spawnAgentBody(Animat<?> animat) {
-//		if (animat!=null) {
-//			AgentBody body = animat.spawnBody(this);
-//			if (body!=null) {
-//				double size = body.getSize();
-//				body.setPosition(rnd(size, getWidth()), rnd(size, getHeight()));
-//				body.setAngle(RandomNumber.nextDouble() * 2.* Math.PI);
-	// this.worldObjects.insert(body);
-//			}
-//		}
-//	}
 	
 	private double rnd(double s, double w) {
 		double r = w - 3. * s;
@@ -202,6 +203,16 @@ public abstract class AbstractEnvironment implements Environment {
 	protected Collection<AgentBody> cloneAgentBodies() {
 		Collection<AgentBody> clone = new ArrayList<AgentBody>(this.bodies.size());
 		clone.addAll(this.bodies.values());
+		return clone;
+	}
+
+	/**
+	 * Clone the list of agents in the environment.
+	 * 
+	 * @return a clone.
+	 */
+	protected QuadTree cloneWorldObjects() {
+		QuadTree clone = worldObjects;
 		return clone;
 	}
 

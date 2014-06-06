@@ -17,10 +17,10 @@ public class QuadTreeTest {
 
 	@Test
 	public void testBuild() {
-		tree = new QuadTree();
+		tree = new QuadTree(8, 8);
 
 		// First level
-		root = new QuadTreeNode(new AABB(0, 8, 0, 8));
+		// root = new QuadTreeNode(new AABB(0, 8, 0, 8));
 		// System.out.println("once");
 		// // Second level
 		// List<QuadTreeNode> children = new ArrayList<>();
@@ -74,7 +74,7 @@ public class QuadTreeTest {
 		// children.get(2).setChildren(gChildren);
 		// gChildren.clear();
 		
-		tree.setRoot(root);
+		// tree.setRoot(root);
 		System.out.println("flora 1");
 		tree.insert(new Flora(2, new Point2d(3, 5)));
 		System.out.println("flora 2");
