@@ -302,75 +302,58 @@ public class GUI extends JFrame implements FrameworkGUI {
 		}
 	}
 
-	private void drawObject(Graphics2D g2d, int x, int y, String objectType) {
-		if (SHOW_ICON && (objectType != null)) {
-			switch (objectType) {
+		private void drawObject(Graphics2D g2d, int x, int y, String objectType) {
+			if (SHOW_ICON && (objectType != null)) {
+				switch (objectType) {
+					
+					case "TREE":
+						TREE_ICON.paintIcon(this, g2d, x-(ICON_WIDTH / 2), y
+								- (ICON_HEIGHT / 2));
+						break;
+						
+					case "Beach":
+						BEACHSTAGE_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
+								- (ICON_HEIGHT / 2));
+						break;
+						
+					case "FOODSTAND":
+						FOODSTAND_ICON.paintIcon(this, g2d, x
+								- (ICON_WIDTH / 2), y - (ICON_HEIGHT / 2));
+						break;
+					case "DRINKSTAND":
+						DRINKSTAND_ICON.paintIcon(this, g2d, x
+								- (ICON_WIDTH / 2), y - (ICON_HEIGHT / 2));
+						break;
+					case "TOILET":
+						TOILET_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2),
+								y - (ICON_HEIGHT / 2));
+						break;
+					case "MAN":
+						MAN_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
+								- (ICON_HEIGHT / 2));
+						break;
+					case "WOMAN":
+						WOMAN_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
+								- (ICON_HEIGHT / 2));
+						break;
+					case "MED":
+						MED_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
+								- (ICON_HEIGHT / 2));
+						break;
+					case "BODYGUARD":
+						BODYGUARD_ICON.paintIcon(this, g2d, x
+								- (ICON_WIDTH / 2), y - (ICON_HEIGHT / 2));
+						break;
+					case "SELLER":
+						SELLER_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2),
+								y - (ICON_HEIGHT / 2));
+						break;
+					default:
+						System.out.println("GUI.drawObject - pas de type trouvé");
+					break;
+				}
 
-				case "TREE":
-					TREE_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
-							- (ICON_HEIGHT / 2));
-					break;
-
-				case "Beach":
-					BEACHSTAGE_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2),
-							y - (ICON_HEIGHT / 2));
-					break;
-
-				case "FOODSTAND":
-					FOODSTAND_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
-							- (ICON_HEIGHT / 2));
-					break;
-				case "DRINKSTAND":
-					DRINKSTAND_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2),
-							y - (ICON_HEIGHT / 2));
-					break;
-				case "TOILET":
-					TOILET_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
-							- (ICON_HEIGHT / 2));
-					break;
-				default:
-					System.out.println("GUI.drawObject - pas de type trouvï¿½");
-					break;
 			}
-
 		}
-	}
-
-	@SuppressWarnings("synthetic-access")
-	private void drawAgent(Graphics2D g2d, int x, int y, int dx, int dy,
-			String agentType) {
-		// g2d.setColor(Color.BLUE);
-		// g2d.drawLine(x,y,x+dx,y+dy);
-		if (SHOW_ICON && (agentType != null)) {
-			switch (agentType) {
-				case "MAN":
-					MAN_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
-							- (ICON_HEIGHT / 2));
-					break;
-				case "WOMAN":
-					WOMAN_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
-							- (ICON_HEIGHT / 2));
-					break;
-				case "MED":
-					MED_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
-							- (ICON_HEIGHT / 2));
-					break;
-				case "BODYGUARD":
-					BODYGUARD_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
-							- (ICON_HEIGHT / 2));
-					break;
-				case "SELLER":
-					SELLER_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
-							- (ICON_HEIGHT / 2));
-					break;
-				default:
-					System.out.println("GUI.drawAgent - pas de type trouvï¿½");
-					break;
-			}
-		} else {
-			g2d.drawOval(x - (ICON_WIDTH / 2), y - (ICON_HEIGHT / 2),
-					ICON_WIDTH, ICON_HEIGHT);
-		}
-	}
 
 }

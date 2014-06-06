@@ -96,7 +96,8 @@ public class WorldModelState {
 			return ((Stand) o).getName();
 		} else if(o instanceof Stage){
 			return ((Stage) o).getName();
+		} else {
+			return getAgentType(o);
 		}
-		return null;
 	}
 }

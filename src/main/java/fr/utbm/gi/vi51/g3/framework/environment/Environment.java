@@ -20,8 +20,6 @@
  */
 package fr.utbm.gi.vi51.g3.framework.environment;
 
-import java.util.Collection;
-
 import org.janusproject.kernel.address.AgentAddress;
 
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
@@ -52,24 +50,12 @@ public interface Environment {
 	 */
 	public double getHeight();
 
-	/** Replies the bodies in the environment.
-	 * 
-	 * @return the bodies in the environment.
-	 */
-	public Collection<AgentBody> getAgentBodies();
-
 	/** Replies the agent body associated to the given agent.
 	 * 
 	 * @param agentId
 	 * @return the agent body or <code>null</code>.
 	 */
 	public AgentBody getAgentBodyFor(AgentAddress agentId);
-
-	/** Replies the objects in the environment that are not bodies.
-	 * 
-	 * @return the objects in the environment that are not bodies.
-	 */
-	public Collection<SituatedObject> getOtherObjects();
 
 	/** Run the environment behaviour: apply influences, compute perceptions.
 	 */

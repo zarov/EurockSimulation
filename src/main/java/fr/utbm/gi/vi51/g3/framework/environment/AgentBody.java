@@ -40,6 +40,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 
 	private final long perceptionRange;
 	private final AgentAddress owner;
+	private final AABB frustrum;
 
 	private MotionInfluence motionInfluence = null;
 	private List<Perception> perceptions = Collections.emptyList();
@@ -64,6 +65,13 @@ public class AgentBody extends AbstractMobileObject implements Body {
 				maxAngularAcceleration);
 		this.owner = owner;
 		this.perceptionRange = perceptionRange;
+		this.frustrum = new AABB(getX() - (perceptionRange / 2), getX()
+				+ (perceptionRange / 2), getY() - (perceptionRange / 2), getY()
+				+ (perceptionRange / 2));
+	}
+
+	public AABB getFrustrum() {
+		return this.frustrum;
 	}
 
 	/**
@@ -236,12 +244,6 @@ public class AgentBody extends AbstractMobileObject implements Body {
 
 	@Override
 	public Perception toPerception() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public AABB getBox() {
 		// TODO Auto-generated method stub
 		return null;
 	}

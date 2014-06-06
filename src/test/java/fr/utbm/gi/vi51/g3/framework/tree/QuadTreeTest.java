@@ -102,7 +102,7 @@ public class QuadTreeTest {
 				+ percepts.size());
 		for (Perception p : percepts) {
 			System.out.println(p.getPerceivedObject().getClass().toString()
-					+ " - " + p.getPerceivedObject().getBox().toString());
+					+ " - " + p.getPerceivedObject().getFrustrum().toString());
 		}
 	}
 

@@ -149,7 +149,8 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 							// perception field
 							SituatedObject object = node.getObject();
 							if ((object != null)
-									&& object.getBox().intersects(frustrum)) {
+									&& object.getFrustrum()
+											.intersects(frustrum)) {
 								next = object.toPerception();
 							}
 						}

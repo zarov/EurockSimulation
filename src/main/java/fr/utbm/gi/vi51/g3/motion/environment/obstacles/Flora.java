@@ -16,7 +16,7 @@ public class Flora extends AbstractSituatedObject {
 	 * width of {@code size}, and his center is {@code position}.
 	 */
 	@Override
-	public AABB getBox() {
+	public AABB getFrustrum() {
 		return new AABB(getX() - (getSize() / 2), getX() + (getSize() / 2),
 				getY() - (getSize() / 2), getY() + (getSize() / 2));
 	}

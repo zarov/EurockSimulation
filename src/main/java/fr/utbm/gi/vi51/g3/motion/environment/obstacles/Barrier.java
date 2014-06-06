@@ -12,7 +12,7 @@ public class Barrier extends AbstractSituatedObject {
 	}
 
 	@Override
-	public AABB getBox() {
+	public AABB getFrustrum() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -195,7 +195,7 @@ public class WorldModel extends AbstractEnvironment implements
 			// double x1 = agent.getX();
 			// double y1 = agent.getY();
 
-			return getState().getWorldObjects().cull(agent.getBox());
+			return getState().getWorldObjects().cull(agent.getFrustrum());
 
 		}
 		return null;

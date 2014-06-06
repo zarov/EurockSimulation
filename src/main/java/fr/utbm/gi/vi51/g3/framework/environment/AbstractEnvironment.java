@@ -23,11 +23,7 @@ package fr.utbm.gi.vi51.g3.framework.environment;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.vecmath.Vector2d;
@@ -37,6 +33,7 @@ import org.janusproject.kernel.util.random.RandomNumber;
 
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
 import fr.utbm.gi.vi51.g3.framework.tree.QuadTree;
+import fr.utbm.gi.vi51.g3.framework.tree.QuadTreeNode;
 
 
 /**
@@ -49,8 +46,6 @@ public abstract class AbstractEnvironment implements Environment {
 
 	private final QuadTree worldObjects;
 	
-	private final Map<AgentAddress,AgentBody> bodies = new TreeMap<AgentAddress,AgentBody>();
-	private final Set<SituatedObject> objects = new HashSet<SituatedObject>();
 	
 	private final SimulationTimeManager timeManager;
 	private final double width;
@@ -104,7 +99,7 @@ public abstract class AbstractEnvironment implements Environment {
 	 */
 	@Override
 	public void killAgentBody(AgentAddress animat) {
-		this.bodies.remove(animat);
+		// this.worldObjects.remove(animat);
 	}
 
 	/** {@inheritDoc}
@@ -172,25 +167,6 @@ public abstract class AbstractEnvironment implements Environment {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Collection<AgentBody> getAgentBodies() {
-		return Collections.unmodifiableCollection(this.bodies.values());
-	}
-
-	/**
-	 * Clone the list of agents in the environment.
-	 *
-	 * @return a clone.
-	 */
-	protected Collection<AgentBody> cloneAgentBodies() {
-		Collection<AgentBody> clone = new ArrayList<AgentBody>(this.bodies.size());
-		clone.addAll(this.bodies.values());
-		return clone;
-	}
-
-	/**
 	 * Clone the list of agents in the environment.
 	 * 
 	 * @return a clone.
@@ -204,15 +180,8 @@ public abstract class AbstractEnvironment implements Environment {
 	 */
 	@Override
 	public AgentBody getAgentBodyFor(AgentAddress agentId) {
-		return this.bodies.get(agentId);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Collection<SituatedObject> getOtherObjects() {
-		return Collections.unmodifiableCollection(this.objects);
+		// return this.bodies.get(agentId);
+		return null;
 	}
 
 	/**
@@ -225,10 +194,16 @@ public abstract class AbstractEnvironment implements Environment {
 		}
 		Collection<MotionInfluence> influences = new ArrayList<MotionInfluence>();
 		MotionInfluence influence;
-		for(AgentBody body : this.bodies.values()) {
-			influence = body.consumeInfluence();
-			if (influence!=null) {
-				influences.add(influence);
+
+		for (QuadTreeNode node : worldObjects) {
+			if (node != null && node.getObject() != null) {
+				SituatedObject obj = node.getObject();
+				if (obj instanceof AgentBody){
+					influence = ((AgentBody) obj).consumeInfluence();
+					if (influence!=null) {
+						influences.add(influence);
+					}					
+				}
 			}
 		}
 		if (!influences.isEmpty()) {
@@ -239,10 +214,16 @@ public abstract class AbstractEnvironment implements Environment {
 			}
 		}
 		List<Perception> list;
-		for(AgentBody body : this.bodies.values()) {
-			list = computePerceptionsFor(body);
-			if (list==null) list = Collections.emptyList();
-			body.setPerceptions(list);
+		for (QuadTreeNode node : worldObjects) {
+			if (node != null && node.getObject() != null) {
+				SituatedObject obj = node.getObject();
+				if (obj instanceof AgentBody){
+					list = computePerceptionsFor((AgentBody) obj);
+					if (list == null)
+						list = Collections.emptyList();
+					((AgentBody) obj).setPerceptions(list);
+				}
+			}
 		}
 	}
 
