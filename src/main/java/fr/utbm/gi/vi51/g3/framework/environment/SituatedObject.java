@@ -86,5 +86,4 @@ public interface SituatedObject {
 	 * @return
 	 */
 	public AABB getBox();
-
 }

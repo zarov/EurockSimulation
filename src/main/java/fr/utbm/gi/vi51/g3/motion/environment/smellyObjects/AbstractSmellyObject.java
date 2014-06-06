@@ -23,5 +23,4 @@ public class AbstractSmellyObject extends AbstractSituatedObject {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }

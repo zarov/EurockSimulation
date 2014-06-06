@@ -71,8 +71,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	 */
 	@Override
 	public String toString() {
-		return Locale.getString(AbstractSituatedObject.class,
-				"BODY_OF", this.owner); //$NON-NLS-1$
+		return Locale.getString(AbstractSituatedObject.class, "BODY_OF", owner); //$NON-NLS-1$
 	}
 
 	/**
@@ -82,7 +81,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	 */
 	@Override
 	public AgentAddress getOwner() {
-		return this.owner;
+		return owner;
 	}
 
 	/**
@@ -109,8 +108,8 @@ public class AgentBody extends AbstractMobileObject implements Body {
 		}
 		double ai = GeometryUtil.clamp(angularInfluence, -getMaxAngularSpeed(),
 				getMaxAngularSpeed());
-		this.motionInfluence = new MotionInfluence(DynamicType.KINEMATIC, this,
-				li, ai);
+		motionInfluence = new MotionInfluence(DynamicType.KINEMATIC, this, li,
+				ai);
 	}
 
 	/**
@@ -137,8 +136,8 @@ public class AgentBody extends AbstractMobileObject implements Body {
 		}
 		double ai = GeometryUtil.clamp(angularInfluence,
 				-getMaxAngularAcceleration(), getMaxAngularAcceleration());
-		this.motionInfluence = new MotionInfluence(DynamicType.STEEERING, this,
-				li, ai);
+		motionInfluence = new MotionInfluence(DynamicType.STEEERING, this, li,
+				ai);
 	}
 
 	/**
@@ -192,7 +191,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	 */
 	@Override
 	public List<Perception> getPerceivedObjects() {
-		return Collections.unmodifiableList(this.perceptions);
+		return Collections.unmodifiableList(perceptions);
 	}
 
 	/**
@@ -201,8 +200,8 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	 * @return the influence.
 	 */
 	MotionInfluence consumeInfluence() {
-		MotionInfluence i = this.motionInfluence;
-		this.motionInfluence = null;
+		MotionInfluence i = motionInfluence;
+		motionInfluence = null;
 		if (i != null) {
 			i.setEmitter(getOwner());
 		}
@@ -220,7 +219,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	}
 
 	public double getPerceptionRange() {
-		return this.perceptionRange;
+		return perceptionRange;
 	}
 
 	@Override
@@ -245,10 +244,5 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	public AABB getBox() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-	
-	@Override
-	public boolean isBomb(){
-		return false;
 	}
 }

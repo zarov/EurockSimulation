@@ -82,6 +82,4 @@ public interface MobileObject extends SituatedObject {
 	public boolean isAttendant();
 
 	public boolean isOK();
-
-	public boolean isBomb();
 }

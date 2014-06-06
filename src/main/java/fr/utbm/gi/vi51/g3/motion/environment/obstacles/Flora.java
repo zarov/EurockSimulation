@@ -20,5 +20,4 @@ public class Flora extends AbstractSituatedObject {
 		return new AABB(getX() - (getSize() / 2), getX() + (getSize() / 2),
 				getY() - (getSize() / 2), getY() + (getSize() / 2));
 	}
-
 }

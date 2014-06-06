@@ -14,16 +14,17 @@ import org.janusproject.kernel.status.StatusFactory;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
-import fr.utbm.gi.vi51.g3.framework.environment.MobileObject;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
+import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
 
 public class Attendant extends Animat<AgentBody> {
 	private static final long serialVersionUID = 4416989095632710549L;
@@ -48,22 +49,20 @@ public class Attendant extends Animat<AgentBody> {
 	private final SeekBehaviour<?> seekBehaviour;
 
 	public Attendant(AttendantGender gender) {
-		this.isOK = true;
+		isOK = true;
 		// if (this.isSteering) {
 		initNeeds();
-		this.GENDER = gender;
-		this.fleeBehaviour = new SteeringFleeBehaviour();
-		this.seekBehaviour = new SteeringSeekBehaviour();
+		GENDER = gender;
+		fleeBehaviour = new SteeringFleeBehaviour();
+		seekBehaviour = new SteeringSeekBehaviour();
 		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(STOP_RADIUS,
 				SLOW_RADIUS);
 
 		SteeringFaceBehaviour faceB = new SteeringFaceBehaviour(STOP_DISTANCE,
 				alignB);
-		this.wanderBehaviour = new SteeringWanderBehaviour(
-				WANDER_CIRCLE_DISTANCE, WANDER_CIRCLE_RADIUS,
-				WANDER_MAX_ROTATION, faceB);
-		
-		
+		wanderBehaviour = new SteeringWanderBehaviour(WANDER_CIRCLE_DISTANCE,
+				WANDER_CIRCLE_RADIUS, WANDER_MAX_ROTATION, faceB);
+
 		// } else {
 		// this.evadeBehaviour = new KinematicEvadeBehaviour();
 		// this.wanderBehaviour = new KinematicWanderBehaviour();
@@ -72,9 +71,9 @@ public class Attendant extends Animat<AgentBody> {
 	}
 
 	private void initNeeds() {
-		this.needs = new HashSet<Need>();
+		needs = new HashSet<Need>();
 		for (NeedType elem : NeedType.values()) {
-			this.needs.add(new Need(elem, (int) Math.random() * 10));
+			needs.add(new Need(elem, (int) Math.random() * 10));
 		}
 	}
 
@@ -82,7 +81,7 @@ public class Attendant extends Animat<AgentBody> {
 	public Status activate(Object... activationParameters) {
 		Status s = super.activate(activationParameters);
 		if (s.isSuccess()) {
-			setName(Locale.getString(Attendant.class, this.GENDER.getName()));
+			setName(Locale.getString(Attendant.class, GENDER.getName()));
 			System.out.println(getName());
 		}
 		return s;
@@ -107,19 +106,21 @@ public class Attendant extends Animat<AgentBody> {
 		List<Perception> perc = getPerceivedObjects();
 
 		for (Perception p : perc) {
-			MobileObject o = (MobileObject) p.getPerceivedObject();
-			if (o.isBomb()) 
-			{	this.fleeBehaviour.runFlee(position, linearSpeed, 0.5, o.getPosition()); }
+			SituatedObject o = p.getPerceivedObject();
+			if (o instanceof Bomb) {
+				fleeBehaviour.runFlee(position, linearSpeed, 0.5,
+						o.getPosition());
+			}
 		}
 		return StatusFactory.ok(this);
 	}
-	
+
 	public static double getPerceptionRange() {
 		return PERCEPTION_RANGE;
 	}
 
 	public boolean isOK() {
-		return this.isOK;
+		return isOK;
 	}
 
 	public boolean isAttendant() {
@@ -127,20 +128,22 @@ public class Attendant extends Animat<AgentBody> {
 	}
 
 	public boolean hasNeed(NeedType needType) {
-		for(Need n : this.needs){
-			if(n.getType() == needType && n.getValue() == 10)
+		for (Need n : needs) {
+			if ((n.getType() == needType) && (n.getValue() == 10)) {
 				return true;
+			}
 
 		}
 		return false;
 	}
 
 	public void updateNeeds(NeedType needType) {
-		for(Need n : this.needs){
-			if(n.getType() == needType && n.getValue() == 10)
+		for (Need n : needs) {
+			if ((n.getType() == needType) && (n.getValue() == 10)) {
 				n.setValue(0);
+			}
 		}
-		
+
 	}
 
 }

@@ -16,8 +16,8 @@ import fr.utbm.gi.vi51.g3.framework.environment.MobileObject;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
-
 
 public class Seller extends Animat<AgentBody> {
 
@@ -27,14 +27,12 @@ public class Seller extends Animat<AgentBody> {
 
 	private final static long PERCEPTION_RANGE = 200;
 
-
 	private final FleeBehaviour<?> fleeBehaviour;
 	private final Stand stand;
 
-
 	public Seller(Stand s) {
-		this.stand = s;
-		this.fleeBehaviour = new SteeringFleeBehaviour();
+		stand = s;
+		fleeBehaviour = new SteeringFleeBehaviour();
 	}
 
 	@Override
@@ -67,8 +65,10 @@ public class Seller extends Animat<AgentBody> {
 
 		for (Perception p : perc) {
 			MobileObject o = (MobileObject) p.getPerceivedObject();
-			if (o.isBomb()) 
-				this.fleeBehaviour.runFlee(position, linearSpeed, 0.5, o.getPosition());
+			if (o instanceof Bomb) {
+				fleeBehaviour.runFlee(position, linearSpeed, 0.5,
+						o.getPosition());
+			}
 		}
 
 		return StatusFactory.ok(this);

@@ -16,5 +16,4 @@ public class Barrier extends AbstractSituatedObject {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }
