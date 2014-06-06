@@ -13,6 +13,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
+import java.util.Iterator;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -30,6 +31,7 @@ import fr.utbm.gi.vi51.g3.framework.FrameworkLauncher;
 import fr.utbm.gi.vi51.g3.framework.environment.EnvironmentEvent;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.framework.gui.FrameworkGUI;
+import fr.utbm.gi.vi51.g3.framework.tree.QuadTree;
 import fr.utbm.gi.vi51.g3.framework.tree.QuadTreeNode;
 import fr.utbm.gi.vi51.g3.motion.MainProgram;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelEvent;
@@ -60,8 +62,6 @@ public class GUI extends JFrame implements FrameworkGUI {
 	private static final Icon BEACHSTAGE_ICON;
 	private static final Icon MAINSTAGE_ICON;
 	private static final Icon GREENSTAGE_ICON;
-	
-	
 
 	private static final int ICON_WIDTH;
 	private static final int ICON_HEIGHT;
@@ -70,55 +70,56 @@ public class GUI extends JFrame implements FrameworkGUI {
 		URL url = Resources.getResource(GUI.class, IMG_DIR + "small_man.png"); //$NON-NLS-1$
 		assert (url != null);
 		MAN_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_woman.png"); //$NON-NLS-1$
 		assert (url != null);
 		WOMAN_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_seller.png"); //$NON-NLS-1$
 		assert (url != null);
 		SELLER_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_med.png"); //$NON-NLS-1$
 		assert (url != null);
 		MED_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_bodyguard.png"); //$NON-NLS-1$
 		assert (url != null);
 		BODYGUARD_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_barrier.png"); //$NON-NLS-1$
 		assert (url != null);
 		BARRIER_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
 		assert (url != null);
 		TREE_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_tree.png"); //$NON-NLS-1$
 		assert (url != null);
 		TOILET_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_foodstand.png"); //$NON-NLS-1$
 		assert (url != null);
 		FOODSTAND_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_foodstand.png"); //$NON-NLS-1$
 		assert (url != null);
 		DRINKSTAND_ICON = new ImageIcon(url);
-		
-		url = Resources.getResource(GUI.class, IMG_DIR + "beach_stage_empty.jpg");
+
+		url = Resources.getResource(GUI.class, IMG_DIR
+				+ "beach_stage_empty.jpg");
 		assert (url != null);
 		BEACHSTAGE_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "main_stage.jpg");
 		assert (url != null);
 		MAINSTAGE_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "greenRoom_stage.jpg");
 		assert (url != null);
 		GREENSTAGE_ICON = new ImageIcon(url);
-		
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "Loggia_stage.jpg");
 		assert (url != null);
 		LOGGIASTAGE_ICON = new ImageIcon(url);
@@ -145,9 +146,9 @@ public class GUI extends JFrame implements FrameworkGUI {
 
 		content.setLayout(new BorderLayout());
 
-		this.world = new World();
+		world = new World();
 
-		JScrollPane scroll = new JScrollPane(this.world);
+		JScrollPane scroll = new JScrollPane(world);
 		content.add(BorderLayout.CENTER, scroll);
 
 		JButton closeBt = new JButton("Quit"); //$NON-NLS-1$
@@ -159,7 +160,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 		});
 		content.add(BorderLayout.SOUTH, closeBt);
 
-		this.world.setPreferredSize(new Dimension((int) worldWidth,
+		world.setPreferredSize(new Dimension((int) worldWidth,
 				(int) worldHeight));
 
 		addWindowListener(new WindowAdapter() {
@@ -169,7 +170,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 			}
 		});
 
-		this.world.addMouseMotionListener(new MouseMotionListener() {
+		world.addMouseMotionListener(new MouseMotionListener() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				// setMouseTarget(new Point2d(e.getX(), e.getY()));
@@ -181,7 +182,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 			}
 		});
 
-		this.world.addMouseListener(new MouseListener() {
+		world.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				//
@@ -219,12 +220,11 @@ public class GUI extends JFrame implements FrameworkGUI {
 	@Override
 	public void environmentChanged(EnvironmentEvent event) {
 		synchronized (getTreeLock()) {
-			if ((event instanceof WorldModelEvent)
-					&& (this.environment == null)) {
+			if ((event instanceof WorldModelEvent) && (environment == null)) {
 				WorldModelEvent e = (WorldModelEvent) event;
-				this.environment = e.getStateProvider();
+				environment = e.getStateProvider();
 			}
-			this.lastState = this.environment.getState();
+			lastState = environment.getState();
 			repaint();
 		}
 	}
@@ -234,9 +234,9 @@ public class GUI extends JFrame implements FrameworkGUI {
 	 */
 	protected void setMouseTarget(Point2d p) {
 		synchronized (getTreeLock()) {
-			this.target = p;
-			if (this.environment != null) {
-				this.environment.setMouseTarget(this.target);
+			target = p;
+			if (environment != null) {
+				environment.setMouseTarget(target);
 			}
 		}
 	}
@@ -247,7 +247,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 	 * @return the last environment state.
 	 */
 	protected WorldModelState getLastState() {
-		return this.lastState;
+		return lastState;
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 		private static final long serialVersionUID = 8516008479029079959L;
 
 		public World() {
-			
+
 		}
 
 		/**
@@ -273,42 +273,28 @@ public class GUI extends JFrame implements FrameworkGUI {
 			Dimension currentDim = getPreferredSize();
 
 			drawAgents(g2d, currentDim);
-			
-//			try {
-//				URL url = Resources.getResource(GUI.class, IMG_DIR + "map_tilted.jpg"); //$NON-NLS-1$
-//				assert (url != null);
-//				
-//				Image img = ImageIO.read(url);
-//				g.drawImage(img,0,0,973,585,this);
-//			} catch(IOException e) {
-//				e.printStackTrace();
-//			}
+
+			// try {
+			//				URL url = Resources.getResource(GUI.class, IMG_DIR + "map_tilted.jpg"); //$NON-NLS-1$
+			// assert (url != null);
+			//
+			// Image img = ImageIO.read(url);
+			// g.drawImage(img,0,0,973,585,this);
+			// } catch(IOException e) {
+			// e.printStackTrace();
+			// }
 		}
 
 		private void drawAgents(Graphics2D g2d, Dimension currentDim) {
 			WorldModelState state = getLastState();
-			if (state != null) {
-//				for (SituatedObject p : state.getAgents()) {
-//					if (p instanceof AgentBody) {
-//						drawAgent(
-//								g2d,
-//								(int) p.getX(),
-//								(int) p.getY(),
-//								(int) (p.getDirection().getX() * DIRECTION_RADIUS),
-//								(int) (p.getDirection().getY() * DIRECTION_RADIUS),
-//								state.getAgentType(p));
-//					} 
-//				
-//				}
-				for(QuadTreeNode node : state.getWorldObjects()){
-//				QuadTree tree = state.getWorldObjects();
-//				Iterator<QuadTreeNode> it = tree.iterator();
-//				while (it.hasNext()) {
-//					QuadTreeNode node = it.next();
-					if (node != null && node.getObject() != null) {
+			if (state != null) {}
+				QuadTree tree = state.getWorldObjects();
+				Iterator<QuadTreeNode> it = tree.iterator();
+				while (it.hasNext()) {
+					QuadTreeNode node = it.next();
+					if ((node != null) && (node.getObject() != null)) {
 						SituatedObject obj = node.getObject();
-						drawObject(g2d, (int) obj.getX(),
-								(int) obj.getY(),
+						drawObject(g2d, (int) obj.getX(), (int) obj.getY(),
 								state.getObjectType(obj));
 					}
 				}
@@ -318,17 +304,17 @@ public class GUI extends JFrame implements FrameworkGUI {
 		private void drawObject(Graphics2D g2d, int x, int y, String objectType) {
 			if (SHOW_ICON && (objectType != null)) {
 				switch (objectType) {
-					
+
 					case "TREE":
-						TREE_ICON.paintIcon(this, g2d, x-(ICON_WIDTH / 2), y
+						TREE_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
 								- (ICON_HEIGHT / 2));
 						break;
-						
+
 					case "Beach":
-						BEACHSTAGE_ICON.paintIcon(this, g2d, x - (ICON_WIDTH / 2), y
-								- (ICON_HEIGHT / 2));
+						BEACHSTAGE_ICON.paintIcon(this, g2d, x
+								- (ICON_WIDTH / 2), y - (ICON_HEIGHT / 2));
 						break;
-						
+
 					case "FOODSTAND":
 						FOODSTAND_ICON.paintIcon(this, g2d, x
 								- (ICON_WIDTH / 2), y - (ICON_HEIGHT / 2));
@@ -343,7 +329,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 						break;
 					default:
 						System.out
-								.println("GUI.drawObject - pas de type trouvé");
+								.println("GUI.drawObject - pas de type trouvï¿½");
 						break;
 				}
 

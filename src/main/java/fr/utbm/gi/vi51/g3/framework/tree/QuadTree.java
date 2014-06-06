@@ -21,7 +21,7 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 	private QuadTreeNode root;
 
 	public QuadTree(double width, double height) {
-		this.root = new QuadTreeNode(new AABB(0, width, 0, height));
+		root = new QuadTreeNode(new AABB(0, width, 0, height));
 	}
 
 	/**
@@ -37,15 +37,54 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 	 */
 	@Override
 	public QuadTreeNode getRoot() {
-		return this.root;
+		return root;
 	}
 
 	public boolean insert(SituatedObject obj) {
-		return root.insert(obj);		
+		return root.insert(obj);
 	}
-	
+
+	/**
+	 * Remove the object from the tree. DOES NOT REMOVE THE QUADTREENODE.
+	 * 
+	 * @param obj
+	 *            the object to remove
+	 * @return
+	 */
 	public boolean remove(SituatedObject obj) {
+		QuadTreeNode node = find(obj);
+
+		if ((node == null) || !node.getObject().equals(obj)) {
+			return false;
+		}
+
+		node.setObject(null);
+
 		return true;
+	}
+
+	/**
+	 * Find the node containing the object.
+	 * 
+	 * @param obj
+	 *            the object to find
+	 * @return
+	 */
+	public QuadTreeNode find(SituatedObject obj) {
+		NodeIterator it = new NodeIterator();
+		QuadTreeNode node = null;
+
+		while (it.hasNext()) {
+			node = it.next();
+
+			// Check if a node is containing the object
+			// If he isn't, we delete his children from the stack
+			if (!node.getBox().contains(obj)) {
+				it.remove(4);
+			}
+		}
+
+		return node;
 	}
 
 	/**
@@ -79,7 +118,7 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 
 		public FrustumCuller(Iterator<QuadTreeNode> ni, AABB frustrum) {
 			this.frustrum = frustrum;
-			this.nodeIterator = ni;
+			nodeIterator = ni;
 		}
 
 		/**
@@ -87,7 +126,7 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 		 */
 		@Override
 		public boolean hasNext() {
-			return this.nodeIterator.hasNext();
+			return nodeIterator.hasNext();
 		}
 
 		/**
@@ -97,20 +136,20 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 		public Perception next() {
 			Perception next = null;
 
-			if (this.nodeIterator != null) {
-				while ((next == null) && this.nodeIterator.hasNext()) {
-					TreeNode<QuadTreeNode> node = this.nodeIterator.next();
+			if (nodeIterator != null) {
+				while ((next == null) && nodeIterator.hasNext()) {
+					TreeNode<QuadTreeNode> node = nodeIterator.next();
 					if (node != null) {
 						AABB nBox = node.getBox();
 						// If the box of the node intersects with the frustum,
 						// we can go beyond it
-						if ((nBox != null) && nBox.intersects(this.frustrum)) {
+						if ((nBox != null) && nBox.intersects(frustrum)) {
 							// If the box of the object contained in the node
 							// intersects with the frustum, then it is in the
 							// perception field
 							SituatedObject object = node.getObject();
 							if ((object != null)
-									&& object.getBox().intersects(this.frustrum)) {
+									&& object.getBox().intersects(frustrum)) {
 								next = object.toPerception();
 							}
 						}
@@ -150,7 +189,7 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 		private QuadTreeNode n;
 
 		public NodeIterator() {
-			this.s.push(getRoot());
+			s.push(getRoot());
 		}
 
 		/**
@@ -158,7 +197,7 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 		 */
 		@Override
 		public boolean hasNext() {
-			return !this.s.isEmpty();
+			return !s.isEmpty();
 		}
 
 		/**
@@ -166,20 +205,21 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 		 */
 		@Override
 		public QuadTreeNode next() {
-			this.n = this.s.pop();
-			if (this.n != null) {
-				List<QuadTreeNode> nChildren = this.n.getChildren();
+			n = s.pop();
+			if (n != null) {
+				List<QuadTreeNode> nChildren = n.getChildren();
 				if ((nChildren != null) && !nChildren.isEmpty()) {
 					for (QuadTreeNode c : nChildren) {
-						this.s.push(c);
+						s.push(c);
 					}
 				}
 			} else {
 				if (hasNext()) {
-					n = this.next();
+					n = next();
 				}
 			}
-			return this.n;
+
+			return n;
 		}
 
 		/**
@@ -187,10 +227,22 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 		 */
 		@Override
 		public void remove() {
-			this.s.removeElement(this.n);
+			s.pop();
+		}
+
+		/**
+		 * Removes n elements of the stack.
+		 *
+		 * @param n
+		 */
+		public void remove(int n) {
+			do {
+				s.pop();
+			} while (n > 0);
 		}
 	}
 
+	@Override
 	public QuadTree clone() {
 		Object o = null;
 		try {

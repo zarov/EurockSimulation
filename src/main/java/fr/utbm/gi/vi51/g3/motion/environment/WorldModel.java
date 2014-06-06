@@ -96,23 +96,23 @@ public class WorldModel extends AbstractEnvironment implements
 	}
 
 	private void forest(int x, int y, int height, int width) {
-
 		int saveX = x;
-		int saveY = y;
 		ArrayList<Point2d> trees = new ArrayList<Point2d>();
+
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				trees.add(new Point2d(x, y));
 				x += 25;
 			}
+
 			y += 35;
 			x = saveX;
 		}
-			for(Point2d a : trees)
-			{
+
+		for (Point2d a : trees) {
 			Flora tree = new Flora(50, a);
 			implantSituatedObject(tree);
-			}
+		}
 	}
 
 	/** Stands **/
@@ -174,7 +174,7 @@ public class WorldModel extends AbstractEnvironment implements
 	 */
 	@Override
 	public WorldModelState getState() {
-		/* Ici ça envoie le bordel */
+		/* Ici ï¿½a envoie le bordel */
 		return new WorldModelState(cloneWorldObjects());
 	}
 
@@ -191,7 +191,6 @@ public class WorldModel extends AbstractEnvironment implements
 	 */
 	@Override
 	protected List<Perception> computePerceptionsFor(AgentBody agent) {
-		// List<Perception> allPercepts = new ArrayList<Perception>();
 		if (agent != null) {
 			// double x1 = agent.getX();
 			// double y1 = agent.getY();
@@ -200,26 +199,6 @@ public class WorldModel extends AbstractEnvironment implements
 
 		}
 		return null;
-		// for (AgentBody b1 : getAgentBodies()) {
-		// if (b1 != agent) {
-		// double x2 = b1.getX();
-		// double y2 = b1.getY();
-		// double distance = new Vector2d(x2 - x1, y2 - y1).length();
-		// if (distance < agent.getPerceptionRange()) {
-		// allPercepts.add(new Perception(b1));
-		// }
-		// }
-		// }
-		// for (SituatedObject o1 : getOtherObjects()) {
-		// double x2 = o1.getX();
-		// double y2 = o1.getY();
-		// double distance = new Vector2d(x2 - x1, y2 - y1).length();
-		// if (distance < agent.getPerceptionRange()) {
-		// allPercepts.add(new Perception(o1));
-		// }
-		// }
-		// }
-		// return allPercepts;
 	}
 
 	/**

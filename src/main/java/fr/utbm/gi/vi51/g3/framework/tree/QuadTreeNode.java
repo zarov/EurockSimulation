@@ -105,7 +105,7 @@ public class QuadTreeNode implements TreeNode<QuadTreeNode> {
 
 	public boolean insert(SituatedObject object) {
 		if (box.contains(object)) {
-			if (this.object == null && northWestChild == null) {
+			if ((this.object == null) && (northWestChild == null)) {
 				setObject(object);
 				return true;
 			} else {
@@ -113,19 +113,20 @@ public class QuadTreeNode implements TreeNode<QuadTreeNode> {
 					subdivide();
 				}
 				if (northWestChild.insert(object)) {
-						return true;
-					}
-					if (northEastChild.insert(object)) {
-						return true;
-					}
-					if (southWestChild.insert(object)) {
-						return true;
-					}
-					if (southEastChild.insert(object)) {
-						return true;
-					}
+					return true;
+				}
+				if (northEastChild.insert(object)) {
+					return true;
+				}
+				if (southWestChild.insert(object)) {
+					return true;
+				}
+				if (southEastChild.insert(object)) {
+					return true;
+				}
 			}
 		}
+
 		return false;
 	}
 
@@ -139,7 +140,7 @@ public class QuadTreeNode implements TreeNode<QuadTreeNode> {
 		southEastChild = new QuadTreeNode(new AABB(box.getXmid(), box.getXup(),
 				box.getYlow(), box.getYmid()));
 		insert(object);
-		this.object = null;
+		object = null;
 	}
 
 }
