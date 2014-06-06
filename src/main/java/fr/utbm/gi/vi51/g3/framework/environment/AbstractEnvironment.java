@@ -80,22 +80,6 @@ public abstract class AbstractEnvironment implements Environment {
 	/**
 	 * {@inheritDoc}
 	 */
-	// @Override
-	// public void spawnAgentBody(Animat<?> animat) {
-	// if (animat != null) {
-	// AgentBody body = animat.spawnBody(this);
-	// if (body != null) {
-	// double size = body.getSize();
-	// body.setPosition(rnd(size, getWidth()), rnd(size, getHeight()));
-	// body.setAngle(RandomNumber.nextDouble() * 2. * Math.PI);
-	// this.bodies.put(animat.getAddress(), body);
-	// }
-	// }
-	// }
-
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void spawnAgentBody(Animat<?> animat) {
 		if (animat != null) {
@@ -212,8 +196,7 @@ public abstract class AbstractEnvironment implements Environment {
 	 * @return a clone.
 	 */
 	protected QuadTree cloneWorldObjects() {
-		QuadTree clone = worldObjects;
-		return clone;
+		return worldObjects.clone();
 	}
 
 	/**

@@ -16,7 +16,7 @@ import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
  * @author zarov
  *
  */
-public class QuadTree implements Tree<QuadTreeNode> {
+public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 
 	private QuadTreeNode root;
 
@@ -44,6 +44,10 @@ public class QuadTree implements Tree<QuadTreeNode> {
 		return root.insert(obj);		
 	}
 	
+	public boolean remove(SituatedObject obj) {
+		return true;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -187,5 +191,14 @@ public class QuadTree implements Tree<QuadTreeNode> {
 		}
 	}
 
+	public QuadTree clone() {
+		Object o = null;
+		try {
+			o = super.clone();
+		} catch (CloneNotSupportedException cnse) {
+			cnse.printStackTrace(System.err);
+		}
 
+		return (QuadTree) o;
+	}
 }

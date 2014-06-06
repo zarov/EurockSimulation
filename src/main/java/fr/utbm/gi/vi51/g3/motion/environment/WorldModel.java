@@ -33,7 +33,6 @@ import fr.utbm.gi.vi51.g3.framework.environment.DynamicType;
 import fr.utbm.gi.vi51.g3.framework.environment.EnvironmentEvent;
 import fr.utbm.gi.vi51.g3.framework.environment.MotionInfluence;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
-import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
 import fr.utbm.gi.vi51.g3.motion.agent.NeedType;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
@@ -88,12 +87,11 @@ public class WorldModel extends AbstractEnvironment implements
 		forest(400, 10, 3, 5);
 		forest(650, 680, 3, 5);
 		forest(650, 300, 7, 3);
-		forest(650, 300, 7, 3);
 		forest(950, 80, 5, 4);
 		forest(1100, 300, 2, 2);
 		forest(1300, 20, 3, 4);
 		forest(1300, 200, 2, 14);
-		forest(1600, 200, 6, 3);
+		// forest(1600, 200, 6, 3);
 		forest(1580, 540, 7, 7);
 	}
 
@@ -193,31 +191,35 @@ public class WorldModel extends AbstractEnvironment implements
 	 */
 	@Override
 	protected List<Perception> computePerceptionsFor(AgentBody agent) {
-		List<Perception> allPercepts = new ArrayList<Perception>();
+		// List<Perception> allPercepts = new ArrayList<Perception>();
 		if (agent != null) {
-			double x1 = agent.getX();
-			double y1 = agent.getY();
+			// double x1 = agent.getX();
+			// double y1 = agent.getY();
 
-			for (AgentBody b1 : getAgentBodies()) {
-				if (b1 != agent) {
-					double x2 = b1.getX();
-					double y2 = b1.getY();
-					double distance = new Vector2d(x2 - x1, y2 - y1).length();
-					if (distance < agent.getPerceptionRange()) {
-						allPercepts.add(new Perception(b1));
-					}
-				}
-			}
-			for (SituatedObject o1 : getOtherObjects()) {
-				double x2 = o1.getX();
-				double y2 = o1.getY();
-				double distance = new Vector2d(x2 - x1, y2 - y1).length();
-				if (distance < agent.getPerceptionRange()) {
-					allPercepts.add(new Perception(o1));
-				}
-			}
+			return getState().getWorldObjects().cull(agent.getBox());
+
 		}
-		return allPercepts;
+		return null;
+		// for (AgentBody b1 : getAgentBodies()) {
+		// if (b1 != agent) {
+		// double x2 = b1.getX();
+		// double y2 = b1.getY();
+		// double distance = new Vector2d(x2 - x1, y2 - y1).length();
+		// if (distance < agent.getPerceptionRange()) {
+		// allPercepts.add(new Perception(b1));
+		// }
+		// }
+		// }
+		// for (SituatedObject o1 : getOtherObjects()) {
+		// double x2 = o1.getX();
+		// double y2 = o1.getY();
+		// double distance = new Vector2d(x2 - x1, y2 - y1).length();
+		// if (distance < agent.getPerceptionRange()) {
+		// allPercepts.add(new Perception(o1));
+		// }
+		// }
+		// }
+		// return allPercepts;
 	}
 
 	/**
