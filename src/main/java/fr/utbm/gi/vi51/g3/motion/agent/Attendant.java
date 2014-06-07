@@ -16,10 +16,12 @@ import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringBehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
@@ -53,7 +55,7 @@ public class Attendant extends Animat<AgentBody> {
 
 	public Attendant(AttendantGender gender) {
 		isOK = true;
-		// if (this.isSteering) {
+
 		initNeeds();
 		GENDER = gender;
 		fleeBehaviour = new SteeringFleeBehaviour();
@@ -68,7 +70,6 @@ public class Attendant extends Animat<AgentBody> {
 
 		//Random schedule
 		this.sched = new Schedule();
-
 	}
 
 	private void initNeeds() {
@@ -104,15 +105,23 @@ public class Attendant extends Animat<AgentBody> {
 		double linearSpeed = getCurrentLinearSpeed();
 		double angularSpeed = getCurrentAngularSpeed();
 
-		List<Perception> perc = getPerceivedObjects();
+		BehaviourOutput output = new SteeringBehaviourOutput();
 
-		for (Perception p : perc) {
+		List<Perception> perceivedObj = getPerceivedObjects();
+
+		for (Perception p : perceivedObj) {
 			SituatedObject o = p.getPerceivedObject();
 			if (o instanceof Bomb) {
-				fleeBehaviour.runFlee(position, linearSpeed, 0.5,
+				output = fleeBehaviour.runFlee(position, linearSpeed, 0.5,
 						o.getPosition());
+			} else {
+				output = wanderBehaviour.runWander(position, orientation,
+						linearSpeed,
+						getMaxLinearAcceleration(), angularSpeed,
+						getMaxAngularAcceleration());
 			}
 		}
+<<<<<<< HEAD
 		String placeToBe = sched.getPlaceToBe();
 		Stage stageToBe = environment.getStage(placeToBe);
 		if(!stageToBe.isInRange(position))
@@ -124,6 +133,13 @@ public class Attendant extends Animat<AgentBody> {
 			if(!stageToBe.isOnAir())
 				this.wanderBehaviour.runWander(position, orientation, linearSpeed, 0.5, angularSpeed, Math.PI/4);
 			
+=======
+		
+		if(output != null){
+			influenceSteering(output.getLinear(), output.getAngular());
+		}
+
+>>>>>>> FETCH_HEAD
 		return StatusFactory.ok(this);
 	}
 

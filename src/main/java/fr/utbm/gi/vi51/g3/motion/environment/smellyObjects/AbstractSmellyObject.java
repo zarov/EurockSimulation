@@ -7,20 +7,21 @@ import fr.utbm.gi.vi51.g3.framework.environment.AbstractSituatedObject;
 
 public class AbstractSmellyObject extends AbstractSituatedObject {
 
-	public AbstractSmellyObject(double size) {
-		super(size);
-		// TODO Auto-generated constructor stub
-	}
+	protected String name;
 
 	public AbstractSmellyObject(double size, Point2d position,
-			double orientation) {
+			double orientation, String name) {
 		super(size, position, orientation);
-		// TODO Auto-generated constructor stub
+		this.name = name;
 	}
 
 	@Override
 	public AABB getFrustrum() {
-		// TODO Auto-generated method stub
-		return null;
+		return new AABB(getX() - (getSize() / 2), getX() + (getSize() / 2),
+				getY() - (getSize() / 2), getY() + (getSize() / 2));
+	}
+
+	public String getName() {
+		return this.name;
 	}
 }

@@ -13,8 +13,8 @@ public class Stage extends AbstractSmellyObject {
 		this.onAir = false;
 	}
 
-	public String getName() {
-		return name;
+	public boolean isOnAir() {
+		return this.onAir;
 	}
 	
 	public double getRange(){

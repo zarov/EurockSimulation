@@ -34,11 +34,13 @@ import fr.utbm.gi.vi51.g3.framework.environment.EnvironmentEvent;
 import fr.utbm.gi.vi51.g3.framework.environment.MotionInfluence;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
+import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
 import fr.utbm.gi.vi51.g3.motion.agent.NeedType;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.StandAction;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
 
 /**
  * Model of the world.
@@ -74,15 +76,59 @@ public class WorldModel extends AbstractEnvironment implements
 		stages();
 		stands();
 		flora();
+		bathrooms();
 
 	}
 
+	/* BathRooms */
+	private void bathrooms() {
+		AttendantGender male = AttendantGender.MAN;
+		AttendantGender female = AttendantGender.WOMAN;
+		 
+		setBathrooms(5,90,male);
+		setBathrooms(5,150,female);
+		
+		setBathrooms(500,740,male);
+		setBathrooms(580,740,female);
+		
+		setBathrooms(980,690,male);
+		setBathrooms(1050,740,female);
+		
+		setBathrooms(900,20,male);
+		setBathrooms(980,20,female);
+		
+		setBathrooms(1420,740,male);
+		setBathrooms(1500,740,female);
+		
+		setBathrooms(1700,420,male);
+		setBathrooms(1700,490,female);
+	}
+	
+	private void setBathrooms(int x, int y, AttendantGender a)
+	{
+		Point2d BathR = new Point2d(x, y);
+		Toilet B = new Toilet(15, BathR,15, "T1",a);
+		implantSituatedObject(B);
+	}
+ 
 	/** Stages **/
 	private void stages() {
 		Point2d STAGEXY = new Point2d(1150, 650);
 		Stage STAGE = new Stage(15, STAGEXY, 15, "Beach");
 		this.stages.add("Beach");
 		this.stagesPositions.add(STAGEXY);
+		implantSituatedObject(STAGE);
+		
+		STAGEXY = new Point2d(0,50);
+		STAGE = new Stage(15,STAGEXY,15, "Main");
+		implantSituatedObject(STAGE);
+		
+		STAGEXY = new Point2d(0,100);
+		STAGE = new Stage(15,STAGEXY,15, "Loggia");
+		implantSituatedObject(STAGE);
+		
+		STAGEXY = new Point2d(0,99);
+		STAGE = new Stage(15,STAGEXY,15, "Green");
 		implantSituatedObject(STAGE);
 	}
 
@@ -91,7 +137,7 @@ public class WorldModel extends AbstractEnvironment implements
 		/* From top left corner to bottom right corner */
 		forest(5, 11, 2, 6);
 		forest(20, 680, 3, 4);
-		forest(250, 180, 8, 5);
+//		forest(250, 180, 8, 5);
 		forest(400, 10, 3, 5);
 		forest(650, 680, 3, 5);
 		forest(650, 300, 7, 3);
@@ -129,8 +175,8 @@ public class WorldModel extends AbstractEnvironment implements
 		graille(260, 20, "food");
 		graille(330, 20, "food");
 
-		graille(400, 250, "food");
-		graille(400, 350, "food");
+//		graille(400, 250, "food");
+//		graille(400, 350, "food");
 
 		graille(770, 640, "food");
 		graille(815, 690, "food");
@@ -223,7 +269,8 @@ public class WorldModel extends AbstractEnvironment implements
 		// Compute actions
 		for (int index1 = 0; index1 < influenceList.size(); index1++) {
 			MotionInfluence inf1 = influenceList.get(index1);
-			AgentBody body1 = getAgentBodyFor(inf1.getEmitter());
+			// AgentBody body1 = getAgentBodyFor(inf1.getEmitter());
+			AgentBody body1 = (AgentBody) inf1.getInfluencedObject();
 			if (body1 != null) {
 				Vector2d move;
 				double rotation;

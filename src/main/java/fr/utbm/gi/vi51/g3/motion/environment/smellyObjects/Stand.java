@@ -8,21 +8,13 @@ import fr.utbm.gi.vi51.g3.motion.agent.Attendant;
 
 public class Stand extends AbstractSmellyObject {
 
-	private final String name;
-	//TODO enum pour les types de stand ?
 	private final StandAction action;
 	private final Queue<Attendant> clients;
 
 	public Stand(double size, Point2d position, double orientation, String name, StandAction action) {
-		super(size, position, orientation);
+		super(size, position, orientation, name);
 		this.action = action;
-		this.name = name;
 		this.clients = null;
-	}
-	
-
-	public String getName() {
-		return this.name;
 	}
 
 	public StandAction getAction() {
