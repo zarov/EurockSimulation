@@ -324,11 +324,30 @@ public class GUI extends JFrame implements FrameworkGUI {
 						- (ICON_PEOPLE_HEIGHT / 2));
 				break;
 					case "Beach":
-				BEACHSTAGE_ICON
-						.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-								- (ICON_PEOPLE_HEIGHT / 2));
+//				BEACHSTAGE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
+//								- (ICON_PEOPLE_HEIGHT / 2));
+				g2d.drawRect(1150, 670, 220,100);
 						break;
 						
+					case "Main":
+//						MAINSTAGE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
+//										- (ICON_PEOPLE_HEIGHT / 2));
+						g2d.drawRect(0, 200, 100,300);
+								break;
+								
+					case "Green":
+//						GREENSTAGE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
+//										- (ICON_PEOPLE_HEIGHT / 2));
+						g2d.drawRect(550, 5, 300,100);
+								break;
+								
+								
+					case "Loggia":
+//						LOGGIASTAGE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
+//										- (ICON_PEOPLE_HEIGHT / 2));
+						g2d.drawRect(200, 660, 250,100);
+								break;
+								
 					case "FOODSTAND":
 						FOODSTAND_ICON.paintIcon(this, g2d, x
  - (ICON_PEOPLE_WIDTH / 2), y
