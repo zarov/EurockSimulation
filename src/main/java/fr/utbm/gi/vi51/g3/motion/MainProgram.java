@@ -27,8 +27,6 @@ import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.gui.FrameworkGUI;
 import fr.utbm.gi.vi51.g3.motion.agent.Attendant;
 import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
-import fr.utbm.gi.vi51.g3.motion.agent.Worker;
-import fr.utbm.gi.vi51.g3.motion.agent.WorkerTask;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModel;
 import fr.utbm.gi.vi51.g3.motion.gui.GUI;
 
@@ -68,14 +66,18 @@ public class MainProgram {
 		Attendant b = new Attendant(AttendantGender.WOMAN);
 		FrameworkLauncher.launchAgent(b);
 		
-		Worker c = new Worker(WorkerTask.BODYGUARD);
-		FrameworkLauncher.launchAgent(c);
+		FrameworkLauncher.launchAgent(new Attendant(AttendantGender.MAN));
 		
-		Worker d = new Worker(WorkerTask.MED);
-		FrameworkLauncher.launchAgent(d);
+		FrameworkLauncher.launchAgent(new Attendant(AttendantGender.WOMAN));
 		
-		Worker e = new Worker(WorkerTask.SELLER);
-		FrameworkLauncher.launchAgent(e);
+		// Worker c = new Worker(WorkerTask.BODYGUARD);
+		// FrameworkLauncher.launchAgent(c);
+		//
+		// Worker d = new Worker(WorkerTask.MED);
+		// FrameworkLauncher.launchAgent(d);
+		//
+		// Worker e = new Worker(WorkerTask.SELLER);
+		// FrameworkLauncher.launchAgent(e);
 		
 		FrameworkLauncher.startSimulation();
 	}

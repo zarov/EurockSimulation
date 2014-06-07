@@ -14,9 +14,11 @@ import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.environment.MobileObject;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.PursueBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringBehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringPursueBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
@@ -85,6 +87,7 @@ public class Medic extends Animat<AgentBody> {
 		double linearSpeed = getCurrentLinearSpeed();
 		double angularSpeed = getCurrentAngularSpeed();
 
+		BehaviourOutput output = new SteeringBehaviourOutput();
 		List<Perception> perc = getPerceivedObjects();
 
 		for (Perception p : perc) {
@@ -97,6 +100,10 @@ public class Medic extends Animat<AgentBody> {
 				this.wanderBehaviour.runWander(position, orientation,
 						linearSpeed, MAX_LINEAR, angularSpeed, MAX_ANGULAR);
 			}
+		}
+
+		if (output != null) {
+			influenceSteering(output.getLinear(), output.getAngular());
 		}
 
 		return StatusFactory.ok(this);

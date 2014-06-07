@@ -215,7 +215,8 @@ public class WorldModel extends AbstractEnvironment implements
 		// Compute actions
 		for (int index1 = 0; index1 < influenceList.size(); index1++) {
 			MotionInfluence inf1 = influenceList.get(index1);
-			AgentBody body1 = getAgentBodyFor(inf1.getEmitter());
+			// AgentBody body1 = getAgentBodyFor(inf1.getEmitter());
+			AgentBody body1 = (AgentBody) inf1.getInfluencedObject();
 			if (body1 != null) {
 				Vector2d move;
 				double rotation;
