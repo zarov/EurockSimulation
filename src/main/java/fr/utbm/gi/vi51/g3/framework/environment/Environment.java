@@ -84,5 +84,4 @@ public interface Environment {
 	 * @param animat
 	 */
 	public void killAgentBody(AgentAddress animat);
-
 }

@@ -50,6 +50,9 @@ public class WorldModel extends AbstractEnvironment implements
 		WorldModelStateProvider {
 
 	// private MouseTarget mouseTarget = null;
+	private ArrayList<String> stages;
+	private ArrayList<Point2d> stagesPositions;
+	private final double time;
 
 	/**
 	 * @param width
@@ -60,6 +63,9 @@ public class WorldModel extends AbstractEnvironment implements
 	public WorldModel(double width, double height) {
 		super(width, height, new SimulationTimeManager(500));
 		build();
+		this.stages.clear();
+		this.stagesPositions.clear();
+		this.time=0;
 	}
 
 	private void build() {
@@ -75,6 +81,8 @@ public class WorldModel extends AbstractEnvironment implements
 	private void stages() {
 		Point2d STAGEXY = new Point2d(1150, 650);
 		Stage STAGE = new Stage(15, STAGEXY, 15, "Beach");
+		this.stages.add("Beach");
+		this.stagesPositions.add(STAGEXY);
 		implantSituatedObject(STAGE);
 	}
 
@@ -266,4 +274,25 @@ public class WorldModel extends AbstractEnvironment implements
 		}
 	}
 
+	public int getLengthDay() {
+		return 14;
+	}
+	
+	public Point2d getStagePositon(String stage){
+		if(stage == null)
+			return new Point2d(-1,-1);
+		for(int i=0;i<this.stages.size();i++){
+			if(stages.get(i) == stage)
+				return this.stagesPositions.get(i);	
+		}
+		return new Point2d(-1,-1);
+	}
+
+	public double getTime(){
+		return this.time;
+	}
+	
+	public ArrayList<String> getStages(){
+		return this.stages;
+	}
 }

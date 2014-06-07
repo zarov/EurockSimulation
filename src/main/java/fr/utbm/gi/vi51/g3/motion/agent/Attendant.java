@@ -25,6 +25,7 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFlee
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 
 public class Attendant extends Animat<AgentBody> {
 	private static final long serialVersionUID = 4416989095632710549L;
@@ -47,6 +48,8 @@ public class Attendant extends Animat<AgentBody> {
 	private final FleeBehaviour<?> fleeBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
 	private final SeekBehaviour<?> seekBehaviour;
+	
+	private final Schedule sched;
 
 	public Attendant(AttendantGender gender) {
 		isOK = true;
@@ -63,10 +66,8 @@ public class Attendant extends Animat<AgentBody> {
 		wanderBehaviour = new SteeringWanderBehaviour(WANDER_CIRCLE_DISTANCE,
 				WANDER_CIRCLE_RADIUS, WANDER_MAX_ROTATION, faceB);
 
-		// } else {
-		// this.evadeBehaviour = new KinematicEvadeBehaviour();
-		// this.wanderBehaviour = new KinematicWanderBehaviour();
-		// }
+		//Random schedule
+		this.sched = new Schedule();
 
 	}
 
@@ -112,6 +113,17 @@ public class Attendant extends Animat<AgentBody> {
 						o.getPosition());
 			}
 		}
+		String placeToBe = sched.getPlaceToBe();
+		Stage stageToBe = environment.getStage(placeToBe);
+		if(!stageToBe.isInRange(position))
+			if(stageToBe.isOnAir())
+				this.seekBehaviour.runSeek(position, linearSpeed, 0.5, stageToBe.getPosition());
+			else
+				this.wanderBehaviour.runWander(position, orientation, linearSpeed, 0.5, angularSpeed, Math.PI/4);
+		else
+			if(!stageToBe.isOnAir())
+				this.wanderBehaviour.runWander(position, orientation, linearSpeed, 0.5, angularSpeed, Math.PI/4);
+			
 		return StatusFactory.ok(this);
 	}
 
