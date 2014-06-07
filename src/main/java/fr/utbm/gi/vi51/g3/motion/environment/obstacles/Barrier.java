@@ -13,7 +13,7 @@ public class Barrier extends AbstractSituatedObject {
 
 	@Override
 	public AABB getFrustrum() {
-		// TODO Auto-generated method stub
-		return null;
+		return new AABB(getX() - (getSize() / 2), getX() + (getSize() / 2),
+				getY() - (getSize() / 2), getY() + (getSize() / 2));
 	}
 }

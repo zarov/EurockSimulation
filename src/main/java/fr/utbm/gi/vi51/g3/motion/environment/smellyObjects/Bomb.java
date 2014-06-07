@@ -11,9 +11,16 @@ import javax.vecmath.Point2d;
  */
 public class Bomb extends AbstractSmellyObject {
 
-	public Bomb(double size, Point2d position, double orientation) {
-		super(size, position, orientation);
-		// TODO Auto-generated constructor stub
+	private final int timeBeforeExplosion;
+
+	public Bomb(double size, Point2d position, double orientation, String name,
+			int timerValue) {
+		super(size, position, orientation, name);
+		this.timeBeforeExplosion = timerValue;
+	}
+
+	public int getTimeBeforeExplosion() {
+		return timeBeforeExplosion;
 	}
 
 }
