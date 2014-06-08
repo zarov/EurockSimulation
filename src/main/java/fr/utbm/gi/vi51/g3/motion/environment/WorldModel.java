@@ -36,6 +36,7 @@ import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
 import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
 import fr.utbm.gi.vi51.g3.motion.agent.NeedType;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
@@ -77,9 +78,39 @@ public class WorldModel extends AbstractEnvironment implements
 		stands();
 		flora();
 		bathrooms();
+		Barr();
 
 	}
 
+	/* Barriers */
+	
+	private void Barr()
+	{
+		gate(120,210,17,1,15);
+		gate(120,210,1,7,15);
+	}
+	
+	private void gate(int x, int y, int height, int width, int size) {
+		int saveX = x;
+		ArrayList<Point2d> gate = new ArrayList<Point2d>();
+
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				gate.add(new Point2d(x, y));
+				x += 25;
+			}
+
+			y += 35;
+			x = saveX;
+		}
+
+		for (Point2d a : gate) {
+			Barrier b = new Barrier(size, a);
+			implantSituatedObject(b);
+		}
+	}
+	
+	
 	/* BathRooms */
 	private void bathrooms() {
 		AttendantGender male = AttendantGender.MAN;
