@@ -38,6 +38,7 @@ import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
 import fr.utbm.gi.vi51.g3.motion.agent.NeedType;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.StandAction;
@@ -66,9 +67,9 @@ public class WorldModel extends AbstractEnvironment implements
 	public WorldModel(double width, double height) {
 		super(width, height, new SimulationTimeManager(500));
 		build();
-		this.stages.clear();
-		this.stagesPositions.clear();
-		this.time=0;
+		stages.clear();
+		stagesPositions.clear();
+		time = 0;
 	}
 
 	private void build() {
@@ -83,13 +84,12 @@ public class WorldModel extends AbstractEnvironment implements
 	}
 
 	/* Barriers */
-	
-	private void Barr()
-	{
-		gate(120,210,17,1,15);
-		gate(120,210,1,7,15);
+
+	private void Barr() {
+		gate(120, 210, 17, 1, 15);
+		gate(120, 210, 1, 7, 15);
 	}
-	
+
 	private void gate(int x, int y, int height, int width, int size) {
 		int saveX = x;
 		ArrayList<Point2d> gate = new ArrayList<Point2d>();
@@ -109,58 +109,45 @@ public class WorldModel extends AbstractEnvironment implements
 			implantSituatedObject(b);
 		}
 	}
-	
-	
+
 	/* BathRooms */
 	private void bathrooms() {
 		AttendantGender male = AttendantGender.MAN;
 		AttendantGender female = AttendantGender.WOMAN;
-		 
-		setBathrooms(5,90,male);
-		setBathrooms(5,150,female);
-		
-		setBathrooms(500,740,male);
-		setBathrooms(580,740,female);
-		
-		setBathrooms(980,690,male);
-		setBathrooms(1050,740,female);
-		
-		setBathrooms(900,20,male);
-		setBathrooms(980,20,female);
-		
-		setBathrooms(1420,740,male);
-		setBathrooms(1500,740,female);
-		
-		setBathrooms(1700,420,male);
-		setBathrooms(1700,490,female);
+
+		setBathrooms(5, 90, male);
+		setBathrooms(5, 150, female);
+
+		setBathrooms(500, 740, male);
+		setBathrooms(580, 740, female);
+
+		setBathrooms(980, 690, male);
+		setBathrooms(1050, 740, female);
+
+		setBathrooms(900, 20, male);
+		setBathrooms(980, 20, female);
+
+		setBathrooms(1420, 740, male);
+		setBathrooms(1500, 740, female);
+
+		setBathrooms(1700, 420, male);
+		setBathrooms(1700, 490, female);
 	}
-	
-	private void setBathrooms(int x, int y, AttendantGender a)
-	{
+
+	private void setBathrooms(int x, int y, AttendantGender a) {
 		Point2d BathR = new Point2d(x, y);
-		Toilet B = new Toilet(15, BathR,15, "T1",a);
+		Toilet B = new Toilet(15, BathR, 15, "T1", a);
 		implantSituatedObject(B);
 	}
- 
+
 	/** Stages **/
 	private void stages() {
-		Point2d STAGEXY = new Point2d(1150, 650);
-		Stage STAGE = new Stage(15, STAGEXY, 15, "Beach");
-		this.stages.add("Beach");
-		this.stagesPositions.add(STAGEXY);
-		implantSituatedObject(STAGE);
-		
-		STAGEXY = new Point2d(0,50);
-		STAGE = new Stage(15,STAGEXY,15, "Main");
-		implantSituatedObject(STAGE);
-		
-		STAGEXY = new Point2d(0,100);
-		STAGE = new Stage(15,STAGEXY,15, "Loggia");
-		implantSituatedObject(STAGE);
-		
-		STAGEXY = new Point2d(0,99);
-		STAGE = new Stage(15,STAGEXY,15, "Green");
-		implantSituatedObject(STAGE);
+		Plan[] stagesOnPlan = Plan.values();
+
+		for (Plan sp : stagesOnPlan) {
+			Stage stage = new Stage(sp.size, sp.position, sp.direction, sp.name);
+			implantSituatedObject(stage);
+		}
 	}
 
 	/** Flora **/
@@ -168,7 +155,7 @@ public class WorldModel extends AbstractEnvironment implements
 		/* From top left corner to bottom right corner */
 		forest(5, 11, 2, 6);
 		forest(20, 680, 3, 4);
-//		forest(250, 180, 8, 5);
+		// forest(250, 180, 8, 5);
 		forest(400, 10, 3, 5);
 		forest(650, 680, 3, 5);
 		forest(650, 300, 7, 3);
@@ -206,8 +193,8 @@ public class WorldModel extends AbstractEnvironment implements
 		graille(260, 20, "food");
 		graille(330, 20, "food");
 
-//		graille(400, 250, "food");
-//		graille(400, 350, "food");
+		// graille(400, 250, "food");
+		// graille(400, 350, "food");
 
 		graille(770, 640, "food");
 		graille(815, 690, "food");
@@ -355,22 +342,24 @@ public class WorldModel extends AbstractEnvironment implements
 	public int getLengthDay() {
 		return 14;
 	}
-	
-	public Point2d getStagePositon(String stage){
-		if(stage == null)
-			return new Point2d(-1,-1);
-		for(int i=0;i<this.stages.size();i++){
-			if(stages.get(i) == stage)
-				return this.stagesPositions.get(i);	
+
+	public Point2d getStagePosition(String stage) {
+		if (stage == null) {
+			return new Point2d(-1, -1);
 		}
-		return new Point2d(-1,-1);
+		for (int i = 0; i < stages.size(); i++) {
+			if (stages.get(i) == stage) {
+				return stagesPositions.get(i);
+			}
+		}
+		return new Point2d(-1, -1);
 	}
 
-	public double getTime(){
-		return this.time;
+	public double getTime() {
+		return time;
 	}
-	
-	public ArrayList<String> getStages(){
-		return this.stages;
+
+	public ArrayList<String> getStages() {
+		return stages;
 	}
 }

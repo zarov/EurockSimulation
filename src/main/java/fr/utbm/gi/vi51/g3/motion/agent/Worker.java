@@ -37,29 +37,22 @@ public class Worker extends Animat<AgentBody> {
 	private final WanderBehaviour<?> wanderBehaviour;
 
 	public Worker(WorkerTask task) {
-
-		this.TASK = task;
-		this.evadeBehaviour = new SteeringEvadeBehaviour();
+		TASK = task;
+		evadeBehaviour = new SteeringEvadeBehaviour();
 		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(STOP_RADIUS,
 				SLOW_RADIUS);
 
 		SteeringFaceBehaviour faceB = new SteeringFaceBehaviour(STOP_DISTANCE,
 				alignB);
-		this.wanderBehaviour = new SteeringWanderBehaviour(
-				WANDER_CIRCLE_DISTANCE, WANDER_CIRCLE_RADIUS,
-				WANDER_MAX_ROTATION, faceB);
-		// } else {
-		// this.evadeBehaviour = new KinematicEvadeBehaviour();
-		// this.wanderBehaviour = new KinematicWanderBehaviour();
-		// }
-
+		wanderBehaviour = new SteeringWanderBehaviour(WANDER_CIRCLE_DISTANCE,
+				WANDER_CIRCLE_RADIUS, WANDER_MAX_ROTATION, faceB);
 	}
 
 	@Override
 	public Status activate(Object... activationParameters) {
 		Status s = super.activate(activationParameters);
 		if (s.isSuccess()) {
-			setName(Locale.getString(Worker.class, this.TASK.getName()));
+			setName(Locale.getString(Worker.class, TASK.getName()));
 			System.out.println(getName());
 		}
 		return s;

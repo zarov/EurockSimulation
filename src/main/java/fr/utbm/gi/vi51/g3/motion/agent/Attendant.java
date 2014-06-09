@@ -27,6 +27,7 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFlee
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 
 public class Attendant extends Animat<AgentBody> {
@@ -50,7 +51,7 @@ public class Attendant extends Animat<AgentBody> {
 	private final FleeBehaviour<?> fleeBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
 	private final SeekBehaviour<?> seekBehaviour;
-	
+
 	private final Schedule sched;
 
 	public Attendant(AttendantGender gender) {
@@ -68,8 +69,8 @@ public class Attendant extends Animat<AgentBody> {
 		wanderBehaviour = new SteeringWanderBehaviour(WANDER_CIRCLE_DISTANCE,
 				WANDER_CIRCLE_RADIUS, WANDER_MAX_ROTATION, faceB);
 
-		//Random schedule
-		this.sched = new Schedule();
+		// Random schedule
+		sched = new Schedule();
 	}
 
 	private void initNeeds() {
@@ -86,6 +87,7 @@ public class Attendant extends Animat<AgentBody> {
 			setName(Locale.getString(Attendant.class, GENDER.getName()));
 			System.out.println(getName());
 		}
+
 		return s;
 	}
 
@@ -116,30 +118,31 @@ public class Attendant extends Animat<AgentBody> {
 						o.getPosition());
 			} else {
 				output = wanderBehaviour.runWander(position, orientation,
-						linearSpeed,
-						getMaxLinearAcceleration(), angularSpeed,
+						linearSpeed, getMaxLinearAcceleration(), angularSpeed,
 						getMaxAngularAcceleration());
 			}
 		}
-<<<<<<< HEAD
-		String placeToBe = sched.getPlaceToBe();
-		Stage stageToBe = environment.getStage(placeToBe);
-		if(!stageToBe.isInRange(position))
-			if(stageToBe.isOnAir())
-				this.seekBehaviour.runSeek(position, linearSpeed, 0.5, stageToBe.getPosition());
-			else
-				this.wanderBehaviour.runWander(position, orientation, linearSpeed, 0.5, angularSpeed, Math.PI/4);
-		else
-			if(!stageToBe.isOnAir())
-				this.wanderBehaviour.runWander(position, orientation, linearSpeed, 0.5, angularSpeed, Math.PI/4);
-			
-=======
-		
-		if(output != null){
+
+		Plan placeToBe = sched.getPlaceToBe();
+		Stage stageToBe = new Stage(placeToBe.size, placeToBe.position,
+				placeToBe.direction, placeToBe.name);
+		if (!stageToBe.isInRange(position)) {
+			if (stageToBe.isOnAir()) {
+				seekBehaviour.runSeek(position, linearSpeed, 0.5,
+						stageToBe.getPosition());
+			} else {
+				wanderBehaviour.runWander(position, orientation, linearSpeed,
+						0.5, angularSpeed, Math.PI / 4);
+			}
+		} else if (!stageToBe.isOnAir()) {
+			wanderBehaviour.runWander(position, orientation, linearSpeed, 0.5,
+					angularSpeed, Math.PI / 4);
+		}
+
+		if (output != null) {
 			influenceSteering(output.getLinear(), output.getAngular());
 		}
 
->>>>>>> FETCH_HEAD
 		return StatusFactory.ok(this);
 	}
 
@@ -160,8 +163,8 @@ public class Attendant extends Animat<AgentBody> {
 			if ((n.getType() == needType) && (n.getValue() == 10)) {
 				return true;
 			}
-
 		}
+
 		return false;
 	}
 
@@ -171,7 +174,5 @@ public class Attendant extends Animat<AgentBody> {
 				n.setValue(0);
 			}
 		}
-
 	}
-
 }

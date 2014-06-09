@@ -1,23 +1,34 @@
 package fr.utbm.gi.vi51.g3.motion.agent;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.vecmath.Point2d;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
 
 public class Schedule {
-	private final int day;
-	private final ArrayList<String> stage;
-	
-	public Schedule(){
-		this.day=environment.getLengthDay();
-		ArrayList<String> stages = environment.getStages();
-		for(int i=0;i<this.day;i++){
-			this.stage.add(stages.get((int) Math.floor(Math.random() * stages.size())));
+	private final List<Plan> gigs;
+
+	public Schedule() {
+		gigs = new ArrayList<>();
+		Plan[] stages = Plan.values();
+		for (Plan stage : stages) {
+			gigs.add((int) (Math.floor(Math.random() * stages.length)), stage);
 		}
 	}
-	
-	public String getPlaceToBe(){
-		return stage.get((int) Math.floor(environment.getTime()));
+
+	/**
+	 * Get the stage to be to.
+	 * 
+	 * @return
+	 */
+	public Plan getPlaceToBe() {
+		return gigs.get(0);
 	}
-	
+
+	/**
+	 * Remove the stage of the schedule
+	 */
+	public void removePlaceToBe() {
+		gigs.remove(0);
+	}
 }
