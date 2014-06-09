@@ -9,16 +9,18 @@ import org.junit.Test;
 import fr.utbm.gi.vi51.g3.framework.environment.AABB;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 
 public class QuadTreeTest {
 
 	QuadTree tree;
-	QuadTreeNode root;
+
+	// QuadTreeNode root;
 
 	@Test
 	public void testBuild() {
-		tree = new QuadTree(8, 8);
 
+		tree = new QuadTree(8, 8);
 		// First level
 		// root = new QuadTreeNode(new AABB(0, 8, 0, 8));
 		// System.out.println("once");
@@ -90,8 +92,14 @@ public class QuadTreeTest {
 
 	@Test
 	public void testCull() {
-		testBuild();
+		// testBuild();
 
+		tree = new QuadTree(10000, 10000);
+		for (int i = 0; i < 10000; i++) {
+			System.out.println("flora " + i);
+			System.out.println(tree.insert(new Stage(1.5, new Point2d(i + 3,
+					i + 1), 0, "bla")));
+		}
 		// Let's define a frustum
 		AABB frustum = new AABB(0, 6, 0, 6);
 		// When called, cull function should return a list of 3 objects

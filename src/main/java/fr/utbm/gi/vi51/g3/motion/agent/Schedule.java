@@ -11,9 +11,9 @@ public class Schedule {
 	public Schedule() {
 		gigs = new ArrayList<>();
 		Plan[] stages = Plan.values();
-		for (Plan stage : stages) {
-			gigs.add((int) (Math.floor(Math.random() * stages.length)), stage);
-		}
+		// for (Plan stage : stages) {
+		// gigs.add((int) (Math.floor(Math.random() * stages.length)), stage);
+		// }
 	}
 
 	/**

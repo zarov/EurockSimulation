@@ -54,8 +54,8 @@ public class WorldModel extends AbstractEnvironment implements
 		WorldModelStateProvider {
 
 	// private MouseTarget mouseTarget = null;
-	private ArrayList<String> stages;
-	private ArrayList<Point2d> stagesPositions;
+	private ArrayList<String> stages = new ArrayList<String>();
+	private ArrayList<Point2d> stagesPositions = new ArrayList<Point2d>();
 	private final double time;
 
 	/**
@@ -79,18 +79,20 @@ public class WorldModel extends AbstractEnvironment implements
 		stands();
 		flora();
 		bathrooms();
-		Barr();
+		barriers();
 
 	}
 
 	/* Barriers */
 
-	private void Barr() {
-		gate(120, 210, 17, 1, 15);
-		gate(120, 210, 1, 7, 15);
+	private void barriers() {
+		// gate(120, 210, 17, 1, 15);
+		// gate(120, 210, 1, 7, 15);
 	}
 
 	private void gate(int x, int y, int height, int width, int size) {
+
+		System.out.println("init gates");
 		int saveX = x;
 		ArrayList<Point2d> gate = new ArrayList<Point2d>();
 
@@ -112,6 +114,8 @@ public class WorldModel extends AbstractEnvironment implements
 
 	/* BathRooms */
 	private void bathrooms() {
+
+		System.out.println("init bathrooms");
 		AttendantGender male = AttendantGender.MAN;
 		AttendantGender female = AttendantGender.WOMAN;
 
@@ -136,12 +140,14 @@ public class WorldModel extends AbstractEnvironment implements
 
 	private void setBathrooms(int x, int y, AttendantGender a) {
 		Point2d BathR = new Point2d(x, y);
-		Toilet B = new Toilet(15, BathR, 15, "T1", a);
+		Toilet B = new Toilet(15, BathR, 15, "TOILET", a);
 		implantSituatedObject(B);
 	}
 
 	/** Stages **/
 	private void stages() {
+
+		System.out.println("init stages");
 		Plan[] stagesOnPlan = Plan.values();
 
 		for (Plan sp : stagesOnPlan) {
@@ -153,6 +159,7 @@ public class WorldModel extends AbstractEnvironment implements
 	/** Flora **/
 	private void flora() {
 		/* From top left corner to bottom right corner */
+		System.out.println("init trees");
 		forest(5, 11, 2, 6);
 		forest(20, 680, 3, 4);
 		// forest(250, 180, 8, 5);
@@ -189,6 +196,7 @@ public class WorldModel extends AbstractEnvironment implements
 
 	/** Stands **/
 	private void stands() {
+		System.out.println("init stands");
 		graille(180, 20, "food");
 		graille(260, 20, "food");
 		graille(330, 20, "food");

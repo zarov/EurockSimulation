@@ -27,8 +27,6 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFlee
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 
 public class Attendant extends Animat<AgentBody> {
 	private static final long serialVersionUID = 4416989095632710549L;
@@ -122,22 +120,24 @@ public class Attendant extends Animat<AgentBody> {
 						getMaxAngularAcceleration());
 			}
 		}
-
-		Plan placeToBe = sched.getPlaceToBe();
-		Stage stageToBe = new Stage(placeToBe.size, placeToBe.position,
-				placeToBe.direction, placeToBe.name);
-		if (!stageToBe.isInRange(position)) {
-			if (stageToBe.isOnAir()) {
-				seekBehaviour.runSeek(position, linearSpeed, 0.5,
-						stageToBe.getPosition());
-			} else {
-				wanderBehaviour.runWander(position, orientation, linearSpeed,
-						0.5, angularSpeed, Math.PI / 4);
-			}
-		} else if (!stageToBe.isOnAir()) {
-			wanderBehaviour.runWander(position, orientation, linearSpeed, 0.5,
-					angularSpeed, Math.PI / 4);
-		}
+		//
+		// Plan placeToBe = sched.getPlaceToBe();
+		// Stage stageToBe = new Stage(placeToBe.size, placeToBe.position,
+		// placeToBe.direction, placeToBe.name);
+		// if (!stageToBe.isInRange(position)) {
+		// if (stageToBe.isOnAir()) {
+		// output = seekBehaviour.runSeek(position, linearSpeed, 0.5,
+		// stageToBe.getPosition());
+		// } else {
+		// output = wanderBehaviour.runWander(position, orientation,
+		// linearSpeed,
+		// 0.5, angularSpeed, Math.PI / 4);
+		// }
+		// } else if (!stageToBe.isOnAir()) {
+		// output = wanderBehaviour.runWander(position, orientation,
+		// linearSpeed, 0.5,
+		// angularSpeed, Math.PI / 4);
+		// }
 
 		if (output != null) {
 			influenceSteering(output.getLinear(), output.getAngular());

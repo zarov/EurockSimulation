@@ -335,7 +335,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 						g2d.drawRect(0, 200, 100,300);
 								break;
 								
-					case "Green":
+			case "Greenroom":
 //						GREENSTAGE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
 //										- (ICON_PEOPLE_HEIGHT / 2));
 						g2d.drawRect(550, 5, 300,100);
@@ -391,6 +391,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 						break;
 					default:
 						System.out.println("GUI.drawObject - pas de type trouvé");
+
 					break;
 				}
 

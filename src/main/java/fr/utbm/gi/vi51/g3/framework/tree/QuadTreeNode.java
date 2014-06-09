@@ -126,7 +126,6 @@ public class QuadTreeNode implements TreeNode<QuadTreeNode> {
 				}
 			}
 		}
-
 		return false;
 	}
 
