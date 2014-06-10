@@ -1,4 +1,4 @@
-package fr.utbm.gi.vi51.g3.motion.agent;
+package fr.utbm.gi.vi51.g3.motion.environment;
 
 import java.util.ArrayList;
 import java.util.List;

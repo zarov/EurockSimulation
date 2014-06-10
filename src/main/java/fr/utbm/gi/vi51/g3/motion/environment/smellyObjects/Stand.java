@@ -22,13 +22,11 @@ public class Stand extends AbstractSmellyObject {
 	}
 
 	public void newClient(Attendant a) {
-		if(a.hasNeed(this.action.getNeedType())){
-			this.clients.add(a);
-		}
+		this.clients.add(a);
 	}
 	
 	public void serveClient(){
 		Attendant a = this.clients.remove();
-		a.updateNeeds(this.action.getNeedType());
+		a.satisfyNeed(this.action.getNeedType(), this.action.getValue());
 	}
 }

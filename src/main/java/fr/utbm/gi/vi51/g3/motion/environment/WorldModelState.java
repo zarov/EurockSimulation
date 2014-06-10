@@ -77,13 +77,9 @@ public class WorldModelState {
 		} else if(o instanceof Barrier){
 			return "BARRIER";
 		} else if(o instanceof Stand){
-			System.out.println(((Stand) o).getName());
 			return ((Stand) o).getName();
-
 		} else if(o instanceof Stage){
-			System.out.println(((Stage) o).getName());
 			return ((Stage) o).getName();
-
 		} else if(o instanceof Toilet){
 			return ((Toilet) o).getName();
 		} else {

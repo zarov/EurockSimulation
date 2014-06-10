@@ -20,7 +20,7 @@
  */
 package fr.utbm.gi.vi51.g3.motion.environment;
 
-import javax.vecmath.Point2d;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
 
 /**
  * State provider for the world model.  
@@ -30,11 +30,13 @@ import javax.vecmath.Point2d;
  */
 public interface WorldModelStateProvider {
 
-	/** Set the mouse target.
+	/**
+	 * Set the bomb.
 	 * 
-	 * @param target
+	 * @param bomb
+	 * 
 	 */
-	public void setMouseTarget(Point2d target);
+	public void setBomb(Bomb bomb);
 
 	/** Replies the width of the environment.
 	 * 
@@ -53,5 +55,7 @@ public interface WorldModelStateProvider {
 	 * @return the state of the world model.
 	 */
 	public WorldModelState getState();
+
+	public Bomb getBomb();
 
 }

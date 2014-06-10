@@ -1,5 +1,7 @@
 package fr.utbm.gi.vi51.g3.motion.agent;
 
+import java.util.List;
+
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
@@ -10,18 +12,21 @@ import org.janusproject.kernel.status.StatusFactory;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.EvadeBehaviour;
+import fr.utbm.gi.vi51.g3.framework.environment.Perception;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringEvadeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
 
-public class Worker extends Animat<AgentBody> {
+public class Bodyguard extends Animat<AgentBody> {
 
 	private static final long serialVersionUID = 6325181339385994809L;
 
-	private final static double SIZE = 20.;
+	private final static double SIZE = 0.5;
 
 	private final static double STOP_DISTANCE = 3.;
 	private final static double STOP_RADIUS = Math.PI / 10.;
@@ -31,14 +36,11 @@ public class Worker extends Animat<AgentBody> {
 	private final static double WANDER_MAX_ROTATION = Math.PI;
 	private final static long PERCEPTION_RANGE = 200;
 
-	private final WorkerTask TASK;
-
-	private final EvadeBehaviour<?> evadeBehaviour;
+	private final FleeBehaviour<?> fleeBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
 
-	public Worker(WorkerTask task) {
-		TASK = task;
-		evadeBehaviour = new SteeringEvadeBehaviour();
+	public Bodyguard() {
+		fleeBehaviour = new SteeringFleeBehaviour();
 		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(STOP_RADIUS,
 				SLOW_RADIUS);
 
@@ -52,7 +54,7 @@ public class Worker extends Animat<AgentBody> {
 	public Status activate(Object... activationParameters) {
 		Status s = super.activate(activationParameters);
 		if (s.isSuccess()) {
-			setName(Locale.getString(Worker.class, TASK.getName()));
+			setName(Locale.getString(Bodyguard.class, "BODYGUARD"));
 			System.out.println(getName());
 		}
 		return s;
@@ -75,41 +77,30 @@ public class Worker extends Animat<AgentBody> {
 		double linearSpeed = getCurrentLinearSpeed();
 		double angularSpeed = getCurrentAngularSpeed();
 
-		// BehaviourOutput globalOutput = null;
-		// List<Perception> perceptions = getPerceivedObjects();
-		//
-		// if(!perceptions.isEmpty()) {
-		// for(Perception percept: perceptions)
-		// {
-		//
-		// }
-		// } else {
-		//
-		// //if no object is perceived then wander
-		// globalOutput = this.wanderBehaviour.runWander(position, orientation,
-		// linearSpeed, getMaxLinear(), angularSpeed, getMaxAngular());
-		// }
-		//
-		// //send influences to the environment
-		// if (globalOutput!=null) {
-		// if (this.isSteering)
-		// influenceSteering(globalOutput.getLinear(),globalOutput.getAngular());
-		// else
-		// influenceKinematic(globalOutput.getLinear(),globalOutput.getAngular());
-		// }
-		//
+		BehaviourOutput output = null;
+		List<Perception> perceptions = getPerceivedObjects();
+
+		if (!perceptions.isEmpty()) {
+			for (Perception p : perceptions) {
+				if (p.getPerceivedObject() instanceof Bomb) {
+					output = fleeBehaviour.runFlee(position, linearSpeed, 0.5,
+							p.getPerceivedObject().getPosition());
+				}
+			}
+		} else {
+			// if no object is perceived then wander
+			output = this.wanderBehaviour.runWander(position,
+					orientation, linearSpeed, getMaxLinearAcceleration(),
+					angularSpeed, getMaxAngularAcceleration());
+		}
+
+		// send influences to the environment
+		if (output != null) {
+			influenceSteering(output.getLinear(), output.getAngular());
+		}
+
 		return StatusFactory.ok(this);
 	}
-
-	// private double getMaxLinear() {
-	// return this.isSteering ? getMaxLinearAcceleration() :
-	// getMaxLinearSpeed();
-	// }
-	//
-	// private double getMaxAngular() {
-	// return this.isSteering ? getMaxAngularAcceleration() :
-	// getMaxAngularSpeed();
-	// }
 
 	public static double getPerceptionRange() {
 		return PERCEPTION_RANGE;

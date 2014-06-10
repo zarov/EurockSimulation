@@ -45,31 +45,20 @@ public class MainProgram {
 
 		System.out.println(Locale.getString(MainProgram.class, "INTRO_MESSAGE")); //$NON-NLS-1$
 
-		//		boolean steering = JOptionPane.showConfirmDialog(null,
-		//				Locale.getString(MainProgram.class, "USE_STEERING_MESSAGE"), //$NON-NLS-1$
-		//				Locale.getString(MainProgram.class, "USE_STEERING_TITLE"), //$NON-NLS-1$
-		//				JOptionPane.YES_NO_OPTION,
-		//				JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION;
-
-		System.out.println("--- Init. GUI");
+		System.out.println("--- GUI initialization");
 		FrameworkGUI gui = new GUI(WORLD_SIZE_X, WORLD_SIZE_Y);
 
-		System.out.println("--- Init. Environment");
+		System.out.println("--- Environment initialization");
 		Environment environment = new WorldModel(WORLD_SIZE_X, WORLD_SIZE_Y);
 
 		FrameworkLauncher.launchEnvironment(environment, gui, EXECUTION_DELAY);
 
-		System.out.println("--- Init. Agents");
-		Attendant a = new Attendant(AttendantGender.MAN);
-		FrameworkLauncher.launchAgent(a);
+		System.out.println("Creating Agents ...");
 		
-		Attendant b = new Attendant(AttendantGender.WOMAN);
-		FrameworkLauncher.launchAgent(b);
-		
-		FrameworkLauncher.launchAgent(new Attendant(AttendantGender.MAN));
-		
-		FrameworkLauncher.launchAgent(new Attendant(AttendantGender.WOMAN));
-		
+		for (int i = 0; i < 25; i++) {
+			FrameworkLauncher.launchAgent(new Attendant(AttendantGender.MAN));
+			FrameworkLauncher.launchAgent(new Attendant(AttendantGender.WOMAN));
+		}
 		// Worker c = new Worker(WorkerTask.BODYGUARD);
 		// FrameworkLauncher.launchAgent(c);
 		//

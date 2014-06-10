@@ -3,7 +3,6 @@ package fr.utbm.gi.vi51.g3.motion.agent;
 import java.util.List;
 
 import javax.vecmath.Point2d;
-import javax.vecmath.Vector2d;
 
 import org.arakhne.afc.vmutil.locale.Locale;
 import org.janusproject.kernel.status.Status;
@@ -12,9 +11,10 @@ import org.janusproject.kernel.status.StatusFactory;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
-import fr.utbm.gi.vi51.g3.framework.environment.MobileObject;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringBehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
@@ -23,7 +23,7 @@ public class Seller extends Animat<AgentBody> {
 
 	private static final long serialVersionUID = 4416989095632710549L;
 
-	private final static double SIZE = 20.;
+	private final static double SIZE = 0.5;
 
 	private final static long PERCEPTION_RANGE = 200;
 
@@ -57,25 +57,29 @@ public class Seller extends Animat<AgentBody> {
 	@Override
 	public Status live() {
 		Point2d position = new Point2d(getX(), getY());
-		Vector2d orientation = getDirection();
 		double linearSpeed = getCurrentLinearSpeed();
-		double angularSpeed = getCurrentAngularSpeed();
 
 		List<Perception> perc = getPerceivedObjects();
+		BehaviourOutput output = new SteeringBehaviourOutput();
 
 		for (Perception p : perc) {
-			MobileObject o = (MobileObject) p.getPerceivedObject();
-			if (o instanceof Bomb) {
-				fleeBehaviour.runFlee(position, linearSpeed, 0.5,
-						o.getPosition());
+			if (p.getPerceivedObject() instanceof Bomb) {
+				output = fleeBehaviour.runFlee(position, linearSpeed, 0.5, p
+						.getPerceivedObject().getPosition());
 			}
 		}
+
+		influenceSteering(output.getLinear(), output.getAngular());
 
 		return StatusFactory.ok(this);
 	}
 
 	public static double getPerceptionRange() {
 		return PERCEPTION_RANGE;
+	}
+
+	public Stand getStand() {
+		return stand;
 	}
 
 }

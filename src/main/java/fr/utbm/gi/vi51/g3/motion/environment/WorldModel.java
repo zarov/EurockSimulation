@@ -35,9 +35,10 @@ import fr.utbm.gi.vi51.g3.framework.environment.MotionInfluence;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
 import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
-import fr.utbm.gi.vi51.g3.motion.agent.NeedType;
+import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedType;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
@@ -53,10 +54,7 @@ import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
 public class WorldModel extends AbstractEnvironment implements
 		WorldModelStateProvider {
 
-	// private MouseTarget mouseTarget = null;
-	private ArrayList<String> stages = new ArrayList<String>();
-	private ArrayList<Point2d> stagesPositions = new ArrayList<Point2d>();
-	private final double time;
+	private Bomb bomb = null;
 
 	/**
 	 * @param width
@@ -67,32 +65,27 @@ public class WorldModel extends AbstractEnvironment implements
 	public WorldModel(double width, double height) {
 		super(width, height, new SimulationTimeManager(500));
 		build();
-		stages.clear();
-		stagesPositions.clear();
-		time = 0;
 	}
 
 	private void build() {
-		// Build stages
 
-		stages();
-		stands();
-		flora();
-		bathrooms();
-		barriers();
+		buildStages();
+		buildStands();
+		buildFlora();
+		buildBathrooms();
+		buildBarriers();
 
 	}
 
-	/* Barriers */
-
-	private void barriers() {
+	private void buildBarriers() {
+		// TODO appel de gate() fais planter le QuadTree, pourquoi ?
 		// gate(120, 210, 17, 1, 15);
 		// gate(120, 210, 1, 7, 15);
 	}
 
 	private void gate(int x, int y, int height, int width, int size) {
 
-		System.out.println("init gates");
+		System.out.println("Building gates ...");
 		int saveX = x;
 		ArrayList<Point2d> gate = new ArrayList<Point2d>();
 
@@ -112,10 +105,9 @@ public class WorldModel extends AbstractEnvironment implements
 		}
 	}
 
-	/* BathRooms */
-	private void bathrooms() {
+	private void buildBathrooms() {
 
-		System.out.println("init bathrooms");
+		System.out.println("Building bathrooms ...");
 		AttendantGender male = AttendantGender.MAN;
 		AttendantGender female = AttendantGender.WOMAN;
 
@@ -144,10 +136,9 @@ public class WorldModel extends AbstractEnvironment implements
 		implantSituatedObject(B);
 	}
 
-	/** Stages **/
-	private void stages() {
+	private void buildStages() {
 
-		System.out.println("init stages");
+		System.out.println("Building stages ...");
 		Plan[] stagesOnPlan = Plan.values();
 
 		for (Plan sp : stagesOnPlan) {
@@ -156,13 +147,13 @@ public class WorldModel extends AbstractEnvironment implements
 		}
 	}
 
-	/** Flora **/
-	private void flora() {
+	private void buildFlora() {
+
+		System.out.println("Building trees ...");
 		/* From top left corner to bottom right corner */
-		System.out.println("init trees");
 		forest(5, 11, 2, 6);
 		forest(20, 680, 3, 4);
-		// forest(250, 180, 8, 5);
+		// forest(250, 180, 8, 5); //TODO plante le quadtree
 		forest(400, 10, 3, 5);
 		forest(650, 680, 3, 5);
 		forest(650, 300, 7, 3);
@@ -170,7 +161,7 @@ public class WorldModel extends AbstractEnvironment implements
 		forest(1100, 300, 2, 2);
 		forest(1300, 20, 3, 4);
 		forest(1300, 200, 2, 14);
-		// forest(1600, 200, 6, 3);
+		// forest(1600, 200, 6, 3); // TODO plante le quadtree
 		forest(1580, 540, 7, 7);
 	}
 
@@ -194,9 +185,9 @@ public class WorldModel extends AbstractEnvironment implements
 		}
 	}
 
-	/** Stands **/
-	private void stands() {
-		System.out.println("init stands");
+	private void buildStands() {
+
+		System.out.println("Building stands");
 		graille(180, 20, "food");
 		graille(260, 20, "food");
 		graille(330, 20, "food");
@@ -243,10 +234,8 @@ public class WorldModel extends AbstractEnvironment implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setMouseTarget(Point2d target) {
-		// if (target==null) this.mouseTarget = null;
-		// else this.mouseTarget = new MouseTarget(target.getX(),
-		// target.getY());
+	public void setBomb(Bomb bomb) {
+		this.bomb = bomb;
 	}
 
 	/**
@@ -254,7 +243,6 @@ public class WorldModel extends AbstractEnvironment implements
 	 */
 	@Override
 	public WorldModelState getState() {
-		/* Ici �a envoie le bordel */
 		return new WorldModelState(cloneWorldObjects());
 	}
 
@@ -271,14 +259,17 @@ public class WorldModel extends AbstractEnvironment implements
 	 */
 	@Override
 	protected List<Perception> computePerceptionsFor(AgentBody agent) {
+		List<Perception> perceptions = null;
+
 		if (agent != null) {
-			// double x1 = agent.getX();
-			// double y1 = agent.getY();
-
-			return getState().getWorldObjects().cull(agent.getFrustrum());
-
+			perceptions = getState().getWorldObjects()
+					.cull(agent.getFrustrum());
+			if (bomb != null) {
+				perceptions.add(bomb.toPerception());
+			}
 		}
-		return null;
+
+		return perceptions;
 	}
 
 	/**
@@ -295,7 +286,6 @@ public class WorldModel extends AbstractEnvironment implements
 		// Compute actions
 		for (int index1 = 0; index1 < influenceList.size(); index1++) {
 			MotionInfluence inf1 = influenceList.get(index1);
-			// AgentBody body1 = getAgentBodyFor(inf1.getEmitter());
 			AgentBody body1 = (AgentBody) inf1.getInfluencedObject();
 			if (body1 != null) {
 				Vector2d move;
@@ -347,27 +337,7 @@ public class WorldModel extends AbstractEnvironment implements
 		}
 	}
 
-	public int getLengthDay() {
-		return 14;
-	}
-
-	public Point2d getStagePosition(String stage) {
-		if (stage == null) {
-			return new Point2d(-1, -1);
-		}
-		for (int i = 0; i < stages.size(); i++) {
-			if (stages.get(i) == stage) {
-				return stagesPositions.get(i);
-			}
-		}
-		return new Point2d(-1, -1);
-	}
-
-	public double getTime() {
-		return time;
-	}
-
-	public ArrayList<String> getStages() {
-		return stages;
+	public Bomb getBomb() {
+		return bomb;
 	}
 }
