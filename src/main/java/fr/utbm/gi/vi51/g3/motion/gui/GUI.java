@@ -28,6 +28,7 @@ import org.arakhne.afc.vmutil.Resources;
 import org.arakhne.afc.vmutil.locale.Locale;
 
 import fr.utbm.gi.vi51.g3.framework.FrameworkLauncher;
+import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.EnvironmentEvent;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.framework.gui.FrameworkGUI;
@@ -304,7 +305,25 @@ public class GUI extends JFrame implements FrameworkGUI {
 						.getBomb().getX(), (int) environment.getBomb().getY());
 			}
 
+			drawObjects(g2d, currentDim);
 			drawAgents(g2d, currentDim);
+		}
+
+		private void drawObjects(Graphics2D g2d, Dimension currentDim) {
+			WorldModelState state = getLastState();
+			if (state != null) {
+				QuadTree tree = state.getWorldObjects();
+				Iterator<QuadTreeNode> it = tree.iterator();
+				while (it.hasNext()) {
+					QuadTreeNode node = it.next();
+					if ((node != null) && (node.getObject() != null)
+							&& !(node.getObject() instanceof AgentBody)) {
+						SituatedObject obj = node.getObject();
+						drawObject(g2d, (int) obj.getX(), (int) obj.getY(),
+								state.getObjectType(obj));
+					}
+				}
+			}
 		}
 
 		private void drawAgents(Graphics2D g2d, Dimension currentDim) {
@@ -314,9 +333,10 @@ public class GUI extends JFrame implements FrameworkGUI {
 				Iterator<QuadTreeNode> it = tree.iterator();
 				while (it.hasNext()) {
 					QuadTreeNode node = it.next();
-					if ((node != null) && (node.getObject() != null)) {
+					if ((node != null) && (node.getObject() != null)
+							&& node.getObject() instanceof AgentBody) {
 						SituatedObject obj = node.getObject();
-						drawObject(g2d, (int) obj.getX(), (int) obj.getY(),
+						drawAgent(g2d, (int) obj.getX(), (int) obj.getY(),
 								state.getObjectType(obj));
 					}
 				}
@@ -327,14 +347,6 @@ public class GUI extends JFrame implements FrameworkGUI {
 	private void drawObject(Graphics2D g2d, int x, int y, String objectType) {
 		if (SHOW_ICON && (objectType != null)) {
 			switch (objectType) {
-			case "MAN":
-				MAN_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-						- (ICON_PEOPLE_HEIGHT / 2));
-				break;
-			case "WOMAN":
-				WOMAN_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-						- (ICON_PEOPLE_HEIGHT / 2));
-				break;
 			case "TREE":
 				TREE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
 						- (ICON_PEOPLE_HEIGHT / 2));
@@ -342,10 +354,6 @@ public class GUI extends JFrame implements FrameworkGUI {
 			case "BARRIER":
 				BARRIER_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2),
 						y - (ICON_PEOPLE_HEIGHT / 2));
-				break;
-			case "BOMB":
-				BOMB_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-						- (ICON_PEOPLE_HEIGHT / 2));
 				break;
 			case "Beach":
 				// BEACHSTAGE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH /
@@ -394,6 +402,25 @@ public class GUI extends JFrame implements FrameworkGUI {
 				TOILET_WOMAN_ICON
 						.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
 								- (ICON_PEOPLE_HEIGHT / 2));
+				break;
+			default:
+				// System.out.println("GUI.drawObject - pas de type trouvé");
+				break;
+			}
+		}
+
+	}
+
+	private void drawAgent(Graphics2D g2d, int x, int y, String objectType) {
+		if (SHOW_ICON && (objectType != null)) {
+			switch (objectType) {
+			case "MAN":
+				MAN_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
+						- (ICON_PEOPLE_HEIGHT / 2));
+				break;
+			case "WOMAN":
+				WOMAN_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
+						- (ICON_PEOPLE_HEIGHT / 2));
 				break;
 			case "MED":
 				MED_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y

@@ -101,7 +101,7 @@ public class QuadTreeTest {
 					i + 1), 0, "bla")));
 		}
 		// Let's define a frustum
-		AABB frustum = new AABB(0, 6, 0, 6);
+		AABB frustum = new AABB(0, 1, 0, 1);
 		// When called, cull function should return a list of 3 objects
 		// CM EDIT should be 4 perceived objects to me : flora 1, 3, 4, 5.
 		List<Perception> percepts = tree.cull(frustum);

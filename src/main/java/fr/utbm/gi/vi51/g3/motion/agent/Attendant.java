@@ -23,7 +23,6 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringBehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
@@ -109,28 +108,39 @@ public class Attendant extends Animat<AgentBody> {
 		double linearSpeed = getCurrentLinearSpeed();
 		double angularSpeed = getCurrentAngularSpeed();
 
-		BehaviourOutput output = new SteeringBehaviourOutput();
+		BehaviourOutput output = null;
 		List<Perception> perceivedObj = getPerceivedObjects();
+		int distFromTarget = 3000;
 
 		for (Perception p : perceivedObj) {
 			SituatedObject o = p.getPerceivedObject();
 			if (o instanceof Bomb) {
-				output = fleeBehaviour.runFlee(position, linearSpeed, 0.5,
+				Vector2d vec = new Vector2d(position);
+				vec.sub(o.getPosition());
+				if (vec.length() < PERCEPTION_RANGE) {
+					output = fleeBehaviour.runFlee(position, linearSpeed, 0.5,
 						o.getPosition());
+					break;
+				}
 			} else if (o.getClass() == computeTargetClass()) {
-				if (o instanceof Toilet) {
-					if (((Toilet) o).getGender() == this.GENDER) {
+				Vector2d vec = new Vector2d(position);
+				vec.sub(o.getPosition());
+				if (vec.length() < distFromTarget) {
+					// manage gender in case of target being toilets
+					if (o instanceof Toilet) {
+						if (((Toilet) o).getGender() == this.GENDER) {
+							output = seekBehaviour.runSeek(position,
+									linearSpeed, 0.5, o.getPosition());
+							// break;
+						} else {
+							// ignore perceived object
+						}
+					} else {
 						output = seekBehaviour.runSeek(position, linearSpeed,
 								0.5, o.getPosition());
+						// break;
 					}
-				} else {
-					output = seekBehaviour.runSeek(position, linearSpeed, 0.5,
-							o.getPosition());
 				}
-			} else {
-				output = wanderBehaviour.runWander(position, orientation,
-						linearSpeed, getMaxLinearAcceleration(), angularSpeed,
-						getMaxAngularAcceleration());
 			}
 		}
 		//
@@ -152,10 +162,13 @@ public class Attendant extends Animat<AgentBody> {
 		// angularSpeed, Math.PI / 4);
 		// }
 
-		if (output != null) {
-			influenceSteering(output.getLinear(), output.getAngular());
+		if (output == null) {
+			output = wanderBehaviour.runWander(position, orientation,
+					linearSpeed, getMaxLinearAcceleration(), angularSpeed,
+					getMaxAngularAcceleration());
 		}
 
+		influenceSteering(output.getLinear(), output.getAngular());
 		return StatusFactory.ok(this);
 	}
 
