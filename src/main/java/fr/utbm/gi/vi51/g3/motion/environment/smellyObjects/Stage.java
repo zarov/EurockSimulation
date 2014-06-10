@@ -6,10 +6,15 @@ public class Stage extends AbstractSmellyObject {
 
 	private final boolean onAir;
 	private final double noiseRange = 200;
+	private final int sizeX;
+	private final int sizeY;
 
-	public Stage(double size, Point2d position, double orientation, String name) {
-		super(size, position, orientation, name);
+	public Stage(Point2d position, double orientation, String name, int sizeX,
+			int sizeY) {
+		super(sizeX, position, orientation, name);
 		onAir = false;
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
 	}
 
 	public double getRange() {
@@ -31,5 +36,19 @@ public class Stage extends AbstractSmellyObject {
 
 	public boolean isOnAir() {
 		return onAir;
+	}
+
+	/**
+	 * @return the sizeX
+	 */
+	public int getSizeX() {
+		return sizeX;
+	}
+
+	/**
+	 * @return the sizeY
+	 */
+	public int getSizeY() {
+		return sizeY;
 	}
 }

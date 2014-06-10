@@ -79,8 +79,8 @@ public class WorldModel extends AbstractEnvironment implements
 
 	private void buildBarriers() {
 		// TODO appel de gate() fais planter le QuadTree, pourquoi ?
-		// gate(120, 210, 17, 1, 15);
-		// gate(120, 210, 1, 7, 15);
+		gate(120, 210, 17, 1, 15);
+		gate(145, 210, 1, 7, 15);
 	}
 
 	private void gate(int x, int y, int height, int width, int size) {
@@ -142,7 +142,8 @@ public class WorldModel extends AbstractEnvironment implements
 		Plan[] stagesOnPlan = Plan.values();
 
 		for (Plan sp : stagesOnPlan) {
-			Stage stage = new Stage(sp.size, sp.position, sp.direction, sp.name);
+			Stage stage = new Stage(sp.position, sp.direction, sp.name,
+					sp.sizeX, sp.sizeY);
 			implantSituatedObject(stage);
 		}
 	}
@@ -337,6 +338,7 @@ public class WorldModel extends AbstractEnvironment implements
 		}
 	}
 
+	@Override
 	public Bomb getBomb() {
 		return bomb;
 	}

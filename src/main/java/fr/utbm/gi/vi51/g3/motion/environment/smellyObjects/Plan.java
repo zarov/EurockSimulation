@@ -12,17 +12,20 @@ import javax.vecmath.Point2d;
  *
  */
 public enum Plan {
-	MAIN("Main", 15, 0, 50, 15), BEACH("Beach", 15, 1150, 650, 15), LOGGIA(
-			"Loggia", 15, 0, 100, 15), GREEN("Greenroom", 15, 0, 99, 15);
+	MAIN("Main", 100, 300, 0, 200, 15), BEACH("Beach", 220, 100, 1150, 650, 15), LOGGIA(
+			"Loggia", 250, 100, 200, 660, 15), GREEN("Greenroom", 300, 100,
+			550, 5, 15);
 
 	public final String name;
-	public final int size;
+	public final int sizeX;
+	public final int sizeY;
 	public final Point2d position;
 	public final int direction;
 
-	private Plan(String name, int size, int x, int y, int direction) {
+	private Plan(String name, int sizeX, int sizeY, int x, int y, int direction) {
 		this.name = name;
-		this.size = size;
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
 		position = new Point2d(x, y);
 		this.direction = direction;
 	}
@@ -35,8 +38,12 @@ public enum Plan {
 		return position;
 	}
 
-	public int getSize() {
-		return size;
+	public int getSizeX() {
+		return sizeX;
+	}
+
+	public int getSizeY() {
+		return sizeY;
 	}
 
 	public int getDirection() {
