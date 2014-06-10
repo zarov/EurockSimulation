@@ -71,6 +71,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 
 	private static final int ICON_PEOPLE_WIDTH;
 	private static final int ICON_PEOPLE_HEIGHT;
+	private static final int ICON_STAND_SIZE;
 	private static final int ICON_BOMB_SIZE;
 
 	static {
@@ -148,6 +149,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 		ICON_PEOPLE_WIDTH = MAN_ICON.getIconWidth();
 		ICON_PEOPLE_HEIGHT = MAN_ICON.getIconHeight();
 		ICON_BOMB_SIZE = BOMB_ICON.getIconHeight();
+		ICON_STAND_SIZE = FOODSTAND_ICON.getIconHeight();
 	}
 
 	private final World world;
@@ -295,6 +297,10 @@ public class GUI extends JFrame implements FrameworkGUI {
 			Graphics2D g2d = (Graphics2D) g;
 
 			Dimension currentDim = getPreferredSize();
+
+			drawObjects(g2d, currentDim);
+			drawAgents(g2d, currentDim);
+
 			if (environment.getBomb() == null) {
 				if (mousePosition != null) {
 					BOMB_ICON.paintIcon(this, g2d, (int) mousePosition.x
@@ -305,9 +311,6 @@ public class GUI extends JFrame implements FrameworkGUI {
 				TICKING_BOMB_ICON.paintIcon(this, g2d, (int) environment
 						.getBomb().getX(), (int) environment.getBomb().getY());
 			}
-
-			drawObjects(g2d, currentDim);
-			drawAgents(g2d, currentDim);
 		}
 
 		private void drawObjects(Graphics2D g2d, Dimension currentDim) {
@@ -323,8 +326,8 @@ public class GUI extends JFrame implements FrameworkGUI {
 						if (obj instanceof Stage) {
 							drawObject(g2d, (int) obj.getX(), (int) obj.getY(),
 									state.getObjectType(obj),
-									((Stage) obj).getSizeX(),
-									((Stage) obj).getSizeY());
+									((Stage) obj).getWidth(),
+									((Stage) obj).getHeight());
 						} else {
 							drawObject(g2d, (int) obj.getX(), (int) obj.getY(),
 									state.getObjectType(obj), 0, 0);
@@ -353,7 +356,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 	}
 
 	private void drawObject(Graphics2D g2d, int x, int y, String objectType,
-			int sizeX, int sizeY) {
+			int width, int height) {
 		if (SHOW_ICON && (objectType != null)) {
 			switch (objectType) {
 				case "TREE":
@@ -370,7 +373,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 					// (ICON_PEOPLE_WIDTH /
 					// 2), y
 					// - (ICON_PEOPLE_HEIGHT / 2));
-					g2d.drawRect(x, y, sizeX, sizeY);
+				g2d.drawRect(x - width / 2, y - height / 2, width, height);
 					break;
 
 				case "Main":
@@ -378,7 +381,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 					// (ICON_PEOPLE_WIDTH /
 					// 2), y
 					// - (ICON_PEOPLE_HEIGHT / 2));
-					g2d.drawRect(x, y, sizeX, sizeY);
+				g2d.drawRect(x - width / 2, y - height / 2, width, height);
 					break;
 
 				case "Greenroom":
@@ -386,7 +389,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 					// (ICON_PEOPLE_WIDTH /
 					// 2), y
 					// - (ICON_PEOPLE_HEIGHT / 2));
-					g2d.drawRect(x, y, sizeX, sizeY);
+				g2d.drawRect(x - width / 2, y - height / 2, width, height);
 					break;
 
 				case "Loggia":
@@ -394,7 +397,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 					// (ICON_PEOPLE_WIDTH
 					// / 2), y
 					// - (ICON_PEOPLE_HEIGHT / 2));
-					g2d.drawRect(x, y, sizeX, sizeY);
+				g2d.drawRect(x - width / 2, y - height / 2, width, height);
 					break;
 
 				case "FOODSTAND":

@@ -12,9 +12,9 @@ import javax.vecmath.Point2d;
  *
  */
 public enum Plan {
-	MAIN("Main", 100, 300, 0, 200, 15), BEACH("Beach", 220, 100, 1150, 650, 15), LOGGIA(
+	MAIN("Main", 100, 300, 50, 350, 15), BEACH("Beach", 220, 100, 1260, 700, 15), LOGGIA(
 			"Loggia", 250, 100, 200, 660, 15), GREEN("Greenroom", 300, 100,
-			550, 5, 15);
+			700, 55, 15);
 
 	public final String name;
 	public final int sizeX;

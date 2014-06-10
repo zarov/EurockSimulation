@@ -110,7 +110,7 @@ public class Attendant extends Animat<AgentBody> {
 
 		BehaviourOutput output = null;
 		List<Perception> perceivedObj = getPerceivedObjects();
-		int distFromTarget = 3000;
+		double distFromTarget = 3000;
 
 		for (Perception p : perceivedObj) {
 			SituatedObject o = p.getPerceivedObject();
@@ -122,10 +122,13 @@ public class Attendant extends Animat<AgentBody> {
 						o.getPosition());
 					break;
 				}
-			} else if (o.getClass() == computeTargetClass()) {
+			} else
+			// define the target type in function of the higher need
+			if (o.getClass() == computeTargetClass()) {
 				Vector2d vec = new Vector2d(position);
 				vec.sub(o.getPosition());
 				if (vec.length() < distFromTarget) {
+					distFromTarget = vec.length();
 					// manage gender in case of target being toilets
 					if (o instanceof Toilet) {
 						if (((Toilet) o).getGender() == this.GENDER) {
@@ -135,6 +138,13 @@ public class Attendant extends Animat<AgentBody> {
 						} else {
 							// ignore perceived object
 						}
+					} else if (o instanceof Stage) {
+						Vector2d vec2 = new Vector2d(o.getPosition());
+						vec2.sub(position);
+						output = seekBehaviour.runSeek(
+								position,
+								linearSpeed,
+								0.5, o.getPosition());
 					} else {
 						output = seekBehaviour.runSeek(position, linearSpeed,
 								0.5, o.getPosition());
@@ -143,7 +153,10 @@ public class Attendant extends Animat<AgentBody> {
 				}
 			}
 		}
-		//
+
+		// getStageNearestSidePoint(vec,
+		// ((Stage) o).getSizeX(),
+		// ((Stage) o).getSizeY())
 		// Plan placeToBe = sched.getPlaceToBe();
 		// Stage stageToBe = new Stage(placeToBe.size, placeToBe.position,
 		// placeToBe.direction, placeToBe.name);
@@ -170,6 +183,27 @@ public class Attendant extends Animat<AgentBody> {
 
 		influenceSteering(output.getLinear(), output.getAngular());
 		return StatusFactory.ok(this);
+	}
+
+	private Point2d getStageNearestSidePoint(Vector2d vec, int width, int height) {
+		Point2d newTarget = new Point2d();
+
+		if (vec.getX() > vec.getY()) {
+			if (vec.getX() > 0) {
+				newTarget.x = vec.getX() - width / 2;
+			} else {
+				newTarget.x = vec.getX() + width / 2;
+			}
+			newTarget.y = vec.getY() / 2;
+		} else {
+			if (vec.getY() > 0) {
+				newTarget.y = vec.getY() - height;
+			} else {
+				newTarget.y = vec.getY() + height;
+			}
+			newTarget.x = vec.getX() / 2;
+		}
+		return newTarget;
 	}
 
 	private NeedType computeHigherNeed() {

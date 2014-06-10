@@ -79,8 +79,8 @@ public class WorldModel extends AbstractEnvironment implements
 
 	private void buildBarriers() {
 		// TODO appel de gate() fais planter le QuadTree, pourquoi ?
-		gate(120, 210, 17, 1, 15);
-		gate(145, 210, 1, 7, 15);
+		// gate(120, 210, 17, 1, 15);
+		// gate(145, 210, 1, 7, 15);
 	}
 
 	private void gate(int x, int y, int height, int width, int size) {
