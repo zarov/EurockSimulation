@@ -8,7 +8,7 @@ public class Stage extends AbstractSmellyObject {
 	private final double noiseRange = 200;
 
 	public Stage(double size, Point2d position, double orientation, String name) {
-		super(size, position, orientation);
+		super(size, position, orientation, name);
 		this.name = name;
 		this.onAir = false;
 	}
@@ -34,7 +34,5 @@ public class Stage extends AbstractSmellyObject {
 		return false;
 	}
 	
-	public boolean isOnAir() {
-		return this.onAir;
-	}
+ 
 }
