@@ -28,6 +28,7 @@ import org.arakhne.afc.vmutil.Resources;
 import org.arakhne.afc.vmutil.locale.Locale;
 
 import fr.utbm.gi.vi51.g3.framework.FrameworkLauncher;
+import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.EnvironmentEvent;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.framework.gui.FrameworkGUI;
@@ -37,6 +38,8 @@ import fr.utbm.gi.vi51.g3.motion.MainProgram;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelEvent;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelState;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelStateProvider;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 
 public class GUI extends JFrame implements FrameworkGUI {
 
@@ -45,6 +48,8 @@ public class GUI extends JFrame implements FrameworkGUI {
 	private static final boolean SHOW_ICON = true;
 
 	private static final String IMG_DIR = "images/";
+
+	private static final int BOMB_TIMER = 120;
 
 	private static final Icon MAN_ICON;
 	private static final Icon WOMAN_ICON;
@@ -62,9 +67,11 @@ public class GUI extends JFrame implements FrameworkGUI {
 	private static final Icon MAINSTAGE_ICON;
 	private static final Icon GREENSTAGE_ICON;
 	private static final Icon BOMB_ICON;
+	private static final Icon TICKING_BOMB_ICON;
 
 	private static final int ICON_PEOPLE_WIDTH;
 	private static final int ICON_PEOPLE_HEIGHT;
+	private static final int ICON_STAND_SIZE;
 	private static final int ICON_BOMB_SIZE;
 
 	static {
@@ -109,6 +116,11 @@ public class GUI extends JFrame implements FrameworkGUI {
 		assert (url != null);
 		BOMB_ICON = new ImageIcon(url);
 
+		url = Resources.getResource(GUI.class, IMG_DIR
+				+ "small_ticking_bomb.png"); //$NON-NLS-1$
+		assert (url != null);
+		TICKING_BOMB_ICON = new ImageIcon(url);
+
 		url = Resources.getResource(GUI.class, IMG_DIR + "small_foodstand.png"); //$NON-NLS-1$
 		assert (url != null);
 		FOODSTAND_ICON = new ImageIcon(url);
@@ -137,6 +149,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 		ICON_PEOPLE_WIDTH = MAN_ICON.getIconWidth();
 		ICON_PEOPLE_HEIGHT = MAN_ICON.getIconHeight();
 		ICON_BOMB_SIZE = BOMB_ICON.getIconHeight();
+		ICON_STAND_SIZE = FOODSTAND_ICON.getIconHeight();
 	}
 
 	private final World world;
@@ -196,7 +209,8 @@ public class GUI extends JFrame implements FrameworkGUI {
 		world.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//
+				setBomb(new Point2d(e.getX() - (ICON_BOMB_SIZE / 2), e.getY()
+						- (ICON_BOMB_SIZE / 2)));
 			}
 
 			@Override
@@ -243,7 +257,8 @@ public class GUI extends JFrame implements FrameworkGUI {
 	/**
 	 * @param p
 	 */
-	protected void setMouseTarget(Point2d p) {
+	protected void setBomb(Point2d position) {
+		environment.setBomb(new Bomb(2, position, 0, "BOMB", BOMB_TIMER));
 		// synchronized (getTreeLock()) {
 		// target = p;
 		// if (environment != null) {
@@ -282,12 +297,44 @@ public class GUI extends JFrame implements FrameworkGUI {
 			Graphics2D g2d = (Graphics2D) g;
 
 			Dimension currentDim = getPreferredSize();
-			if (mousePosition != null) {
-				BOMB_ICON.paintIcon(this, g2d, (int) mousePosition.x
-						- ICON_BOMB_SIZE / 2, (int) mousePosition.y
-						- ICON_BOMB_SIZE / 2);
-			}
+
+			drawObjects(g2d, currentDim);
 			drawAgents(g2d, currentDim);
+
+			if (environment.getBomb() == null) {
+				if (mousePosition != null) {
+					BOMB_ICON.paintIcon(this, g2d, (int) mousePosition.x
+							- (ICON_BOMB_SIZE / 2), (int) mousePosition.y
+							- (ICON_BOMB_SIZE / 2));
+				}
+			} else {
+				TICKING_BOMB_ICON.paintIcon(this, g2d, (int) environment
+						.getBomb().getX(), (int) environment.getBomb().getY());
+			}
+		}
+
+		private void drawObjects(Graphics2D g2d, Dimension currentDim) {
+			WorldModelState state = getLastState();
+			if (state != null) {
+				QuadTree tree = state.getWorldObjects();
+				Iterator<QuadTreeNode> it = tree.iterator();
+				while (it.hasNext()) {
+					QuadTreeNode node = it.next();
+					if ((node != null) && (node.getObject() != null)
+							&& !(node.getObject() instanceof AgentBody)) {
+						SituatedObject obj = node.getObject();
+						if (obj instanceof Stage) {
+							drawObject(g2d, (int) obj.getX(), (int) obj.getY(),
+									state.getObjectType(obj),
+									((Stage) obj).getWidth(),
+									((Stage) obj).getHeight());
+						} else {
+							drawObject(g2d, (int) obj.getX(), (int) obj.getY(),
+									state.getObjectType(obj), 0, 0);
+						}
+					}
+				}
+			}
 		}
 
 		private void drawAgents(Graphics2D g2d, Dimension currentDim) {
@@ -297,9 +344,10 @@ public class GUI extends JFrame implements FrameworkGUI {
 				Iterator<QuadTreeNode> it = tree.iterator();
 				while (it.hasNext()) {
 					QuadTreeNode node = it.next();
-					if ((node != null) && (node.getObject() != null)) {
+					if ((node != null) && (node.getObject() != null)
+							&& (node.getObject() instanceof AgentBody)) {
 						SituatedObject obj = node.getObject();
-						drawObject(g2d, (int) obj.getX(), (int) obj.getY(),
+						drawAgent(g2d, (int) obj.getX(), (int) obj.getY(),
 								state.getObjectType(obj));
 					}
 				}
@@ -307,94 +355,109 @@ public class GUI extends JFrame implements FrameworkGUI {
 		}
 	}
 
-		private void drawObject(Graphics2D g2d, int x, int y, String objectType) {
-			if (SHOW_ICON && (objectType != null)) {
-				switch (objectType) {
-					
-					case "TREE":
-				TREE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-						- (ICON_PEOPLE_HEIGHT / 2));
-						break;
-			case "BARRIER":
-				BARRIER_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2),
-						y - (ICON_PEOPLE_HEIGHT / 2));
-				break;
-			case "BOMB":
-				BOMB_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-						- (ICON_PEOPLE_HEIGHT / 2));
-				break;
-					case "Beach":
-//				BEACHSTAGE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-//								- (ICON_PEOPLE_HEIGHT / 2));
-				g2d.drawRect(1150, 670, 220,100);
-						break;
-						
-					case "Main":
-//						MAINSTAGE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-//										- (ICON_PEOPLE_HEIGHT / 2));
-						g2d.drawRect(0, 200, 100,300);
-								break;
-								
-					case "Green":
-//						GREENSTAGE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-//										- (ICON_PEOPLE_HEIGHT / 2));
-						g2d.drawRect(550, 5, 300,100);
-								break;
-								
-								
-					case "Loggia":
-//						LOGGIASTAGE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-//										- (ICON_PEOPLE_HEIGHT / 2));
-						g2d.drawRect(200, 660, 250,100);
-								break;
-								
-					case "FOODSTAND":
-						FOODSTAND_ICON.paintIcon(this, g2d, x
- - (ICON_PEOPLE_WIDTH / 2), y
-								- (ICON_PEOPLE_HEIGHT / 2));
-						break;
-					case "DRINKSTAND":
-						DRINKSTAND_ICON.paintIcon(this, g2d, x
- - (ICON_PEOPLE_WIDTH / 2), y
-								- (ICON_PEOPLE_HEIGHT / 2));
-						break;
-			case "TOILET_MAN":
-				TOILET_MAN_ICON
-						.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-								- (ICON_PEOPLE_HEIGHT / 2));
-						break;
-			case "TOILET_WOMAN":
-				TOILET_WOMAN_ICON
-						.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-								- (ICON_PEOPLE_HEIGHT / 2));
-				break;
-					case "MAN":
-				MAN_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-						- (ICON_PEOPLE_HEIGHT / 2));
-						break;
-					case "WOMAN":
-				WOMAN_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-						- (ICON_PEOPLE_HEIGHT / 2));
-						break;
-					case "MED":
-				MED_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-						- (ICON_PEOPLE_HEIGHT / 2));
-						break;
-					case "BODYGUARD":
-						BODYGUARD_ICON.paintIcon(this, g2d, x
- - (ICON_PEOPLE_WIDTH / 2), y
-								- (ICON_PEOPLE_HEIGHT / 2));
-						break;
-					case "SELLER":
-				SELLER_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2), y
-						- (ICON_PEOPLE_HEIGHT / 2));
-						break;
-					default:
-						System.out.println("GUI.drawObject - pas de type trouvé");
+	private void drawObject(Graphics2D g2d, int x, int y, String objectType,
+			int width, int height) {
+		if (SHOW_ICON && (objectType != null)) {
+			switch (objectType) {
+				case "TREE":
+					TREE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2),
+							y - (ICON_PEOPLE_HEIGHT / 2));
 					break;
-				}
+				case "BARRIER":
+					BARRIER_ICON.paintIcon(this, g2d, x
+							- (ICON_PEOPLE_WIDTH / 2), y
+							- (ICON_PEOPLE_HEIGHT / 2));
+					break;
+				case "Beach":
+					// BEACHSTAGE_ICON.paintIcon(this, g2d, x -
+					// (ICON_PEOPLE_WIDTH /
+					// 2), y
+					// - (ICON_PEOPLE_HEIGHT / 2));
+				g2d.drawRect(x - width / 2, y - height / 2, width, height);
+					break;
 
+				case "Main":
+					// MAINSTAGE_ICON.paintIcon(this, g2d, x -
+					// (ICON_PEOPLE_WIDTH /
+					// 2), y
+					// - (ICON_PEOPLE_HEIGHT / 2));
+				g2d.drawRect(x - width / 2, y - height / 2, width, height);
+					break;
+
+				case "Greenroom":
+					// GREENSTAGE_ICON.paintIcon(this, g2d, x -
+					// (ICON_PEOPLE_WIDTH /
+					// 2), y
+					// - (ICON_PEOPLE_HEIGHT / 2));
+				g2d.drawRect(x - width / 2, y - height / 2, width, height);
+					break;
+
+				case "Loggia":
+					// LOGGIASTAGE_ICON.paintIcon(this, g2d, x -
+					// (ICON_PEOPLE_WIDTH
+					// / 2), y
+					// - (ICON_PEOPLE_HEIGHT / 2));
+				g2d.drawRect(x - width / 2, y - height / 2, width, height);
+					break;
+
+				case "FOODSTAND":
+					FOODSTAND_ICON.paintIcon(this, g2d, x
+							- (ICON_PEOPLE_WIDTH / 2), y
+							- (ICON_PEOPLE_HEIGHT / 2));
+					break;
+				case "DRINKSTAND":
+					DRINKSTAND_ICON.paintIcon(this, g2d, x
+							- (ICON_PEOPLE_WIDTH / 2), y
+							- (ICON_PEOPLE_HEIGHT / 2));
+					break;
+				case "TOILET_MAN":
+					TOILET_MAN_ICON.paintIcon(this, g2d, x
+							- (ICON_PEOPLE_WIDTH / 2), y
+							- (ICON_PEOPLE_HEIGHT / 2));
+					break;
+				case "TOILET_WOMAN":
+					TOILET_WOMAN_ICON.paintIcon(this, g2d, x
+							- (ICON_PEOPLE_WIDTH / 2), y
+							- (ICON_PEOPLE_HEIGHT / 2));
+					break;
+				default:
+					// System.out.println("GUI.drawObject - pas de type trouvï¿½");
+					break;
 			}
 		}
 
+	}
+
+	private void drawAgent(Graphics2D g2d, int x, int y, String objectType) {
+		if (SHOW_ICON && (objectType != null)) {
+			switch (objectType) {
+				case "MAN":
+					MAN_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2),
+							y - (ICON_PEOPLE_HEIGHT / 2));
+					break;
+				case "WOMAN":
+					WOMAN_ICON.paintIcon(this, g2d,
+							x - (ICON_PEOPLE_WIDTH / 2), y
+									- (ICON_PEOPLE_HEIGHT / 2));
+					break;
+				case "MED":
+					MED_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2),
+							y - (ICON_PEOPLE_HEIGHT / 2));
+					break;
+				case "BODYGUARD":
+					BODYGUARD_ICON.paintIcon(this, g2d, x
+							- (ICON_PEOPLE_WIDTH / 2), y
+							- (ICON_PEOPLE_HEIGHT / 2));
+					break;
+				case "SELLER":
+					SELLER_ICON.paintIcon(this, g2d, x
+							- (ICON_PEOPLE_WIDTH / 2), y
+							- (ICON_PEOPLE_HEIGHT / 2));
+					break;
+				default:
+					// System.out.println("GUI.drawObject - pas de type trouvï¿½");
+					break;
+			}
+		}
+	}
 }

@@ -126,7 +126,6 @@ public class QuadTreeNode implements TreeNode<QuadTreeNode> {
 				}
 			}
 		}
-
 		return false;
 	}
 
@@ -141,6 +140,15 @@ public class QuadTreeNode implements TreeNode<QuadTreeNode> {
 				box.getYlow(), box.getYmid()));
 		insert(object);
 		object = null;
+	}
+
+	/**
+	 * Tell is there is children (branch) or not (leaf)
+	 *
+	 * @return boolean
+	 */
+	public boolean isLeaf() {
+		return northWestChild == null;
 	}
 
 }

@@ -46,7 +46,6 @@ public abstract class AbstractEnvironment implements Environment {
 
 	private final QuadTree worldObjects;
 	
-	
 	private final SimulationTimeManager timeManager;
 	private final double width;
 	private final double height;
@@ -99,7 +98,9 @@ public abstract class AbstractEnvironment implements Environment {
 	 */
 	@Override
 	public void killAgentBody(AgentAddress animat) {
-		// this.worldObjects.remove(animat);
+		// TODO on connait remove slmt pour un AgentBody
+		// il faudrait tuer l'agent à creuser
+		// this.worldObjects.remove();
 	}
 
 	/** {@inheritDoc}
@@ -180,6 +181,7 @@ public abstract class AbstractEnvironment implements Environment {
 	 */
 	@Override
 	public AgentBody getAgentBodyFor(AgentAddress agentId) {
+		// TODO trouver une solution
 		// return this.bodies.get(agentId);
 		return null;
 	}

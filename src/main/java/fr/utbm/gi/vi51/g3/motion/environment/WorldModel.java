@@ -35,9 +35,11 @@ import fr.utbm.gi.vi51.g3.framework.environment.MotionInfluence;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
 import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
-import fr.utbm.gi.vi51.g3.motion.agent.NeedType;
+import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedType;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.StandAction;
@@ -52,10 +54,7 @@ import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
 public class WorldModel extends AbstractEnvironment implements
 		WorldModelStateProvider {
 
-	// private MouseTarget mouseTarget = null;
-	private ArrayList<String> stages;
-	private ArrayList<Point2d> stagesPositions;
-	private final double time;
+	private Bomb bomb = null;
 
 	/**
 	 * @param width
@@ -66,31 +65,27 @@ public class WorldModel extends AbstractEnvironment implements
 	public WorldModel(double width, double height) {
 		super(width, height, new SimulationTimeManager(500));
 		build();
-		this.stages.clear();
-		this.stagesPositions.clear();
-		this.time=0;
 	}
 
 	private void build() {
-		// Build stages
 
-		stages();
-		stands();
-		flora();
-		bathrooms();
-		Barr();
+		buildStages();
+		buildStands();
+		buildFlora();
+		buildBathrooms();
+		buildBarriers();
 
 	}
 
-	/* Barriers */
-	
-	private void Barr()
-	{
-		gate(120,210,17,1,15);
-		gate(120,210,1,7,15);
+	private void buildBarriers() {
+		// TODO appel de gate() fais planter le QuadTree, pourquoi ?
+		// gate(120, 210, 17, 1, 15);
+		// gate(145, 210, 1, 7, 15);
 	}
-	
+
 	private void gate(int x, int y, int height, int width, int size) {
+
+		System.out.println("Building gates ...");
 		int saveX = x;
 		ArrayList<Point2d> gate = new ArrayList<Point2d>();
 
@@ -109,66 +104,57 @@ public class WorldModel extends AbstractEnvironment implements
 			implantSituatedObject(b);
 		}
 	}
-	
-	
-	/* BathRooms */
-	private void bathrooms() {
+
+	private void buildBathrooms() {
+
+		System.out.println("Building bathrooms ...");
 		AttendantGender male = AttendantGender.MAN;
 		AttendantGender female = AttendantGender.WOMAN;
-		 
-		setBathrooms(5,90,male);
-		setBathrooms(5,150,female);
-		
-		setBathrooms(500,740,male);
-		setBathrooms(580,740,female);
-		
-		setBathrooms(980,690,male);
-		setBathrooms(1050,740,female);
-		
-		setBathrooms(900,20,male);
-		setBathrooms(980,20,female);
-		
-		setBathrooms(1420,740,male);
-		setBathrooms(1500,740,female);
-		
-		setBathrooms(1700,420,male);
-		setBathrooms(1700,490,female);
-	}
-	
-	private void setBathrooms(int x, int y, AttendantGender a)
-	{
-		Point2d BathR = new Point2d(x, y);
-		Toilet B = new Toilet(15, BathR,15, "T1",a);
-		implantSituatedObject(B);
-	}
- 
-	/** Stages **/
-	private void stages() {
-		Point2d STAGEXY = new Point2d(1150, 650);
-		Stage STAGE = new Stage(15, STAGEXY, 15, "Beach");
-		this.stages.add("Beach");
-		this.stagesPositions.add(STAGEXY);
-		implantSituatedObject(STAGE);
-		
-		STAGEXY = new Point2d(0,50);
-		STAGE = new Stage(15,STAGEXY,15, "Main");
-		implantSituatedObject(STAGE);
-		
-		STAGEXY = new Point2d(0,100);
-		STAGE = new Stage(15,STAGEXY,15, "Loggia");
-		implantSituatedObject(STAGE);
-		
-		STAGEXY = new Point2d(0,99);
-		STAGE = new Stage(15,STAGEXY,15, "Green");
-		implantSituatedObject(STAGE);
+
+		setBathrooms(5, 90, male);
+		setBathrooms(5, 150, female);
+
+		setBathrooms(500, 740, male);
+		setBathrooms(580, 740, female);
+
+		setBathrooms(980, 690, male);
+		setBathrooms(1050, 740, female);
+
+		setBathrooms(900, 20, male);
+		setBathrooms(980, 20, female);
+
+		setBathrooms(1420, 740, male);
+		setBathrooms(1500, 740, female);
+
+		setBathrooms(1700, 420, male);
+		setBathrooms(1700, 490, female);
 	}
 
-	/** Flora **/
-	private void flora() {
+	private void setBathrooms(int x, int y, AttendantGender a) {
+		Point2d BathR = new Point2d(x, y);
+		Toilet B = new Toilet(15, BathR, 15, "TOILET", a);
+		implantSituatedObject(B);
+	}
+
+	private void buildStages() {
+
+		System.out.println("Building stages ...");
+		Plan[] stagesOnPlan = Plan.values();
+
+		for (Plan sp : stagesOnPlan) {
+			Stage stage = new Stage(sp.position, sp.direction, sp.name,
+					sp.sizeX, sp.sizeY);
+			implantSituatedObject(stage);
+		}
+	}
+
+	private void buildFlora() {
+
+		System.out.println("Building trees ...");
 		/* From top left corner to bottom right corner */
 		forest(5, 11, 2, 6);
 		forest(20, 680, 3, 4);
-//		forest(250, 180, 8, 5);
+		// forest(250, 180, 8, 5); //TODO plante le quadtree
 		forest(400, 10, 3, 5);
 		forest(650, 680, 3, 5);
 		forest(650, 300, 7, 3);
@@ -176,7 +162,7 @@ public class WorldModel extends AbstractEnvironment implements
 		forest(1100, 300, 2, 2);
 		forest(1300, 20, 3, 4);
 		forest(1300, 200, 2, 14);
-		// forest(1600, 200, 6, 3);
+		// forest(1600, 200, 6, 3); // TODO plante le quadtree
 		forest(1580, 540, 7, 7);
 	}
 
@@ -200,14 +186,15 @@ public class WorldModel extends AbstractEnvironment implements
 		}
 	}
 
-	/** Stands **/
-	private void stands() {
+	private void buildStands() {
+
+		System.out.println("Building stands");
 		graille(180, 20, "food");
 		graille(260, 20, "food");
 		graille(330, 20, "food");
 
-//		graille(400, 250, "food");
-//		graille(400, 350, "food");
+		// graille(400, 250, "food");
+		// graille(400, 350, "food");
 
 		graille(770, 640, "food");
 		graille(815, 690, "food");
@@ -248,10 +235,8 @@ public class WorldModel extends AbstractEnvironment implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setMouseTarget(Point2d target) {
-		// if (target==null) this.mouseTarget = null;
-		// else this.mouseTarget = new MouseTarget(target.getX(),
-		// target.getY());
+	public void setBomb(Bomb bomb) {
+		this.bomb = bomb;
 	}
 
 	/**
@@ -259,7 +244,6 @@ public class WorldModel extends AbstractEnvironment implements
 	 */
 	@Override
 	public WorldModelState getState() {
-		/* Ici �a envoie le bordel */
 		return new WorldModelState(cloneWorldObjects());
 	}
 
@@ -276,14 +260,17 @@ public class WorldModel extends AbstractEnvironment implements
 	 */
 	@Override
 	protected List<Perception> computePerceptionsFor(AgentBody agent) {
+		List<Perception> perceptions = null;
+
 		if (agent != null) {
-			// double x1 = agent.getX();
-			// double y1 = agent.getY();
-
-			return getState().getWorldObjects().cull(agent.getFrustrum());
-
+			perceptions = getState().getWorldObjects()
+					.cull(agent.getFrustrum());
+			if (bomb != null) {
+				perceptions.add(bomb.toPerception());
+			}
 		}
-		return null;
+
+		return perceptions;
 	}
 
 	/**
@@ -300,7 +287,6 @@ public class WorldModel extends AbstractEnvironment implements
 		// Compute actions
 		for (int index1 = 0; index1 < influenceList.size(); index1++) {
 			MotionInfluence inf1 = influenceList.get(index1);
-			// AgentBody body1 = getAgentBodyFor(inf1.getEmitter());
 			AgentBody body1 = (AgentBody) inf1.getInfluencedObject();
 			if (body1 != null) {
 				Vector2d move;
@@ -352,25 +338,8 @@ public class WorldModel extends AbstractEnvironment implements
 		}
 	}
 
-	public int getLengthDay() {
-		return 14;
-	}
-	
-	public Point2d getStagePositon(String stage){
-		if(stage == null)
-			return new Point2d(-1,-1);
-		for(int i=0;i<this.stages.size();i++){
-			if(stages.get(i) == stage)
-				return this.stagesPositions.get(i);	
-		}
-		return new Point2d(-1,-1);
-	}
-
-	public double getTime(){
-		return this.time;
-	}
-	
-	public ArrayList<String> getStages(){
-		return this.stages;
+	@Override
+	public Bomb getBomb() {
+		return bomb;
 	}
 }

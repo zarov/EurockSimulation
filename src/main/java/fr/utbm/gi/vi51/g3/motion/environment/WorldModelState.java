@@ -27,7 +27,6 @@ import org.janusproject.kernel.address.AgentAddress;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.framework.tree.QuadTree;
-import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
@@ -82,9 +81,7 @@ public class WorldModelState {
 		} else if(o instanceof Stage){
 			return ((Stage) o).getName();
 		} else if(o instanceof Toilet){
-			AttendantGender a = ((Toilet) o).getGender();
-			if(a == AttendantGender.MAN) { return "TOILET_MAN"; }
-			else { return "TOILET_WOMAN";}
+			return ((Toilet) o).getName();
 		} else {
 			return getAgentType(o);
 		}

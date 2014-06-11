@@ -12,30 +12,27 @@ import org.janusproject.kernel.status.StatusFactory;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
-import fr.utbm.gi.vi51.g3.framework.environment.MobileObject;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.PursueBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringBehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringPursueBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
 
 public class Medic extends Animat<AgentBody> {
 
 	private static final long serialVersionUID = 4416989095632710549L;
 
-	private final static double SIZE = 20.;
+	private final static double SIZE = 0.5;
 
 	private final static double STOP_DISTANCE = 3.;
 	private final static double STOP_RADIUS = Math.PI / 10.;
 	private final static double SLOW_RADIUS = Math.PI / 4.;
 
-	// WARNING the following parameters optimize a steering use of the program
-	// especially the wander behaviour part : the kinematic wander behaviour
-	// would require different parameters.
 	private final static double WANDER_CIRCLE_DISTANCE = 30.;
 	private final static double WANDER_CIRCLE_RADIUS = 30.;
 	private final static double WANDER_MAX_ROTATION = Math.PI;
@@ -44,12 +41,15 @@ public class Medic extends Animat<AgentBody> {
 	private final static int MAX_LINEAR = 5;
 	private final static double MAX_ANGULAR = 0.5;
 
-	private final PursueBehaviour<?> pursueBehaviour;
+	private final FleeBehaviour<?> fleeBehaviour;
+	// private final PursueBehaviour<?> pursueBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
 
 	public Medic() {
 
-		this.pursueBehaviour = new SteeringPursueBehaviour();
+		// this.pursueBehaviour = new SteeringPursueBehaviour();
+		this.fleeBehaviour = new SteeringFleeBehaviour();
+
 		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(STOP_RADIUS,
 				SLOW_RADIUS);
 
@@ -91,11 +91,15 @@ public class Medic extends Animat<AgentBody> {
 		List<Perception> perc = getPerceivedObjects();
 
 		for (Perception p : perc) {
-			MobileObject o = (MobileObject) p.getPerceivedObject();
-			if (o.isAttendant() && !o.isOK()) {
-				this.pursueBehaviour.runPursue(position, linearSpeed,
-						MAX_LINEAR, o.getPosition(), o.getCurrentLinearSpeed(),
-						o.getDirection());
+			// MobileObject o = (MobileObject) p.getPerceivedObject();
+			// if (o.isAttendant() && !o.isOK()) {
+			// this.pursueBehaviour.runPursue(position, linearSpeed,
+			// MAX_LINEAR, o.getPosition(), o.getCurrentLinearSpeed(),
+			// o.getDirection());
+			// }
+			if (p.getPerceivedObject() instanceof Bomb) {
+				output = fleeBehaviour.runFlee(position, linearSpeed, 0.5, p
+						.getPerceivedObject().getPosition());
 			} else {
 				this.wanderBehaviour.runWander(position, orientation,
 						linearSpeed, MAX_LINEAR, angularSpeed, MAX_ANGULAR);

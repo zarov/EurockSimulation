@@ -13,12 +13,13 @@ import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
 public class QuadTreeTest {
 
 	QuadTree tree;
-	QuadTreeNode root;
+
+	// QuadTreeNode root;
 
 	@Test
 	public void testBuild() {
-		tree = new QuadTree(8, 8);
 
+		tree = new QuadTree(8, 8);
 		// First level
 		// root = new QuadTreeNode(new AABB(0, 8, 0, 8));
 		// System.out.println("once");
@@ -90,10 +91,14 @@ public class QuadTreeTest {
 
 	@Test
 	public void testCull() {
-		testBuild();
+		// testBuild();
 
+		tree = new QuadTree(10000, 10000);
+		for (int i = 0; i < 10000; i++) {
+			System.out.println("flora " + i);
+		}
 		// Let's define a frustum
-		AABB frustum = new AABB(0, 6, 0, 6);
+		AABB frustum = new AABB(0, 1, 0, 1);
 		// When called, cull function should return a list of 3 objects
 		// CM EDIT should be 4 perceived objects to me : flora 1, 3, 4, 5.
 		List<Perception> percepts = tree.cull(frustum);

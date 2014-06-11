@@ -1,4 +1,4 @@
-package fr.utbm.gi.vi51.g3.motion.agent;
+package fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour;
 
 public enum NeedType {
 
@@ -12,11 +12,11 @@ public enum NeedType {
 		this.MAX_VALUE = maxValue;
 	}
 
-	public String getName(String name) {
+	public String getName() {
 		return this.name;
 	}
 
-	public int getValue(int value) {
+	public int getMaxValue() {
 		return this.MAX_VALUE;
 	}
 
