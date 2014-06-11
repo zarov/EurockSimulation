@@ -244,7 +244,7 @@ public class WorldModel extends AbstractEnvironment implements
 	 */
 	@Override
 	public WorldModelState getState() {
-		return new WorldModelState(cloneWorldObjects());
+		return new WorldModelState(cloneWorldObjects(), getCurrentTime());
 	}
 
 	/**
@@ -336,6 +336,11 @@ public class WorldModel extends AbstractEnvironment implements
 				move(body, action.getTranslation(), action.getRotation());
 			}
 		}
+	}
+
+	@Override
+	public double getCurrentTime() {
+		return getTimeManager().getCurrentTime();
 	}
 
 	@Override

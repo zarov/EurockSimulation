@@ -20,8 +20,6 @@
  */
 package fr.utbm.gi.vi51.g3.motion.environment;
 
-import java.util.Collection;
-
 import org.janusproject.kernel.address.AgentAddress;
 
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
@@ -42,18 +40,11 @@ import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
 public class WorldModelState {
 
 	private final QuadTree worldObjects;
+	private final double time;
 
-	
-	WorldModelState(Collection<? extends SituatedObject> objs) {
-		this.worldObjects = null;
-	}
-
-	WorldModelState(QuadTree wdobjs) {
+	WorldModelState(QuadTree wdobjs, double time) {
 		this.worldObjects = wdobjs;
-	}
-	
-	WorldModelState(Collection<? extends SituatedObject> agents, Collection<? extends SituatedObject> objet) {
-		this.worldObjects = null;
+		this.time = time;
 	}
 
 	public QuadTree getWorldObjects() {
@@ -86,5 +77,9 @@ public class WorldModelState {
 			return getAgentType(o);
 		}
 		
+	}
+
+	public double getTime() {
+		return time;
 	}
 }

@@ -194,6 +194,7 @@ public abstract class AbstractEnvironment implements Environment {
 		if (this.init.getAndSet(false)) {
 			fireEnvironmentChange();
 		}
+		timeManager.increment();
 		Collection<MotionInfluence> influences = new ArrayList<MotionInfluence>();
 		MotionInfluence influence;
 

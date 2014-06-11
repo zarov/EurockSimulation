@@ -23,6 +23,7 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringBehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
@@ -45,7 +46,7 @@ public class Attendant extends Animat<AgentBody> {
 	private final static double WANDER_CIRCLE_DISTANCE = 30.;
 	private final static double WANDER_CIRCLE_RADIUS = 30.;
 	private final static double WANDER_MAX_ROTATION = Math.PI;
-	private final static long PERCEPTION_RANGE = 200;
+	private final static long PERCEPTION_RANGE = 400;
 
 	private final boolean isOK;
 
@@ -114,9 +115,9 @@ public class Attendant extends Animat<AgentBody> {
 
 		for (Perception p : perceivedObj) {
 			SituatedObject o = p.getPerceivedObject();
+			Vector2d vec = new Vector2d(position);
+			vec.sub(o.getPosition());
 			if (o instanceof Bomb) {
-				Vector2d vec = new Vector2d(position);
-				vec.sub(o.getPosition());
 				if (vec.length() < PERCEPTION_RANGE) {
 					output = fleeBehaviour.runFlee(position, linearSpeed, 0.5,
 						o.getPosition());
@@ -125,31 +126,41 @@ public class Attendant extends Animat<AgentBody> {
 			} else
 			// define the target type in function of the higher need
 			if (o.getClass() == computeTargetClass()) {
-				Vector2d vec = new Vector2d(position);
-				vec.sub(o.getPosition());
 				if (vec.length() < distFromTarget) {
 					distFromTarget = vec.length();
+
 					// manage gender in case of target being toilets
 					if (o instanceof Toilet) {
 						if (((Toilet) o).getGender() == this.GENDER) {
 							output = seekBehaviour.runSeek(position,
 									linearSpeed, 0.5, o.getPosition());
-							// break;
 						} else {
 							// ignore perceived object
 						}
-					} else if (o instanceof Stage) {
-						Vector2d vec2 = new Vector2d(o.getPosition());
-						vec2.sub(position);
-						output = seekBehaviour.runSeek(
-								position,
-								linearSpeed,
-								0.5, o.getPosition());
 					} else {
 						output = seekBehaviour.runSeek(position, linearSpeed,
 								0.5, o.getPosition());
-						// break;
 					}
+				}
+			}
+			if (o instanceof Stage){
+				BehaviourOutput negativeOutput = fleeBehaviour.runFlee(
+						position,
+						linearSpeed,
+						getMaxLinearAcceleration(),
+						o.getPosition());
+				negativeOutput.getLinear().normalize();
+				negativeOutput.getLinear().scale(((Stage) o).getWidth());
+				Vector2d newLinear;
+				if (output != null) {
+					newLinear = output.getLinear();
+					newLinear.add(negativeOutput.getLinear());
+					newLinear.normalize();
+					newLinear.scale(getMaxLinearAcceleration());
+					output.setLinear(newLinear);
+				} else {
+					output = new SteeringBehaviourOutput();
+					output.setLinear(negativeOutput.getLinear());
 				}
 			}
 		}

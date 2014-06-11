@@ -50,6 +50,13 @@ public interface WorldModelStateProvider {
 	 */
 	public double getHeight();
 	
+	/**
+	 * Replies current time.
+	 * 
+	 * @return current time.
+	 */
+	public double getCurrentTime();
+
 	/** Replies the state of the world model.
 	 * 
 	 * @return the state of the world model.

@@ -55,7 +55,7 @@ public class MainProgram {
 
 		System.out.println("Creating Agents ...");
 		
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 200; i++) {
 			FrameworkLauncher.launchAgent(new Attendant(AttendantGender.MAN));
 			FrameworkLauncher.launchAgent(new Attendant(AttendantGender.WOMAN));
 		}
