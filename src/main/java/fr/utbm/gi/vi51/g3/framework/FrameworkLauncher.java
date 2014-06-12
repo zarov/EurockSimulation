@@ -20,6 +20,8 @@
  */
 package fr.utbm.gi.vi51.g3.framework;
 
+import javax.vecmath.Point2d;
+
 import org.janusproject.kernel.Kernel;
 import org.janusproject.kernel.KernelAdapter;
 import org.janusproject.kernel.KernelEvent;
@@ -70,6 +72,24 @@ public class FrameworkLauncher {
 	}
 	
 	/** Launch the given animat.
+	 * 
+	 * @param animat
+	 */
+	public static void launchAgent(Animat<?> animat, Point2d position) {
+		if (environmentSingleton == null)
+			throw new IllegalStateException();
+
+		Kernel k = Kernels.get();
+		if (k == null)
+			throw new IllegalStateException();
+
+		environmentSingleton.spawnAgentBody(animat, position);
+
+		k.submitLightAgent(animat);
+	}
+
+	/**
+	 * Launch the given animat.
 	 * 
 	 * @param animat
 	 */

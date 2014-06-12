@@ -29,4 +29,8 @@ public class Stand extends AbstractSmellyObject {
 		Attendant a = this.clients.remove();
 		a.satisfyNeed(this.action.getNeedType(), this.action.getValue());
 	}
+
+	public StandAction getStandAction() {
+		return action;
+	}
 }

@@ -259,12 +259,12 @@ public class WorldModel extends AbstractEnvironment implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected List<Perception> computePerceptionsFor(AgentBody agent) {
+	protected List<Perception> computePerceptionsFor(AgentBody body) {
 		List<Perception> perceptions = null;
 
-		if (agent != null) {
+		if (body != null) {
 			perceptions = getState().getWorldObjects()
-					.cull(agent.getFrustrum());
+.cull(body.getFrustrum());
 			if (bomb != null) {
 				perceptions.add(bomb.toPerception());
 			}

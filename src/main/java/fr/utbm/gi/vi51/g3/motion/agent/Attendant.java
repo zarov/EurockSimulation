@@ -254,6 +254,9 @@ public class Attendant extends Animat<AgentBody> {
 
 	public void satisfyNeed(NeedType needType, int action) {
 		int newNeedValue = needs.get(needType) + action;
+		if (newNeedValue < 0)
+			newNeedValue = 0;
+		System.out.println(needType.getName() + " : " + newNeedValue);
 		needs.put(needType, newNeedValue);
 	}
 

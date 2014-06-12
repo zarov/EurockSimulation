@@ -20,6 +20,11 @@
  */
 package fr.utbm.gi.vi51.g3.motion;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.vecmath.Point2d;
+
 import org.arakhne.afc.vmutil.locale.Locale;
 
 import fr.utbm.gi.vi51.g3.framework.FrameworkLauncher;
@@ -27,7 +32,11 @@ import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.gui.FrameworkGUI;
 import fr.utbm.gi.vi51.g3.motion.agent.Attendant;
 import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
+import fr.utbm.gi.vi51.g3.motion.agent.Seller;
+import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedType;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModel;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.StandAction;
 import fr.utbm.gi.vi51.g3.motion.gui.GUI;
 
 
@@ -59,14 +68,101 @@ public class MainProgram {
 			FrameworkLauncher.launchAgent(new Attendant(AttendantGender.MAN));
 			FrameworkLauncher.launchAgent(new Attendant(AttendantGender.WOMAN));
 		}
+
+		List<Stand> standList = new ArrayList<Stand>();
+		StandAction satisfyHunger = new StandAction(NeedType.HUNGER, -7);
+		
+		Point2d pos = new Point2d(180,20);
+		Stand stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(260, 20);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(330, 20);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+
+		pos = new Point2d(770, 640);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(815, 690);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(870, 730);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		
+		pos = new Point2d(750, 480);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(750, 400);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(850, 400);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(950, 400);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(850, 480);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(950, 480);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+
+		pos = new Point2d(1550, 280);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(1550, 350);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		
+		pos = new Point2d(1450, 280);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(1450, 350);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(1350, 280);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(1350, 350);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(1120, 20);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+		pos = new Point2d(1220, 20);
+		stand = new Stand(15, pos, 15, "FOODSTAND", satisfyHunger);
+		standList.add(stand);
+		FrameworkLauncher.launchAgent(new Seller(stand));
+
 		// Worker c = new Worker(WorkerTask.BODYGUARD);
 		// FrameworkLauncher.launchAgent(c);
 		//
 		// Worker d = new Worker(WorkerTask.MED);
 		// FrameworkLauncher.launchAgent(d);
 		//
-		// Worker e = new Worker(WorkerTask.SELLER);
-		// FrameworkLauncher.launchAgent(e);
 		
 		FrameworkLauncher.startSimulation();
 	}

@@ -322,7 +322,6 @@ public class GUI extends JFrame implements FrameworkGUI {
 		private void drawObjects(Graphics2D g2d, Dimension currentDim,
 				WorldModelState state) {
 			if (state != null) {
-				System.out.println(state.getTime());
 				QuadTree tree = state.getWorldObjects();
 				Iterator<QuadTreeNode> it = tree.iterator();
 				while (it.hasNext()) {
@@ -368,9 +367,9 @@ public class GUI extends JFrame implements FrameworkGUI {
 			int width, int height, boolean onAir, boolean isEvenTime) {
 		if (SHOW_ICON && (objectType != null)) {
 			int scaleStage = 0;
-			if (isEvenTime) {
-				scaleStage = 10;
-			}
+			// if (isEvenTime) {
+			// scaleStage = 10;
+			// }
 			if (onAir)
 				g2d.setColor(Color.cyan);
 			else

@@ -96,6 +96,7 @@ public class QuadTreeTest {
 		tree = new QuadTree(10000, 10000);
 		for (int i = 0; i < 10000; i++) {
 			System.out.println("flora " + i);
+			tree.insert(new Flora(1, new Point2d(i, i)));
 		}
 		// Let's define a frustum
 		AABB frustum = new AABB(0, 1, 0, 1);
