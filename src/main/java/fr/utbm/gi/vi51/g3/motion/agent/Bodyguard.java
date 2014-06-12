@@ -35,7 +35,7 @@ public class Bodyguard extends Animat<AgentBody> {
 	private final static double WANDER_CIRCLE_RADIUS = 30.;
 	private final static double WANDER_MAX_ROTATION = Math.PI;
 	private final static long PERCEPTION_RANGE = 200;
-
+	private boolean isOK;
 	private final FleeBehaviour<?> fleeBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
 
@@ -48,6 +48,7 @@ public class Bodyguard extends Animat<AgentBody> {
 				alignB);
 		wanderBehaviour = new SteeringWanderBehaviour(WANDER_CIRCLE_DISTANCE,
 				WANDER_CIRCLE_RADIUS, WANDER_MAX_ROTATION, faceB);
+		isOK=true;
 	}
 
 	@Override
@@ -102,6 +103,14 @@ public class Bodyguard extends Animat<AgentBody> {
 		return StatusFactory.ok(this);
 	}
 
+	public boolean isOK() {
+		return isOK;
+	}
+	
+	public void hurtAgent(){
+		this.isOK=false;
+	}
+	
 	public static double getPerceptionRange() {
 		return PERCEPTION_RANGE;
 	}

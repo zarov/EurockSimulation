@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -259,7 +261,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 	 * @param p
 	 */
 	protected void setBomb(Point2d position) {
-		environment.setBomb(new Bomb(2, position, 0, "BOMB", BOMB_TIMER));
+		environment.setBomb(new Bomb(2, position, 0, "BOMB", BOMB_TIMER, environment.getCurrentTime()));
 		// synchronized (getTreeLock()) {
 		// target = p;
 		// if (environment != null) {
@@ -288,7 +290,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 	private class World extends JPanel {
 
 		private static final long serialVersionUID = 8516008479029079959L;
-
+		
 		public World() {
 
 		}
@@ -316,6 +318,14 @@ public class GUI extends JFrame implements FrameworkGUI {
 			} else {
 				TICKING_BOMB_ICON.paintIcon(this, g2d, (int) environment
 						.getBomb().getX(), (int) environment.getBomb().getY());
+				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+			            RenderingHints.VALUE_ANTIALIAS_ON);
+			        Font font = new Font("Serif", Font.PLAIN, 8);
+			        g2d.setFont(font);
+			 
+			        g2d.drawString(Integer.toString((int) environment.getBomb().getTimeBeforeExplosion()), 
+			        		(int) environment.getBomb().getX(), 
+			        		(int) environment.getBomb().getY()); 
 			}
 		}
 

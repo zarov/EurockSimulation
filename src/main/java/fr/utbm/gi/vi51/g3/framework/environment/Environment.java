@@ -85,7 +85,7 @@ public interface Environment {
 	 * 
 	 * @param animat
 	 */
-	public void killAgentBody(AgentAddress animat);
+	public void killAgentBody(AgentBody a);
 
 	public void spawnAgentBody(Animat<?> animat, Point2d position);
 }

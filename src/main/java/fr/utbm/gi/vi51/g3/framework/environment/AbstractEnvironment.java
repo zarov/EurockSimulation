@@ -30,11 +30,13 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.janusproject.kernel.address.AgentAddress;
+import org.janusproject.kernel.agent.Agent;
 import org.janusproject.kernel.util.random.RandomNumber;
 
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
 import fr.utbm.gi.vi51.g3.framework.tree.QuadTree;
 import fr.utbm.gi.vi51.g3.framework.tree.QuadTreeNode;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
 
 
 /**
@@ -46,7 +48,7 @@ import fr.utbm.gi.vi51.g3.framework.tree.QuadTreeNode;
 public abstract class AbstractEnvironment implements Environment {
 
 	private final QuadTree worldObjects;
-	
+	protected Bomb bomb = null;
 	private final SimulationTimeManager timeManager;
 	private final double width;
 	private final double height;
@@ -122,11 +124,8 @@ public abstract class AbstractEnvironment implements Environment {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public void killAgentBody(AgentAddress animat) {
-		// TODO on connait remove slmt pour un AgentBody
-		// il faudrait tuer l'agent à creuser
-		// this.worldObjects.remove();
+	public void killAgentBody(AgentBody a) {
+		worldObjects.remove(a);
 	}
 
 	/** {@inheritDoc}
@@ -211,7 +210,21 @@ public abstract class AbstractEnvironment implements Environment {
 		// return this.bodies.get(agentId);
 		return null;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public Bomb getBomb() {
+		return bomb;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setBomb(Bomb bomb) {
+		this.bomb = bomb;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -221,6 +234,15 @@ public abstract class AbstractEnvironment implements Environment {
 			fireEnvironmentChange();
 		}
 		timeManager.increment();
+		if(bomb != null)
+		{
+			bomb.decreseBomb(timeManager.getCurrentTime());
+			if(bomb.getTimeBeforeExplosion() == 0)
+			{
+				hurtPeople();
+				bomb=null;
+			}
+		}
 		Collection<MotionInfluence> influences = new ArrayList<MotionInfluence>();
 		MotionInfluence influence;
 
@@ -254,6 +276,32 @@ public abstract class AbstractEnvironment implements Environment {
 				}
 			}
 		}
+	}
+
+	private void hurtPeople() {
+		List<Perception> kperc = this.worldObjects.cull(new AABB(bomb.getX() + bomb.getRangeKill(),
+				bomb.getX() - bomb.getRangeKill(),
+				bomb.getY() + bomb.getRangeKill(),
+				bomb.getY() - bomb.getRangeKill()));
+		for(Perception p : kperc){
+			SituatedObject o = p.getPerceivedObject();
+			if(o instanceof AgentBody){
+				AgentBody a = (AgentBody) o;
+				this.killAgentBody(a);
+			}
+		}
+		List<Perception> hperc = this.worldObjects.cull(new AABB(bomb.getX() + bomb.getRangeHurt(),
+				bomb.getX() - bomb.getRangeHurt(),
+				bomb.getY() + bomb.getRangeHurt(),
+				bomb.getY() - bomb.getRangeHurt()));
+		for(Perception p : hperc){
+			SituatedObject o = p.getPerceivedObject();
+			if(o instanceof AgentBody){
+				AgentBody a = (AgentBody) o;
+				a.hurtAgent();
+			}
+		}
+		
 	}
 
 	/** Compute the perceptions for an agent body.

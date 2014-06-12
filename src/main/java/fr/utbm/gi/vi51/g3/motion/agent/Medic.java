@@ -44,6 +44,8 @@ public class Medic extends Animat<AgentBody> {
 	private final FleeBehaviour<?> fleeBehaviour;
 	// private final PursueBehaviour<?> pursueBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
+	
+	private boolean isOK;
 
 	public Medic() {
 
@@ -58,7 +60,7 @@ public class Medic extends Animat<AgentBody> {
 		this.wanderBehaviour = new SteeringWanderBehaviour(
 				WANDER_CIRCLE_DISTANCE, WANDER_CIRCLE_RADIUS,
 				WANDER_MAX_ROTATION, faceB);
-
+		isOK=true;
 	}
 
 	@Override
@@ -115,6 +117,14 @@ public class Medic extends Animat<AgentBody> {
 
 	public static double getPerceptionRange() {
 		return PERCEPTION_RANGE;
+	}
+	
+	public boolean isOK() {
+		return isOK;
+	}
+	
+	public void hurtAgent(){
+		this.isOK=false;
 	}
 
 }

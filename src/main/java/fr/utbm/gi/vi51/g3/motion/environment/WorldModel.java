@@ -57,7 +57,6 @@ import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
 public class WorldModel extends AbstractEnvironment implements
 		WorldModelStateProvider {
 
-	private Bomb bomb = null;
 
 	/**
 	 * @param width
@@ -246,13 +245,6 @@ public class WorldModel extends AbstractEnvironment implements
 	// implantSituatedObject(FOOD);
 	// }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setBomb(Bomb bomb) {
-		this.bomb = bomb;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -298,7 +290,7 @@ public class WorldModel extends AbstractEnvironment implements
 				influences);
 		List<AnimatAction> actions = new ArrayList<AnimatAction>(
 				influenceList.size());
-
+		
 		// Compute actions
 		for (int index1 = 0; index1 < influenceList.size(); index1++) {
 			MotionInfluence inf1 = influenceList.get(index1);
@@ -356,10 +348,5 @@ public class WorldModel extends AbstractEnvironment implements
 	@Override
 	public double getCurrentTime() {
 		return getTimeManager().getCurrentTime();
-	}
-
-	@Override
-	public Bomb getBomb() {
-		return bomb;
 	}
 }

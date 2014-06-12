@@ -40,6 +40,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 
 	private final long perceptionRange;
 	private final AgentAddress owner;
+	protected boolean isOK;
 
 	private MotionInfluence motionInfluence = null;
 	private List<Perception> perceptions = Collections.emptyList();
@@ -231,5 +232,9 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	@Override
 	public Perception toPerception() {
 		return new Perception(this);
+	}
+
+	public void hurtAgent() {
+		this.isOK=false;	
 	}
 }

@@ -50,7 +50,6 @@ public class Attendant extends Animat<AgentBody> {
 	private final static double WANDER_MAX_ROTATION = Math.PI;
 	private final static long PERCEPTION_RANGE = 200;
 
-	private final boolean isOK;
 	private boolean isWaiting;
 
 	private final AttendantGender GENDER;
@@ -62,8 +61,10 @@ public class Attendant extends Animat<AgentBody> {
 
 	private final Schedule sched;
 
+	private boolean isOK;
+
 	public Attendant(AttendantGender gender) {
-		isOK = true;
+		this.isOK = true;
 		GENDER = gender;
 		isWaiting = false;
 
@@ -292,6 +293,10 @@ public class Attendant extends Animat<AgentBody> {
 
 	public boolean isOK() {
 		return isOK;
+	}
+	
+	public void hurtAgent(){
+		this.isOK=false;
 	}
 
 	public static double getPerceptionRange() {

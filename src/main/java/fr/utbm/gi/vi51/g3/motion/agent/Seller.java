@@ -34,9 +34,12 @@ public class Seller extends Animat<AgentBody> {
 	private final FleeBehaviour<?> fleeBehaviour;
 	private final SeekBehaviour<?> seekBehaviour;
 	private final Stand stand;
+	
+	private boolean isOK;
 
 	public Seller(Stand s) {
 		stand = s;
+		isOK = true;
 		fleeBehaviour = new SteeringFleeBehaviour();
 		seekBehaviour = new SteeringSeekBehaviour();
 	}
@@ -98,6 +101,14 @@ public class Seller extends Animat<AgentBody> {
 
 	public Stand getStand() {
 		return stand;
+	}
+	
+	public boolean isOK() {
+		return isOK;
+	}
+	
+	public void hurtAgent(){
+		this.isOK=false;
 	}
 
 }
