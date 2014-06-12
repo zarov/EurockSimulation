@@ -229,20 +229,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	}
 
 	@Override
-	public boolean isAttendant() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isOK() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
 	public Perception toPerception() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Perception(this);
 	}
 }

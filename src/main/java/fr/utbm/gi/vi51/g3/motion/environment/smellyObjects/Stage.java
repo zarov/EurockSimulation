@@ -11,7 +11,7 @@ public class Stage extends AbstractSmellyObject {
 
 	public Stage(Point2d position, double orientation, String name, int width,
 			int height) {
-		super(width, position, orientation, name);
+		super(width, position, orientation, name, null);
 		onAir = false;
 		this.width = width;
 		this.height = height;

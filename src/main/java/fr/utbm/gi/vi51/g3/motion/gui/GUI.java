@@ -1,6 +1,7 @@
 package fr.utbm.gi.vi51.g3.motion.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -38,7 +39,7 @@ import fr.utbm.gi.vi51.g3.motion.MainProgram;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelEvent;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelState;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelStateProvider;
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 
 public class GUI extends JFrame implements FrameworkGUI {
@@ -267,6 +268,10 @@ public class GUI extends JFrame implements FrameworkGUI {
 		// }
 	}
 
+	private boolean isEvenTime(WorldModelState state) {
+		return (state.getTime() % 1000 == 0);
+	}
+
 	/**
 	 * Replies the last environment state.
 	 *
@@ -298,8 +303,9 @@ public class GUI extends JFrame implements FrameworkGUI {
 
 			Dimension currentDim = getPreferredSize();
 
-			drawObjects(g2d, currentDim);
-			drawAgents(g2d, currentDim);
+			WorldModelState state = getLastState();
+			drawObjects(g2d, currentDim, state);
+			drawAgents(g2d, currentDim, state);
 
 			if (environment.getBomb() == null) {
 				if (mousePosition != null) {
@@ -313,8 +319,8 @@ public class GUI extends JFrame implements FrameworkGUI {
 			}
 		}
 
-		private void drawObjects(Graphics2D g2d, Dimension currentDim) {
-			WorldModelState state = getLastState();
+		private void drawObjects(Graphics2D g2d, Dimension currentDim,
+				WorldModelState state) {
 			if (state != null) {
 				QuadTree tree = state.getWorldObjects();
 				Iterator<QuadTreeNode> it = tree.iterator();
@@ -327,18 +333,20 @@ public class GUI extends JFrame implements FrameworkGUI {
 							drawObject(g2d, (int) obj.getX(), (int) obj.getY(),
 									state.getObjectType(obj),
 									((Stage) obj).getWidth(),
-									((Stage) obj).getHeight());
+									((Stage) obj).getHeight(),
+									((Stage) obj).isOnAir(), isEvenTime(state));
 						} else {
 							drawObject(g2d, (int) obj.getX(), (int) obj.getY(),
-									state.getObjectType(obj), 0, 0);
+									state.getObjectType(obj), 0, 0, false,
+									false);
 						}
 					}
 				}
 			}
 		}
 
-		private void drawAgents(Graphics2D g2d, Dimension currentDim) {
-			WorldModelState state = getLastState();
+		private void drawAgents(Graphics2D g2d, Dimension currentDim,
+				WorldModelState state) {
 			if (state != null) {
 				QuadTree tree = state.getWorldObjects();
 				Iterator<QuadTreeNode> it = tree.iterator();
@@ -356,8 +364,16 @@ public class GUI extends JFrame implements FrameworkGUI {
 	}
 
 	private void drawObject(Graphics2D g2d, int x, int y, String objectType,
-			int width, int height) {
+			int width, int height, boolean onAir, boolean isEvenTime) {
 		if (SHOW_ICON && (objectType != null)) {
+			int scaleStage = 0;
+			// if (isEvenTime) {
+			// scaleStage = 10;
+			// }
+			if (onAir)
+				g2d.setColor(Color.cyan);
+			else
+				g2d.setColor(Color.gray);
 			switch (objectType) {
 				case "TREE":
 					TREE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2),
@@ -381,7 +397,8 @@ public class GUI extends JFrame implements FrameworkGUI {
 					// (ICON_PEOPLE_WIDTH /
 					// 2), y
 					// - (ICON_PEOPLE_HEIGHT / 2));
-				g2d.drawRect(x - width / 2, y - height / 2, width, height);
+				g2d.drawRect(x - width / 2, y - height / 2, width + scaleStage,
+						height + scaleStage);
 					break;
 
 				case "Greenroom":
@@ -421,7 +438,6 @@ public class GUI extends JFrame implements FrameworkGUI {
 							- (ICON_PEOPLE_HEIGHT / 2));
 					break;
 				default:
-					// System.out.println("GUI.drawObject - pas de type trouv�");
 					break;
 			}
 		}
@@ -455,7 +471,6 @@ public class GUI extends JFrame implements FrameworkGUI {
 							- (ICON_PEOPLE_HEIGHT / 2));
 					break;
 				default:
-					// System.out.println("GUI.drawObject - pas de type trouv�");
 					break;
 			}
 		}

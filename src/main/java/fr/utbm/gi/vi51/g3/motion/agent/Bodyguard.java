@@ -20,7 +20,7 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlig
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
 
 public class Bodyguard extends Animat<AgentBody> {
 

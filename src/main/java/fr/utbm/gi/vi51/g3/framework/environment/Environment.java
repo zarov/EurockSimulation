@@ -20,6 +20,8 @@
  */
 package fr.utbm.gi.vi51.g3.framework.environment;
 
+import javax.vecmath.Point2d;
+
 import org.janusproject.kernel.address.AgentAddress;
 
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
@@ -84,4 +86,6 @@ public interface Environment {
 	 * @param animat
 	 */
 	public void killAgentBody(AgentAddress animat);
+
+	public void spawnAgentBody(Animat<?> animat, Point2d position);
 }

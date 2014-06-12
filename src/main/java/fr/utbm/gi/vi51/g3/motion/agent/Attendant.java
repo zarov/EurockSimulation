@@ -9,6 +9,7 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.arakhne.afc.vmutil.locale.Locale;
+import org.janusproject.kernel.message.Message;
 import org.janusproject.kernel.status.Status;
 import org.janusproject.kernel.status.StatusFactory;
 
@@ -17,19 +18,21 @@ import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
+import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedMessage;
 import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedType;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringBehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.environment.Schedule;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.AbstractSmellyObject;
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
@@ -48,6 +51,7 @@ public class Attendant extends Animat<AgentBody> {
 	private final static long PERCEPTION_RANGE = 200;
 
 	private final boolean isOK;
+	private boolean isWaiting;
 
 	private final AttendantGender GENDER;
 	private Map<NeedType, Integer> needs;
@@ -61,6 +65,7 @@ public class Attendant extends Animat<AgentBody> {
 	public Attendant(AttendantGender gender) {
 		isOK = true;
 		GENDER = gender;
+		isWaiting = false;
 
 		initNeeds();
 		sched = new Schedule();
@@ -79,7 +84,13 @@ public class Attendant extends Animat<AgentBody> {
 	private void initNeeds() {
 		needs = new HashMap<NeedType, Integer>();
 		for (NeedType elem : NeedType.values()) {
-			needs.put(elem, (int) (Math.random() * 10));
+			if (elem == NeedType.EXIT) {
+				needs.put(elem, 0);
+			} else if (elem == NeedType.SEEGIG) {
+				needs.put(elem, 5);
+			} else {
+				needs.put(elem, (int) (Math.random() * 10));
+			}
 		}
 	}
 
@@ -103,6 +114,12 @@ public class Attendant extends Animat<AgentBody> {
 
 	@Override
 	public Status live() {
+		Message msg = getMessage();
+		if (msg != null && msg instanceof NeedMessage) {
+			satisfyNeed((((NeedMessage) msg).getNeed()),
+					((NeedMessage) msg).getAction());
+		}
+
 		Point2d position = new Point2d(getX(), getY());
 		Vector2d orientation = getDirection();
 		double linearSpeed = getCurrentLinearSpeed();
@@ -114,41 +131,67 @@ public class Attendant extends Animat<AgentBody> {
 
 		for (Perception p : perceivedObj) {
 			SituatedObject o = p.getPerceivedObject();
+			Vector2d vec = new Vector2d(position);
+			vec.sub(o.getPosition());
 			if (o instanceof Bomb) {
-				Vector2d vec = new Vector2d(position);
-				vec.sub(o.getPosition());
 				if (vec.length() < PERCEPTION_RANGE) {
 					output = fleeBehaviour.runFlee(position, linearSpeed, 0.5,
 						o.getPosition());
 					break;
 				}
-			} else
-			// define the target type in function of the higher need
-			if (o.getClass() == computeTargetClass()) {
-				Vector2d vec = new Vector2d(position);
-				vec.sub(o.getPosition());
-				if (vec.length() < distFromTarget) {
-					distFromTarget = vec.length();
-					// manage gender in case of target being toilets
-					if (o instanceof Toilet) {
-						if (((Toilet) o).getGender() == this.GENDER) {
+			} else if (!isWaiting) {
+				// define the target type in function of the higher need
+				if (o.getClass() == computeTargetClass()) {
+					if (vec.length() < distFromTarget) {
+						distFromTarget = vec.length();	
+						if(o instanceof Stand){
+							if(distFromTarget < 5){
+								isWaiting = true;
+								((Stand) o).addNewClient(getAddress());
+							}
+						} 
+						// manage gender in case of target being toilets
+						if (o instanceof Toilet) {
+							if (((Toilet) o).getGender() == this.GENDER) {
+								if(distFromTarget < 5){
+									isWaiting = true;
+									((Toilet) o).addNewClient(getAddress());
+								} else {
+									output = seekBehaviour.runSeek(position,
+											linearSpeed, 0.5, o.getPosition());
+								}
+							} else {
+								// ignore perceived object
+							}
+						} else {
 							output = seekBehaviour.runSeek(position,
 									linearSpeed, 0.5, o.getPosition());
-							// break;
-						} else {
-							// ignore perceived object
 						}
-					} else if (o instanceof Stage) {
-						Vector2d vec2 = new Vector2d(o.getPosition());
-						vec2.sub(position);
-						output = seekBehaviour.runSeek(
-								position,
-								linearSpeed,
-								0.5, o.getPosition());
+					}
+				}
+
+				if (output == null) {
+					output = wanderBehaviour.runWander(position, orientation,
+							linearSpeed, getMaxLinearAcceleration(),
+							angularSpeed, getMaxAngularAcceleration());
+				}
+
+				if (o instanceof Stage) {
+					BehaviourOutput negativeOutput = fleeBehaviour.runFlee(
+							position, linearSpeed, getMaxLinearAcceleration(),
+							o.getPosition());
+					negativeOutput.getLinear().normalize();
+					negativeOutput.getLinear().scale(((Stage) o).getWidth());
+					Vector2d newLinear;
+					if (output != null) {
+						newLinear = output.getLinear();
+						newLinear.add(negativeOutput.getLinear());
+						newLinear.normalize();
+						newLinear.scale(getMaxLinearAcceleration());
+						output.setLinear(newLinear);
 					} else {
-						output = seekBehaviour.runSeek(position, linearSpeed,
-								0.5, o.getPosition());
-						// break;
+						output = new SteeringBehaviourOutput();
+						output.setLinear(negativeOutput.getLinear());
 					}
 				}
 			}
@@ -175,13 +218,9 @@ public class Attendant extends Animat<AgentBody> {
 		// angularSpeed, Math.PI / 4);
 		// }
 
-		if (output == null) {
-			output = wanderBehaviour.runWander(position, orientation,
-					linearSpeed, getMaxLinearAcceleration(), angularSpeed,
-					getMaxAngularAcceleration());
+		if (output != null) {
+			influenceSteering(output.getLinear(), output.getAngular());
 		}
-
-		influenceSteering(output.getLinear(), output.getAngular());
 		return StatusFactory.ok(this);
 	}
 
@@ -216,7 +255,7 @@ public class Attendant extends Animat<AgentBody> {
 				higherNeed = elem.getKey();
 			}
 		}
-
+		// System.out.println(higherNeed.getName() + " : " + val);
 		return higherNeed;
 	}
 
@@ -243,7 +282,12 @@ public class Attendant extends Animat<AgentBody> {
 
 	public void satisfyNeed(NeedType needType, int action) {
 		int newNeedValue = needs.get(needType) + action;
+		if (newNeedValue < 0) {
+			newNeedValue = 0;
+		}
+		System.out.println(newNeedValue);
 		needs.put(needType, newNeedValue);
+		isWaiting = false;
 	}
 
 	public boolean isOK() {

@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.janusproject.kernel.address.AgentAddress;
@@ -96,6 +97,22 @@ public abstract class AbstractEnvironment implements Environment {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void spawnAgentBody(Animat<?> animat, Point2d position) {
+		if (animat != null) {
+			AgentBody body = animat.spawnBody(this);
+			if (body != null && position.x < getWidth()
+					&& position.y < getHeight()) {
+				body.setPosition(position.x, position.y);
+				body.setAngle(RandomNumber.nextDouble() * 2. * Math.PI);
+				this.worldObjects.insert(body);
+			}
+		}
+	}
+
 	private double rnd(double s, double w) {
 		double r = w - 3. * s;
 		r = RandomNumber.nextDouble() * r;
@@ -203,6 +220,7 @@ public abstract class AbstractEnvironment implements Environment {
 		if (this.init.getAndSet(false)) {
 			fireEnvironmentChange();
 		}
+		timeManager.increment();
 		Collection<MotionInfluence> influences = new ArrayList<MotionInfluence>();
 		MotionInfluence influence;
 

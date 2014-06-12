@@ -78,8 +78,4 @@ public interface MobileObject extends SituatedObject {
 	 * @return the current linear motion.
 	 */
 	public Vector2d getCurrentLinearMotion();
-
-	public boolean isAttendant();
-
-	public boolean isOK();
 }
