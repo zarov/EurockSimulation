@@ -27,6 +27,7 @@ import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.framework.tree.QuadTree;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Gate;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
@@ -65,7 +66,9 @@ public class WorldModelState {
 	public String getObjectType(SituatedObject o) {
 		if (o instanceof Flora){
 			return "TREE";
-		} else if(o instanceof Barrier){
+		} else if (o instanceof Gate) {
+			return "GATE";
+	    } else if(o instanceof Barrier){
 			return "BARRIER";
 		} else if(o instanceof Stand){
 			return ((Stand) o).getName();

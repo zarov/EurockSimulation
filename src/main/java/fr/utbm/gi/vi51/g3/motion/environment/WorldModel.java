@@ -41,6 +41,7 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedType;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Gate;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
@@ -76,6 +77,11 @@ public class WorldModel extends AbstractEnvironment implements
 		buildFlora();
 		buildBathrooms();
 		buildBarriers();
+		
+		Point2d a = new Point2d(1780, 50);
+		Gate g = new Gate(15, a, 15, "Entry");
+		implantSituatedObject(g);
+		
 
 	}
 

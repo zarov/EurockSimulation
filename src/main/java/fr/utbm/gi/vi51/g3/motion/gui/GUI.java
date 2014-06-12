@@ -384,6 +384,13 @@ public class GUI extends JFrame implements FrameworkGUI {
 							- (ICON_PEOPLE_WIDTH / 2), y
 							- (ICON_PEOPLE_HEIGHT / 2));
 					break;
+				
+				case "GATE":
+					 
+					g2d.fillRect(x - 100 / 2, y - 100 / 2, 50, 200);
+					
+					break;
+					
 				case "Beach":
 					// BEACHSTAGE_ICON.paintIcon(this, g2d, x -
 					// (ICON_PEOPLE_WIDTH /

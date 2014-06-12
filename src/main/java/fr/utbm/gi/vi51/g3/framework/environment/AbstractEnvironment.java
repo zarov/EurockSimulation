@@ -87,7 +87,7 @@ public abstract class AbstractEnvironment implements Environment {
 //				this.worldObjects.insert(body);
 				
 				/* Gate */
-					double x = 1650 + (double)(Math.random() * ((1780 - 1650) + 1));
+					double x = 1730 + (double)(Math.random() * ((1780 - 1730) + 1));
 					double y = 20 + (double)(Math.random() * ((200 - 20) + 1));
 				
 				body.setPosition(x,y);

@@ -23,6 +23,14 @@ public class AbstractSmellyObject extends AbstractSituatedObject {
 		this.actions = actions;
 		this.clients = new Stack<AgentAddress>();
 	}
+	
+	public AbstractSmellyObject(double size, Point2d position,
+			double orientation, String name) {
+		super(size, position, orientation);
+		this.name = name;
+		this.actions = null;
+		this.clients = new Stack<AgentAddress>();
+	}
 
 	@Override
 	public AABB getFrustrum() {
