@@ -20,7 +20,7 @@
  */
 package fr.utbm.gi.vi51.g3.motion.environment;
 
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
 
 /**
  * State provider for the world model.  

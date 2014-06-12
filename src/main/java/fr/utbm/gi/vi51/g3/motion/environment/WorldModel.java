@@ -22,7 +22,9 @@ package fr.utbm.gi.vi51.g3.motion.environment;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
@@ -37,8 +39,8 @@ import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
 import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
 import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedType;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
@@ -62,15 +64,15 @@ public class WorldModel extends AbstractEnvironment implements
 	 * @param height
 	 *            is the height of the world.
 	 */
-	public WorldModel(double width, double height) {
+	public WorldModel(double width, double height, Set<Stand> standSet) {
 		super(width, height, new SimulationTimeManager(500));
-		build();
+		build(standSet);
 	}
 
-	private void build() {
+	private void build(Set<Stand> standSet) {
 
 		buildStages();
-		buildStands();
+		buildStands(standSet);
 		buildFlora();
 		buildBathrooms();
 		buildBarriers();
@@ -131,8 +133,11 @@ public class WorldModel extends AbstractEnvironment implements
 	}
 
 	private void setBathrooms(int x, int y, AttendantGender a) {
+		Set<StandAction> actions = new HashSet<StandAction>();
+		actions.add(new StandAction(NeedType.PEE, -6));
+
 		Point2d BathR = new Point2d(x, y);
-		Toilet B = new Toilet(15, BathR, 15, "TOILET", a);
+		Toilet B = new Toilet(15, BathR, 15, "TOILET", a, actions);
 		implantSituatedObject(B);
 	}
 
@@ -186,50 +191,53 @@ public class WorldModel extends AbstractEnvironment implements
 		}
 	}
 
-	private void buildStands() {
+	private void buildStands(Set<Stand> standSet) {
 
 		System.out.println("Building stands");
-		graille(180, 20, "food");
-		graille(260, 20, "food");
-		graille(330, 20, "food");
-
-		// graille(400, 250, "food");
-		// graille(400, 350, "food");
-
-		graille(770, 640, "food");
-		graille(815, 690, "food");
-		graille(870, 730, "food");
-
-		graille(750, 480, "food");
-		graille(750, 400, "food");
-		graille(850, 400, "food");
-		graille(950, 400, "food");
-		graille(850, 480, "food");
-		graille(950, 480, "food");
-
-		graille(1550, 280, "food");
-		graille(1550, 350, "food");
-
-		graille(1450, 280, "food");
-		graille(1450, 350, "food");
-		graille(1350, 280, "food");
-		graille(1350, 350, "food");
-		graille(1120, 20, "food");
-		graille(1220, 20, "food");
-	}
-
-	private void graille(int x, int y, String type) {
-		Point2d FOODXY = new Point2d(x, y);
-		StandAction FOODHunger;
-
-		if (type == "food") {
-			FOODHunger = new StandAction(NeedType.HUNGER, 10);
-		} else {
-			FOODHunger = new StandAction(NeedType.THIRST, 10);
+		for (Stand elem : standSet) {
+			implantSituatedObject(elem);
 		}
-		Stand FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);
-		implantSituatedObject(FOOD);
+		// graille(180, 20, "food");
+		// graille(260, 20, "food");
+		// graille(330, 20, "food");
+		//
+		// // graille(400, 250, "food");
+		// // graille(400, 350, "food");
+		//
+		// graille(770, 640, "food");
+		// graille(815, 690, "food");
+		// graille(870, 730, "food");
+		//
+		// graille(750, 480, "food");
+		// graille(750, 400, "food");
+		// graille(850, 400, "food");
+		// graille(950, 400, "food");
+		// graille(850, 480, "food");
+		// graille(950, 480, "food");
+		//
+		// graille(1550, 280, "food");
+		// graille(1550, 350, "food");
+		//
+		// graille(1450, 280, "food");
+		// graille(1450, 350, "food");
+		// graille(1350, 280, "food");
+		// graille(1350, 350, "food");
+		// graille(1120, 20, "food");
+		// graille(1220, 20, "food");
 	}
+
+	// private void graille(int x, int y, String type) {
+	// Point2d FOODXY = new Point2d(x, y);
+	// StandAction FOODHunger;
+	//
+	// if (type == "food") {
+	// FOODHunger = new StandAction(NeedType.HUNGER, 10);
+	// } else {
+	// FOODHunger = new StandAction(NeedType.THIRST, 10);
+	// }
+	// Stand FOOD = new Stand(15, FOODXY, 15, "FOODSTAND", FOODHunger);
+	// implantSituatedObject(FOOD);
+	// }
 
 	/**
 	 * {@inheritDoc}

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.vecmath.Point2d;
 
 import org.arakhne.afc.vmutil.locale.Locale;
+import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.status.Status;
 import org.janusproject.kernel.status.StatusFactory;
 
@@ -12,13 +13,15 @@ import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
+import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedMessage;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.StandAction;
 
 public class Seller extends Animat<AgentBody> {
 
@@ -26,7 +29,7 @@ public class Seller extends Animat<AgentBody> {
 
 	private final static double SIZE = 0.5;
 
-	private final static long PERCEPTION_RANGE = 10;
+	private final static long PERCEPTION_RANGE = 5;
 
 	private final FleeBehaviour<?> fleeBehaviour;
 	private final SeekBehaviour<?> seekBehaviour;
@@ -64,32 +67,21 @@ public class Seller extends Animat<AgentBody> {
 		List<Perception> perc = getPerceivedObjects();
 		BehaviourOutput output = null;
 
-		double dist = 1000;
-		Attendant personToServe = null;
-
 		for (Perception p : perc) {
 			if (p.getPerceivedObject() instanceof Bomb) {
 				output = fleeBehaviour.runFlee(position, linearSpeed, 0.5, p
 						.getPerceivedObject().getPosition());
-
-			} else if (p.getPerceivedObject() instanceof AgentBody) {
-				System.out.println(((AgentBody) p.getPerceivedObject())
-						.getOwner().getName());
-				//
-				// Vector2d vec = new Vector2d(position);
-				// vec.sub(p.getPerceivedObject().getPosition());
-				// if (vec.length() < dist) {
-				// dist = vec.length();
-				// personToServe = (Attendant) p.getPerceivedObject();
-				// }
+			} else {
+				AgentAddress clientToServe = stand.getNextClient();
+				if (clientToServe != null) {
+					for (StandAction action : stand.getActions()) {
+						NeedMessage needMsg = new NeedMessage(
+								action.getNeedType(), action.getValue());
+						sendMessage(needMsg, clientToServe);
+					}
+				}
 			}
 		}
-
-		if (personToServe != null) {
-			personToServe.satisfyNeed(stand.getStandAction().getNeedType(),
-					stand.getStandAction().getValue());
-		}
-
 		if (output == null) {
 			output = seekBehaviour.runSeek(position, linearSpeed, 0.5,
 					stand.getPosition());

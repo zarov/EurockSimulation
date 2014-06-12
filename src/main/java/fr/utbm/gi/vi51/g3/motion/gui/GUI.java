@@ -39,7 +39,7 @@ import fr.utbm.gi.vi51.g3.motion.MainProgram;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelEvent;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelState;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelStateProvider;
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 
 public class GUI extends JFrame implements FrameworkGUI {
