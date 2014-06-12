@@ -88,4 +88,6 @@ public interface Environment {
 	public void killAgentBody(AgentBody a);
 
 	public void spawnAgentBody(Animat<?> animat, Point2d position);
+
+	public void killAgentBody(AgentAddress agent);
 }

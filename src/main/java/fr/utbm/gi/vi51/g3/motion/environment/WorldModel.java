@@ -29,6 +29,8 @@ import java.util.Set;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
+import org.janusproject.kernel.address.AgentAddress;
+
 import fr.utbm.gi.vi51.g3.framework.environment.AbstractEnvironment;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.DynamicType;
@@ -348,5 +350,11 @@ public class WorldModel extends AbstractEnvironment implements
 	@Override
 	public double getCurrentTime() {
 		return getTimeManager().getCurrentTime();
+	}
+
+	@Override
+	public void killAgentBody(AgentAddress agent) {
+		// TODO Auto-generated method stub
+		
 	}
 }
