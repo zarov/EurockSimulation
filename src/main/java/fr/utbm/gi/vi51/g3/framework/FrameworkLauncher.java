@@ -74,7 +74,7 @@ public class FrameworkLauncher {
 	 * @param animat
 	 */
 	public static void launchAgent(Animat<?> animat) {
-		if (environmentSingleton==null) throw new IllegalStateException();
+		if (environmentSingleton==null) throw new IllegalStateException();		 
 		
 		Kernel k = Kernels.get();
 		if (k==null) throw new IllegalStateException();

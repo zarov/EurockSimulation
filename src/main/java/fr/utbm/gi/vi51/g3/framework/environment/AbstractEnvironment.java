@@ -80,7 +80,16 @@ public abstract class AbstractEnvironment implements Environment {
 			AgentBody body = animat.spawnBody(this);
 			if (body != null) {
 				double size = body.getSize();
-				body.setPosition(rnd(size, getWidth()), rnd(size, getHeight()));
+				/* Classic */
+//				body.setPosition(rnd(size, getWidth()), rnd(size, getHeight()));
+//				body.setAngle(RandomNumber.nextDouble() * 2. * Math.PI);
+//				this.worldObjects.insert(body);
+				
+				/* Gate */
+					double x = 1650 + (double)(Math.random() * ((1780 - 1650) + 1));
+					double y = 20 + (double)(Math.random() * ((200 - 20) + 1));
+				
+				body.setPosition(x,y);
 				body.setAngle(RandomNumber.nextDouble() * 2. * Math.PI);
 				this.worldObjects.insert(body);
 			}
