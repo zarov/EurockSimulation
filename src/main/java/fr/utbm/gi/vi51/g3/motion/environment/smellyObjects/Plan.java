@@ -17,15 +17,15 @@ public enum Plan {
 			700, 55, 15);
 
 	public final String name;
-	public final int sizeX;
-	public final int sizeY;
+	public final int width;
+	public final int height;
 	public final Point2d position;
 	public final int direction;
 
-	private Plan(String name, int sizeX, int sizeY, int x, int y, int direction) {
+	private Plan(String name, int width, int height, int x, int y, int direction) {
 		this.name = name;
-		this.sizeX = sizeX;
-		this.sizeY = sizeY;
+		this.width = width;
+		this.height = height;
 		position = new Point2d(x, y);
 		this.direction = direction;
 	}
@@ -38,12 +38,12 @@ public enum Plan {
 		return position;
 	}
 
-	public int getSizeX() {
-		return sizeX;
+	public int getWidth() {
+		return width;
 	}
 
-	public int getSizeY() {
-		return sizeY;
+	public int getHeight() {
+		return height;
 	}
 
 	public int getDirection() {

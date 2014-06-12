@@ -67,6 +67,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 		this.perceptionRange = perceptionRange;
 	}
 
+	@Override
 	public AABB getFrustrum() {
 		return new AABB(getX() - (perceptionRange / 2), getX()
 				+ (perceptionRange / 2), getY() - (perceptionRange / 2), getY()
@@ -235,6 +236,14 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	}
 
 	public void hurtAgent() {
-		this.isOK=false;	
+		isOK = false;
+	}
+
+	/**
+	 * For now there is a transparent body ;)
+	 */
+	@Override
+	public AABB getBox() {
+		return null;
 	}
 }

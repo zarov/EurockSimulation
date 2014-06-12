@@ -156,7 +156,7 @@ public class WorldModel extends AbstractEnvironment implements
 
 		for (Plan sp : stagesOnPlan) {
 			Stage stage = new Stage(sp.position, sp.direction, sp.name,
-					sp.sizeX, sp.sizeY);
+					sp.width, sp.height);
 			implantSituatedObject(stage);
 		}
 	}

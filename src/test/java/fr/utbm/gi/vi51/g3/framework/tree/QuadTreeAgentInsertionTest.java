@@ -21,7 +21,7 @@ public class QuadTreeAgentInsertionTest {
 	public void testBuild() {
 
 		tree = new QuadTree(8, 8);
-		
+
 		System.out.println("bodyguard");
 		Bodyguard bodyguard = new Bodyguard();
 
@@ -38,7 +38,7 @@ public class QuadTreeAgentInsertionTest {
 		System.out.println("woman");
 		Attendant woman = new Attendant(AttendantGender.WOMAN);
 		tree.insert(new AgentBody(woman.getAddress(), 0.5, 0, 0, 0, 0, 0));
-		
+
 	}
 
 	@Test
@@ -59,7 +59,7 @@ public class QuadTreeAgentInsertionTest {
 				+ percepts.size());
 		for (Perception p : percepts) {
 			System.out.println(p.getPerceivedObject().getClass().toString()
-					+ " - " + p.getPerceivedObject().getFrustrum().toString());
+					+ " - " + p.getPerceivedObject().getBox().toString());
 		}
 	}
 

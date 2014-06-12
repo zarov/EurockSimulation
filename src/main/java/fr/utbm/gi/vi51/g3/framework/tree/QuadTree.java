@@ -181,10 +181,11 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 							// intersects with the frustum, then it is in the
 							// perception field
 							SituatedObject object = node.getObject();
-							if ((object != null)
-									&& object.getFrustrum()
-											.intersects(frustrum)) {
-								next = object.toPerception();
+							if ((object != null)) {
+								AABB box = object.getBox();
+								if ((box != null) && box.intersects(frustrum)) {
+									next = object.toPerception();
+								}
 							}
 						}
 					}

@@ -14,32 +14,32 @@ public class AbstractSmellyObject extends AbstractSituatedObject {
 
 	protected String name;
 	private final Set<StandAction> actions;
-	private Stack<AgentAddress> clients;
+	private final Stack<AgentAddress> clients;
 
 	public AbstractSmellyObject(double size, Point2d position,
 			double orientation, String name, Set<StandAction> actions) {
 		super(size, position, orientation);
 		this.name = name;
 		this.actions = actions;
-		this.clients = new Stack<AgentAddress>();
+		clients = new Stack<AgentAddress>();
 	}
-	
+
 	public AbstractSmellyObject(double size, Point2d position,
 			double orientation, String name) {
 		super(size, position, orientation);
 		this.name = name;
-		this.actions = null;
-		this.clients = new Stack<AgentAddress>();
+		actions = null;
+		clients = new Stack<AgentAddress>();
 	}
 
 	@Override
-	public AABB getFrustrum() {
+	public AABB getBox() {
 		return new AABB(getX() - (getSize() / 2), getX() + (getSize() / 2),
 				getY() - (getSize() / 2), getY() + (getSize() / 2));
 	}
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public AgentAddress getNextClient() {
@@ -55,6 +55,6 @@ public class AbstractSmellyObject extends AbstractSituatedObject {
 	}
 
 	public Set<StandAction> getActions() {
-		return this.actions;
+		return actions;
 	}
 }

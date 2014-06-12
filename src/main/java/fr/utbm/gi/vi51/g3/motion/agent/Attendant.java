@@ -64,7 +64,7 @@ public class Attendant extends Animat<AgentBody> {
 	private boolean isOK;
 
 	public Attendant(AttendantGender gender) {
-		this.isOK = true;
+		isOK = true;
 		GENDER = gender;
 		isWaiting = false;
 
@@ -116,7 +116,7 @@ public class Attendant extends Animat<AgentBody> {
 	@Override
 	public Status live() {
 		Message msg = getMessage();
-		if (msg != null && msg instanceof NeedMessage) {
+		if ((msg != null) && (msg instanceof NeedMessage)) {
 			satisfyNeed((((NeedMessage) msg).getNeed()),
 					((NeedMessage) msg).getAction());
 		}
@@ -137,24 +137,24 @@ public class Attendant extends Animat<AgentBody> {
 			if (o instanceof Bomb) {
 				if (vec.length() < PERCEPTION_RANGE) {
 					output = fleeBehaviour.runFlee(position, linearSpeed, 0.5,
-						o.getPosition());
+							o.getPosition());
 					break;
 				}
 			} else if (!isWaiting) {
 				// define the target type in function of the higher need
 				if (o.getClass() == computeTargetClass()) {
 					if (vec.length() < distFromTarget) {
-						distFromTarget = vec.length();	
-						if(o instanceof Stand){
-							if(distFromTarget < 5){
+						distFromTarget = vec.length();
+						if (o instanceof Stand) {
+							if (distFromTarget < 5) {
 								isWaiting = true;
 								((Stand) o).addNewClient(getAddress());
 							}
-						} 
+						}
 						// manage gender in case of target being toilets
 						if (o instanceof Toilet) {
-							if (((Toilet) o).getGender() == this.GENDER) {
-								if(distFromTarget < 5){
+							if (((Toilet) o).getGender() == GENDER) {
+								if (distFromTarget < 5) {
 									isWaiting = true;
 									((Toilet) o).addNewClient(getAddress());
 								} else {
@@ -202,21 +202,19 @@ public class Attendant extends Animat<AgentBody> {
 		// ((Stage) o).getSizeX(),
 		// ((Stage) o).getSizeY())
 		// Plan placeToBe = sched.getPlaceToBe();
-		// Stage stageToBe = new Stage(placeToBe.size, placeToBe.position,
-		// placeToBe.direction, placeToBe.name);
+		// Stage stageToBe = new Stage(placeToBe.position, placeToBe.direction,
+		// placeToBe.name, placeToBe.height, placeToBe.width);
 		// if (!stageToBe.isInRange(position)) {
 		// if (stageToBe.isOnAir()) {
 		// output = seekBehaviour.runSeek(position, linearSpeed, 0.5,
 		// stageToBe.getPosition());
 		// } else {
 		// output = wanderBehaviour.runWander(position, orientation,
-		// linearSpeed,
-		// 0.5, angularSpeed, Math.PI / 4);
+		// linearSpeed, 0.5, angularSpeed, Math.PI / 4);
 		// }
 		// } else if (!stageToBe.isOnAir()) {
 		// output = wanderBehaviour.runWander(position, orientation,
-		// linearSpeed, 0.5,
-		// angularSpeed, Math.PI / 4);
+		// linearSpeed, 0.5, angularSpeed, Math.PI / 4);
 		// }
 
 		if (output != null) {
@@ -228,21 +226,31 @@ public class Attendant extends Animat<AgentBody> {
 	private Point2d getStageNearestSidePoint(Vector2d vec, int width, int height) {
 		Point2d newTarget = new Point2d();
 
-		if (vec.getX() > vec.getY()) {
-			if (vec.getX() > 0) {
-				newTarget.x = vec.getX() - width / 2;
-			} else {
-				newTarget.x = vec.getX() + width / 2;
-			}
-			newTarget.y = vec.getY() / 2;
-		} else {
-			if (vec.getY() > 0) {
-				newTarget.y = vec.getY() - height;
-			} else {
-				newTarget.y = vec.getY() + height;
-			}
-			newTarget.x = vec.getX() / 2;
+		// East and West corner
+		if (Math.abs(vec.y) < (height / 2)) {
+			newTarget.x = vec.x + (vec.x > 0 ? -width / 2 : width / 2);
+			newTarget.y = vec.y;
+			// North and South
+		} else if (Math.abs(vec.x) < (width / 2)) {
+			newTarget.x = vec.x;
+			newTarget.y = vec.y + (vec.y > 0 ? -height / 2 : height / 2);
 		}
+
+		// if (vec.getX() > vec.getY()) {
+		// if (vec.getX() > 0) {
+		// newTarget.x = vec.getX() - (width / 2);
+		// } else {
+		// newTarget.x = vec.getX() + (width / 2);
+		// }
+		// newTarget.y = vec.getY() / 2;
+		// } else {
+		// if (vec.getY() > 0) {
+		// newTarget.y = vec.getY() - height;
+		// } else {
+		// newTarget.y = vec.getY() + height;
+		// }
+		// newTarget.x = vec.getX() / 2;
+		// }
 		return newTarget;
 	}
 
@@ -263,22 +271,23 @@ public class Attendant extends Animat<AgentBody> {
 	private Class<? extends AbstractSmellyObject> computeTargetClass() {
 		NeedType higherNeed = computeHigherNeed();
 		if (higherNeed != null) {
-		switch (higherNeed.getName()) {
-			case "HUNGER":
-				return Stand.class;
-			case "THIRST":
-				return Stand.class;
-			case "PEE":
-				return Toilet.class;
-			case "SEEGIG":
-				return Stage.class;
-			case "EXIT":
-			// return Exit.class;
-			default :
-				return Stage.class;
+			switch (higherNeed.getName()) {
+				case "HUNGER":
+					return Stand.class;
+				case "THIRST":
+					return Stand.class;
+				case "PEE":
+					return Toilet.class;
+				case "SEEGIG":
+					return Stage.class;
+				case "EXIT":
+					// return Exit.class;
+				default:
+					return Stage.class;
 			}
-		} else
+		} else {
 			return Stage.class;
+		}
 	}
 
 	public void satisfyNeed(NeedType needType, int action) {
@@ -286,7 +295,6 @@ public class Attendant extends Animat<AgentBody> {
 		if (newNeedValue < 0) {
 			newNeedValue = 0;
 		}
-		System.out.println(newNeedValue);
 		needs.put(needType, newNeedValue);
 		isWaiting = false;
 	}
@@ -294,9 +302,9 @@ public class Attendant extends Animat<AgentBody> {
 	public boolean isOK() {
 		return isOK;
 	}
-	
-	public void hurtAgent(){
-		this.isOK=false;
+
+	public void hurtAgent() {
+		isOK = false;
 	}
 
 	public static double getPerceptionRange() {

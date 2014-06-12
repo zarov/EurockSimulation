@@ -85,5 +85,5 @@ public interface SituatedObject {
 	 *
 	 * @return
 	 */
-	public AABB getFrustrum();
+	public AABB getBox();
 }

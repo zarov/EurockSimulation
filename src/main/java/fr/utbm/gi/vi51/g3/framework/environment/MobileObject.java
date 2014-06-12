@@ -78,4 +78,11 @@ public interface MobileObject extends SituatedObject {
 	 * @return the current linear motion.
 	 */
 	public Vector2d getCurrentLinearMotion();
+
+	/**
+	 * Return the AABB box of a SituatedObject.
+	 *
+	 * @return
+	 */
+	public AABB getFrustrum();
 }

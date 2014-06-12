@@ -74,7 +74,7 @@ public class QuadTreeTest {
 		// gChildren.get(3).insert(new Flora(2, new Point2d(3, 5)));
 		// children.get(2).setChildren(gChildren);
 		// gChildren.clear();
-		
+
 		// tree.setRoot(root);
 		System.out.println("flora 1");
 		tree.insert(new Flora(2, new Point2d(3, 5)));
@@ -86,7 +86,7 @@ public class QuadTreeTest {
 		tree.insert(new Flora(1, new Point2d(0.5, 1)));
 		System.out.println("flora 5");
 		tree.insert(new Flora(1.5, new Point2d(3, 1)));
-		
+
 	}
 
 	@Test
@@ -108,7 +108,7 @@ public class QuadTreeTest {
 				+ percepts.size());
 		for (Perception p : percepts) {
 			System.out.println(p.getPerceivedObject().getClass().toString()
-					+ " - " + p.getPerceivedObject().getFrustrum().toString());
+					+ " - " + p.getPerceivedObject().getBox().toString());
 		}
 	}
 

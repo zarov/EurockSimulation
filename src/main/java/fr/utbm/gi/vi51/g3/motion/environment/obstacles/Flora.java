@@ -3,9 +3,8 @@ package fr.utbm.gi.vi51.g3.motion.environment.obstacles;
 import javax.vecmath.Point2d;
 
 import fr.utbm.gi.vi51.g3.framework.environment.AABB;
-import fr.utbm.gi.vi51.g3.framework.environment.AbstractSituatedObject;
 
-public class Flora extends AbstractSituatedObject {
+public class Flora extends AbstractObstacle {
 
 	public Flora(double size, Point2d position) {
 		super(size, position);
@@ -16,7 +15,7 @@ public class Flora extends AbstractSituatedObject {
 	 * width of {@code size}, and his center is {@code position}.
 	 */
 	@Override
-	public AABB getFrustrum() {
+	public AABB getBox() {
 		return new AABB(getX() - (getSize() / 2), getX() + (getSize() / 2),
 				getY() - (getSize() / 2), getY() + (getSize() / 2));
 	}
