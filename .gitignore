@@ -25,3 +25,4 @@ target/
 *.aux
 *.pyg
 *.synctex.gz
+*.out
