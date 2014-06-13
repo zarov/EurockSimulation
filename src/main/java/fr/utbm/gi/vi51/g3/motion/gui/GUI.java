@@ -258,7 +258,8 @@ public class GUI extends JFrame implements FrameworkGUI {
 	 * @param p
 	 */
 	protected void setBomb(Point2d position) {
-		environment.setBomb(new Bomb(2, position, 0, "BOMB", BOMB_TIMER, environment.getCurrentTime()));
+		environment.setBomb(new Bomb(2, position, 0, "BOMB", BOMB_TIMER,
+				environment.getCurrentTime()));
 		// synchronized (getTreeLock()) {
 		// target = p;
 		// if (environment != null) {
@@ -268,7 +269,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 	}
 
 	private boolean isEvenTime(WorldModelState state) {
-		return (state.getTime() % 1000 == 0);
+		return ((state.getTime() % 1000) == 0);
 	}
 
 	/**
@@ -287,7 +288,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 	private class World extends JPanel {
 
 		private static final long serialVersionUID = 8516008479029079959L;
-		
+
 		public World() {
 
 		}
@@ -316,13 +317,13 @@ public class GUI extends JFrame implements FrameworkGUI {
 				TICKING_BOMB_ICON.paintIcon(this, g2d, (int) environment
 						.getBomb().getX(), (int) environment.getBomb().getY());
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-			            RenderingHints.VALUE_ANTIALIAS_ON);
-			        Font font = new Font("Serif", Font.PLAIN, 8);
-			        g2d.setFont(font);
-			 
-			        g2d.drawString(Integer.toString((int) environment.getBomb().getTimeBeforeExplosion()), 
-			        		(int) environment.getBomb().getX(), 
-			        		(int) environment.getBomb().getY()); 
+						RenderingHints.VALUE_ANTIALIAS_ON);
+				Font font = new Font("Serif", Font.PLAIN, 8);
+				g2d.setFont(font);
+
+				g2d.drawString(Integer.toString((int) environment.getBomb()
+						.getTimeBeforeExplosion()), (int) environment.getBomb()
+						.getX(), (int) environment.getBomb().getY());
 			}
 		}
 
@@ -391,19 +392,20 @@ public class GUI extends JFrame implements FrameworkGUI {
  - (ICON_STAND_SIZE / 2), y
 						- (ICON_STAND_SIZE / 2));
 					break;
-				
+
 				case "GATE":
-					 
-					g2d.fillRect(x - 100 / 2, y - 100 / 2, 50, 200);
-					
+
+					g2d.fillRect(x - (100 / 2), y - (100 / 2), 50, 200);
+
 					break;
-					
+
 				case "Beach":
 					// BEACHSTAGE_ICON.paintIcon(this, g2d, x -
 					// (ICON_PEOPLE_WIDTH /
 					// 2), y
 					// - (ICON_PEOPLE_HEIGHT / 2));
-				g2d.drawRect(x - width / 2, y - height / 2, width, height);
+					g2d.drawRect(x - (width / 2), y - (height / 2), width,
+							height);
 					break;
 
 				case "Main":
@@ -411,7 +413,8 @@ public class GUI extends JFrame implements FrameworkGUI {
 					// (ICON_PEOPLE_WIDTH /
 					// 2), y
 					// - (ICON_PEOPLE_HEIGHT / 2));
-				g2d.drawRect(x - width / 2, y - height / 2, width, height);
+					g2d.drawRect(x - (width / 2), y - (height / 2), width,
+							height);
 					break;
 
 				case "Greenroom":
@@ -419,7 +422,8 @@ public class GUI extends JFrame implements FrameworkGUI {
 					// (ICON_PEOPLE_WIDTH /
 					// 2), y
 					// - (ICON_PEOPLE_HEIGHT / 2));
-				g2d.drawRect(x - width / 2, y - height / 2, width, height);
+					g2d.drawRect(x - (width / 2), y - (height / 2), width,
+							height);
 					break;
 
 				case "Loggia":
@@ -427,7 +431,8 @@ public class GUI extends JFrame implements FrameworkGUI {
 					// (ICON_PEOPLE_WIDTH
 					// / 2), y
 					// - (ICON_PEOPLE_HEIGHT / 2));
-				g2d.drawRect(x - width / 2, y - height / 2, width, height);
+					g2d.drawRect(x - (width / 2), y - (height / 2), width,
+							height);
 					break;
 
 				case "FOODSTAND":

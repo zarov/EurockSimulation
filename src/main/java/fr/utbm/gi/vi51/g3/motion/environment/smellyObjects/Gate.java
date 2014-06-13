@@ -6,7 +6,6 @@ public class Gate extends AbstractSmellyObject {
 
 	public static Point2d staticPosition;
 
-	double killRange = 50;
 	public Gate(double size, Point2d position, double orientation, String name) {
 		super(size, position, orientation, name);
 		staticPosition = position;

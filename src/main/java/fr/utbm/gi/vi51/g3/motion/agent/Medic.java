@@ -9,9 +9,6 @@ import org.arakhne.afc.vmutil.locale.Locale;
 import org.janusproject.kernel.status.Status;
 import org.janusproject.kernel.status.StatusFactory;
 
-import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
-import fr.utbm.gi.vi51.g3.framework.environment.Animat;
-import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
@@ -23,7 +20,7 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFlee
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
 
-public class Medic extends Animat<AgentBody> {
+public class Medic extends Vigil {
 
 	private static final long serialVersionUID = 4416989095632710549L;
 
@@ -44,23 +41,22 @@ public class Medic extends Animat<AgentBody> {
 	private final FleeBehaviour<?> fleeBehaviour;
 	// private final PursueBehaviour<?> pursueBehaviour;
 	private final WanderBehaviour<?> wanderBehaviour;
-	
+
 	private boolean isOK;
 
 	public Medic() {
 
 		// this.pursueBehaviour = new SteeringPursueBehaviour();
-		this.fleeBehaviour = new SteeringFleeBehaviour();
+		fleeBehaviour = new SteeringFleeBehaviour();
 
 		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(STOP_RADIUS,
 				SLOW_RADIUS);
 
 		SteeringFaceBehaviour faceB = new SteeringFaceBehaviour(STOP_DISTANCE,
 				alignB);
-		this.wanderBehaviour = new SteeringWanderBehaviour(
-				WANDER_CIRCLE_DISTANCE, WANDER_CIRCLE_RADIUS,
-				WANDER_MAX_ROTATION, faceB);
-		isOK=true;
+		wanderBehaviour = new SteeringWanderBehaviour(WANDER_CIRCLE_DISTANCE,
+				WANDER_CIRCLE_RADIUS, WANDER_MAX_ROTATION, faceB);
+		isOK = true;
 	}
 
 	@Override
@@ -70,16 +66,6 @@ public class Medic extends Animat<AgentBody> {
 			setName(Locale.getString(Medic.class, "MEDIC")); //$NON-NLS-1$
 		}
 		return s;
-	}
-
-	@Override
-	protected AgentBody createBody(Environment in) {
-		return new AgentBody(getAddress(), SIZE, 5, // max linear speed m/s
-				.5, // max linear acceleration (m/s)/s
-				Math.PI / 4, // max angular speed r/s
-				Math.PI / 10, PERCEPTION_RANGE); // max angular acceleration
-													// (r/s)/s
-
 	}
 
 	@Override
@@ -103,8 +89,8 @@ public class Medic extends Animat<AgentBody> {
 				output = fleeBehaviour.runFlee(position, linearSpeed, 0.5, p
 						.getPerceivedObject().getPosition());
 			} else {
-				this.wanderBehaviour.runWander(position, orientation,
-						linearSpeed, MAX_LINEAR, angularSpeed, MAX_ANGULAR);
+				wanderBehaviour.runWander(position, orientation, linearSpeed,
+						MAX_LINEAR, angularSpeed, MAX_ANGULAR);
 			}
 		}
 
@@ -118,13 +104,13 @@ public class Medic extends Animat<AgentBody> {
 	public static double getPerceptionRange() {
 		return PERCEPTION_RANGE;
 	}
-	
+
 	public boolean isOK() {
 		return isOK;
 	}
-	
-	public void hurtAgent(){
-		this.isOK=false;
+
+	public void hurtAgent() {
+		isOK = false;
 	}
 
 }
