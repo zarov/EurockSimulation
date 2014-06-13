@@ -1,7 +1,6 @@
 package fr.utbm.gi.vi51.g3.motion.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -376,14 +375,14 @@ public class GUI extends JFrame implements FrameworkGUI {
 	private void drawObject(Graphics2D g2d, int x, int y, String objectType,
 			int width, int height, boolean onAir, boolean isEvenTime) {
 		if (SHOW_ICON && (objectType != null)) {
-			int scaleStage = 0;
+			// int scaleStage = 0;
 			// if (isEvenTime) {
 			// scaleStage = 10;
 			// }
-			if (onAir)
-				g2d.setColor(Color.cyan);
-			else
-				g2d.setColor(Color.gray);
+			// if (onAir)
+			// g2d.setColor(Color.cyan);
+			// else
+			// g2d.setColor(Color.gray);
 			switch (objectType) {
 				case "TREE":
 					TREE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2),
@@ -414,8 +413,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 					// (ICON_PEOPLE_WIDTH /
 					// 2), y
 					// - (ICON_PEOPLE_HEIGHT / 2));
-				g2d.drawRect(x - width / 2, y - height / 2, width + scaleStage,
-						height + scaleStage);
+				g2d.drawRect(x - width / 2, y - height / 2, width, height);
 					break;
 
 				case "Greenroom":

@@ -1,8 +1,10 @@
 package fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour;
 
+
 public enum NeedType {
 
-	HUNGER("HUNGER", 10), THIRST("THIRST", 10), PEE("PEE", 10), SEEGIG("SEEGIG", 10), EXIT("EXIT", 1);
+	HUNGER("HUNGER", 10), THIRST("THIRST", 10), PEE("PEE", 10), SEEGIG(
+			"SEEGIG", 10), EXIT("EXIT", 15);
 
 	public final String name;
 	public final int MAX_VALUE;
@@ -20,4 +22,7 @@ public enum NeedType {
 		return this.MAX_VALUE;
 	}
 
+	public static NeedType getRandom() {
+		return values()[(int) Math.random() * values().length];
+	}
 }

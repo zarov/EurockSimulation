@@ -239,6 +239,7 @@ public abstract class AbstractEnvironment implements Environment {
 	 */
 	@Override
 	public void runBehaviour() {
+		long startTime = System.currentTimeMillis();
 		if (init.getAndSet(false)) {
 			fireEnvironmentChange();
 		}
@@ -252,6 +253,7 @@ public abstract class AbstractEnvironment implements Environment {
 		}
 		Collection<MotionInfluence> influences = new ArrayList<MotionInfluence>();
 		MotionInfluence influence;
+		List<Perception> list;
 
 		for (QuadTreeNode node : worldObjects) {
 			if ((node != null) && (node.getObject() != null)) {
@@ -261,6 +263,11 @@ public abstract class AbstractEnvironment implements Environment {
 					if (influence != null) {
 						influences.add(influence);
 					}
+					list = computePerceptionsFor((AgentBody) obj);
+					if (list == null) {
+						list = Collections.emptyList();
+					}
+					((AgentBody) obj).setPerceptions(list);
 				}
 			}
 		}
@@ -271,19 +278,8 @@ public abstract class AbstractEnvironment implements Environment {
 				fireEnvironmentChange();
 			}
 		}
-		List<Perception> list;
-		for (QuadTreeNode node : worldObjects) {
-			if ((node != null) && (node.getObject() != null)) {
-				SituatedObject obj = node.getObject();
-				if (obj instanceof AgentBody) {
-					list = computePerceptionsFor((AgentBody) obj);
-					if (list == null) {
-						list = Collections.emptyList();
-					}
-					((AgentBody) obj).setPerceptions(list);
-				}
-			}
-		}
+		long endTime = System.currentTimeMillis() - startTime;
+		System.out.println(endTime);
 	}
 
 	private void hurtPeople() {

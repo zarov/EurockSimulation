@@ -56,7 +56,6 @@ public class Bodyguard extends Animat<AgentBody> {
 		Status s = super.activate(activationParameters);
 		if (s.isSuccess()) {
 			setName(Locale.getString(Bodyguard.class, "BODYGUARD"));
-			System.out.println(getName());
 		}
 		return s;
 	}
@@ -68,7 +67,6 @@ public class Bodyguard extends Animat<AgentBody> {
 				Math.PI / 4, // max angular speed r/s
 				Math.PI / 10, PERCEPTION_RANGE); // max angular acceleration
 													// (r/s)/s
-
 	}
 
 	@Override
