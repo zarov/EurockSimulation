@@ -30,9 +30,7 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFace
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
-import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
-import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.AbstractSmellyObject;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Gate;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
@@ -123,7 +121,7 @@ public class Attendant extends Animat<AgentBody> {
 		Point2d fleeTarget = null;
 		List<Perception> perceivedObj = getPerceivedObjects();
 		double distFromSeekTarget = 3000;
-		double distFromFleeTarget = 40;
+		double distFromFleeTarget = 3000;
 		double fleeTargetSize = 0;
 
 		for (Perception p : perceivedObj) {
@@ -170,7 +168,7 @@ public class Attendant extends Animat<AgentBody> {
 				// Collision Avoidance
 //				if (o instanceof AbstractObstacle
 //						|| o instanceof AbstractSmellyObject) {
-				if (o instanceof Stage || o instanceof Gate || o instanceof Flora || o instanceof Barrier) {
+				if (o instanceof Stage || o instanceof Gate) {
 					if (dist < distFromFleeTarget) {
 						distFromFleeTarget = dist;
 						fleeTarget = o.getPosition();

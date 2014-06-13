@@ -22,11 +22,8 @@ import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringBehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
-import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
-import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Gate;
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.StandAction;
 
@@ -80,28 +77,14 @@ public class Seller extends Animat<AgentBody> {
 		Point2d seekTarget = null;
 		Point2d fleeTarget = null;
 		double fleeTargetSize = 0;
-		double distFromSeekTarget = 3000;
-		double distFromFleeTarget = 40;
 
 		for (Perception p : perc) {
-			SituatedObject o = p.getPerceivedObject();
-			Vector2d vec = new Vector2d(position);
-			vec.sub(o.getPosition());
-			double dist = vec.length();
-			if (o instanceof Bomb) {
+			if (p.getPerceivedObject() instanceof Bomb) {
 				SituatedObject bomb = p.getPerceivedObject();
 				seekTarget = Gate.staticPosition;
 				fleeTarget = bomb.getPosition();
 				fleeTargetSize = bomb.getSize();
-			} else if (o instanceof Stage || o instanceof Gate || o instanceof Flora || o instanceof Barrier) {
-				if (dist < distFromFleeTarget) {
-					distFromFleeTarget = dist;
-					fleeTarget = o.getPosition();
-					fleeTargetSize = o.getSize();
-				}
-			}
-			else
-			{
+			} else {
 				AgentAddress clientToServe = stand.getNextClient();
 				if (clientToServe != null) {
 					for (StandAction action : stand.getActions()) {
