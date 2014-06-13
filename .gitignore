@@ -18,3 +18,10 @@ target/
 
 # Foo
 *~
+
+# Latex
+*.toc
+*.log
+*.aux
+*.pyg
+*.synctex.gz

@@ -1,0 +1,140 @@
+\chapter{Requirement Analysis}
+
+\section{Authors of the project}
+
+This project's group is composed of four I2RV students: Adrien Berthet, Isaac 
+Chiboub, Thibault Miclo and Camille Mougin.
+
+\section{Project's context}
+
+The Eurockéennes de Belfort is a large music festival happening in the beginning
+of July. It lasts three days and hosts a hundred thousand visitors each year. It
+takes place in the Malsaucy peninsula - just a few miles away from the city of
+Belfort. \\
+
+Attendants can enjoy world-famous bands playing on four different stages.
+On-site stands are offering food, drinks, clothes and accessories. Obviously men
+and women bathrooms can also be found all over the festival. The entrance ticket
+includes an access to the camp site to sleep at night.
+
+\section{Goals of the project}
+
+The project globally consists in simulating people's actions during one day of
+festival. Our goals can be listed as follows.\\
+
+\begin{itemize}
+	\item Model the site environment: stages, stands of different kind, 
+	bathrooms, trees, barriers, exit/entrance.
+	\item Simulate crowd movements among stands and stages during the day, 
+	according to each people particular need.
+	\item At a given moment, allow simulation user to drop a bomb inside the 
+	festival area. This event must lead to the evacuation of the site in a fast 
+	and efficient way.
+\end{itemize}
+
+\section{Environment}
+
+The environment will be represented in 2D. The map is a simple area, filled with
+fixed entities and different kind of people. A single entrance/exit is present,
+with emergency exits all around the area.\\
+
+Entities can be listed as follows:\\
+
+\begin{itemize}
+	\item[{\bf Stages,}] where the bands play, and people gather around it
+	\item[{\bf Obstacles,}] trees, barriers, etc...
+	\item[{\bf Toilets,}] distinction between men’s and women’s
+	\item[{\bf Food stands,}] where people go eat and drink
+	\item[{\bf Shopping stands,}] where people can shop souvenirs
+	\item[{\bf One entrance/exit + emergency exit,}] Where you can enter or
+	leave the festival
+\end{itemize}
+
+\begin{figure}[h]
+	\begin{center}
+		%\includegraphics[width=0.7\textwidth]{img/img.png}
+	\end{center}
+	\caption{Entities representation}
+\end{figure}
+
+\section{Agents and behaviors}
+
+\subsection{Agents}
+
+We can define 3 types of agents :\\
+
+\begin{itemize}
+	\item[{\bf Attendant,}] somebody who is here to attend concert
+	\item[{\bf Vigil,}] someone who keep an eye on people. We can have regular
+	vigils, and specialized vigils like medics, who help injured people
+	\item[{\bf Shopkeepers,}] sell goods to attendants people
+\end{itemize}
+
+\subsection{Behaviours}
+For each agent, we can specified differents behaviour :\\
+
+\begin{itemize}
+	\item[{\bf Attendants}] each person has a list of concert he wants to see,
+	he will try to go to each of them. Different schedules can be made :\\
+	
+		\begin{itemize}
+			\item Regular schedule, one concert each hour, no conflict, the
+			schedule will only be interrupted by natural needs (food, toilets,
+			drink)
+			\item Groupie schedule, one group in particular, skip the previous
+			concert to be in the first row, then regular schedule
+			\item Conflicted schedule : some concerts are in conflict, so the
+			person will see x\% of the first one and 100-x\% of the second one
+		\end{itemize}
+
+
+ 	Outside of schedules, people can act differently :\\
+		
+		\begin{itemize}
+			\item Regular people, drink a bit, eat a bit, use the restrooms, go
+			to concerts from the beginning to the end
+			\item Drugged people, slow motion, can slow the evacuation process
+			\item Angry people, various reasons (alcohol, pogos, fights), can
+			hurt others people. People hurted should be evacuated by vigils as
+			soon as seen
+			\item A few, randomly selected can be heavy drinkers and start to
+			act totally randomly (should be stopped by vigils as soon as seen by
+			one)
+			\item Idiot people, take the evacuation as an opportunity to be on
+			the front row
+		\end{itemize}
+
+	\item[{\bf Vigils}] As presented above, there is two types of vigils :
+		\begin{itemize}
+			\item Regular vigils : stay at the same place all the day, have
+			a sight of seeing to detect drunk people and angry people, maybe
+			rotation of given people at given posts
+			\begin{itemize}
+				\item[\emph{Passive}] stationed near his post ( stage
+				supervisory, entry body check)
+				\item[\emph{Active}] motion until in range of troublemakers
+				then warning or neutralization, back to original post after
+				operation success
+			\end{itemize}
+			\item Medics : same as vigils but for injured people
+		\end{itemize}
+
+	\item[{\bf Shopkeepers}] sells goods to people, stay behind the stand the
+	all night and evacuate when needed
+\end{itemize}
+
+Apart from those specific behaviors for each type of agent, there is also
+a panic behavior, which is triggered by the user (events defined
+below).
+
+\begin{itemize}
+	\item Augmentation of maximal speed
+	\item Reduction of perception field
+	\item Following crowd direction until perception of emergency exit
+\end{itemize}
+
+\section{Tools}
+
+The application will be written in Java, in a Maven project. For the interface,
+it will be in 2D (aerian view), using Swing. To manage the multi-agent aspect of
+the project, Janus 1.0 will be used.

@@ -1,0 +1,74 @@
+% VI51 - Eurock Simulation project report
+% Spring 2014
+% Authors : Adrien Berthet, Isaac Chiboub, Thibault Miclo and Camille Mougin
+
+%-------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%-------------------------------------------------------------------------------
+
+\documentclass[a4paper,10pt]{report}
+\usepackage[margin=1.3in]{geometry}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{color,colortbl}
+\usepackage{phdthesis}	% Much beautiful
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{hyphenat}	% Caesura
+
+% Code Coloring with minted, use it as follow :
+% \begin{figure}
+%	\begin{minted}[bgcolor=bg,tabsize=4]{c}
+%		printf("hello");
+%	\end{minted}
+% \end{figure}
+\usepackage{minted}
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+
+\renewcommand*\rmdefault{phv} % Helvetica yeah yeah yeah
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+% Line break after itemize
+\let\EndItemize\enditemize
+\def\enditemize{\EndItemize\bigskip}
+
+%-------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%-------------------------------------------------------------------------------
+
+\title{Eurockéennes simulation\\VI51 project}
+\author{Adrien \bsc{Berthet}, Isaac \bsc{Chiboub}, Thibault \bsc{Miclo} and
+Camille \bsc{Mougin}}
+\date{\bsc{Spring} 2014}
+
+\begin{document}
+
+\maketitle
+
+%-------------------------------------------------------------------------------
+%	CONTENT
+%-------------------------------------------------------------------------------
+
+% INTRODUCTION
+
+% SUMMARY
+\setcounter{tocdepth}{3}
+\renewcommand{\contentsname}{Summary}
+\tableofcontents
+
+% REQUIREMENT ANALYSIS
+\input{requirement.tex}
+
+% DESIGN PART
+\input{design.tex}
+
+% USER GUIDE
+\input{userguide.tex}
+
+% CONCLUSION
+\input{conclusion.tex}
+\addcontentsline{toc}{chapter}{Conclusion}
+
+\end{document}
