@@ -124,6 +124,7 @@ public class Attendant extends Animat<AgentBody> {
 		List<Perception> perceivedObj = getPerceivedObjects();
 		double distFromSeekTarget = 3000;
 		double distFromFleeTarget = 40;
+		double distFromFleeTargetStage = 200;
 		double fleeTargetSize = 0;
 
 		for (Perception p : perceivedObj) {
@@ -170,9 +171,16 @@ public class Attendant extends Animat<AgentBody> {
 				// Collision Avoidance
 //				if (o instanceof AbstractObstacle
 //						|| o instanceof AbstractSmellyObject) {
-				if (o instanceof Stage || o instanceof Gate || o instanceof Flora || o instanceof Barrier) {
+				if (o instanceof Gate || o instanceof Flora || o instanceof Barrier) {
 					if (dist < distFromFleeTarget) {
 						distFromFleeTarget = dist;
+						fleeTarget = o.getPosition();
+						fleeTargetSize = o.getSize();
+					}
+				}else if(o instanceof Stage)
+				{
+					if(dist < distFromFleeTargetStage){
+						distFromFleeTargetStage = dist;
 						fleeTarget = o.getPosition();
 						fleeTargetSize = o.getSize();
 					}
