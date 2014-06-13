@@ -30,10 +30,13 @@ import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.gui.FrameworkGUI;
 import fr.utbm.gi.vi51.g3.motion.agent.Attendant;
 import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
+import fr.utbm.gi.vi51.g3.motion.agent.Bodyguard;
 import fr.utbm.gi.vi51.g3.motion.agent.DamePipi;
 import fr.utbm.gi.vi51.g3.motion.agent.Seller;
 import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedType;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModel;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.StandAction;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
@@ -47,7 +50,7 @@ public class MainProgram {
 
 	/**
 	 * Main program.
-	 *
+	 * 
 	 * @param argv
 	 *            are the command line arguments.
 	 */
@@ -55,13 +58,14 @@ public class MainProgram {
 
 		Set<Stand> standSet = initStands();
 		Set<Toilet> toiletSet = initToilets();
+		Set<Stage> stageSet = initStages();
 
 		System.out.println("--- GUI initialization");
 		FrameworkGUI gui = new GUI(WORLD_SIZE_X, WORLD_SIZE_Y);
 
 		System.out.println("--- Environment initialization");
 		Environment environment = new WorldModel(WORLD_SIZE_X, WORLD_SIZE_Y,
-				standSet, toiletSet);
+				standSet, toiletSet, stageSet);
 
 		FrameworkLauncher.launchEnvironment(environment, gui, EXECUTION_DELAY);
 
@@ -75,6 +79,12 @@ public class MainProgram {
 		for (Stand elem : standSet) {
 			FrameworkLauncher.launchAgent(new Seller(elem));
 		}
+		
+		for (Stage elem : stageSet) {
+			for(int i=0; i<10;i++)
+				FrameworkLauncher.launchAgent(new Bodyguard(elem,i));
+		}
+		
 
 		FrameworkLauncher.launchAgent(new DamePipi(toiletSet));
 		// Worker c = new Worker(WorkerTask.BODYGUARD);
@@ -226,5 +236,17 @@ public class MainProgram {
 		standList.add(stand);
 
 		return standList;
+	}
+	
+	public static Set<Stage> initStages(){
+		Set<Stage> stageList = new HashSet<Stage>();
+		Plan[] stagesOnPlan = Plan.values();
+
+		for (Plan sp : stagesOnPlan) {
+			Stage stage = new Stage(sp.position, sp.direction, sp.name,
+					sp.width, sp.height);
+			stageList.add(stage);
+		}
+		return stageList;
 	}
 }

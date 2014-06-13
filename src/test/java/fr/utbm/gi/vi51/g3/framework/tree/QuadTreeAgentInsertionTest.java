@@ -12,6 +12,8 @@ import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
 import fr.utbm.gi.vi51.g3.motion.agent.Bodyguard;
 import fr.utbm.gi.vi51.g3.motion.agent.Medic;
 import fr.utbm.gi.vi51.g3.motion.agent.Seller;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 
 public class QuadTreeAgentInsertionTest {
 
@@ -22,10 +24,6 @@ public class QuadTreeAgentInsertionTest {
 
 		tree = new QuadTree(8, 8);
 
-		System.out.println("bodyguard");
-		Bodyguard bodyguard = new Bodyguard();
-
-		tree.insert(new AgentBody(bodyguard.getAddress(), 0.5, 0, 0, 0, 0, 0));
 		System.out.println("seller");
 		Seller seller = new Seller(null);
 		tree.insert(new AgentBody(seller.getAddress(), 0.5, 0, 0, 0, 0, 0));

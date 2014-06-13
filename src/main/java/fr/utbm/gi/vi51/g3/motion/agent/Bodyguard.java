@@ -12,12 +12,13 @@ import org.janusproject.kernel.status.StatusFactory;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.WanderBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
-import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringWanderBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 
 public class Bodyguard extends Vigil {
 
@@ -26,23 +27,25 @@ public class Bodyguard extends Vigil {
 	private final static double STOP_DISTANCE = 3.;
 	private final static double STOP_RADIUS = Math.PI / 10.;
 	private final static double SLOW_RADIUS = Math.PI / 4.;
-	private final static double WANDER_CIRCLE_DISTANCE = 30.;
-	private final static double WANDER_CIRCLE_RADIUS = 30.;
-	private final static double WANDER_MAX_ROTATION = Math.PI;
+	private final static int MAX_LINEAR = 5;
+	private final static double MAX_ANGULAR = 0.5;
 	private boolean isOK;
 	private final FleeBehaviour<?> fleeBehaviour;
-	private final WanderBehaviour<?> wanderBehaviour;
+	private final SeekBehaviour<?> seekBehaviour;
+	private final Stage stage;
+	private final int index;
 
-	public Bodyguard() {
+	public Bodyguard(Stage s, int i) {
 		fleeBehaviour = new SteeringFleeBehaviour();
 		SteeringAlignBehaviour alignB = new SteeringAlignBehaviour(STOP_RADIUS,
 				SLOW_RADIUS);
 
 		SteeringFaceBehaviour faceB = new SteeringFaceBehaviour(STOP_DISTANCE,
 				alignB);
-		wanderBehaviour = new SteeringWanderBehaviour(WANDER_CIRCLE_DISTANCE,
-				WANDER_CIRCLE_RADIUS, WANDER_MAX_ROTATION, faceB);
+		seekBehaviour = new SteeringSeekBehaviour();
 		isOK = true;
+		stage = s;
+		index = i;
 	}
 
 	@Override
@@ -71,11 +74,13 @@ public class Bodyguard extends Vigil {
 							p.getPerceivedObject().getPosition());
 				}
 			}
-		} else {
-			// if no object is perceived then wander
-			output = wanderBehaviour.runWander(position, orientation,
-					linearSpeed, getMaxLinearAcceleration(), angularSpeed,
-					getMaxAngularAcceleration());
+		}
+		
+		if(output == null)
+		{
+			Point2d placeToBe = new Point2d(stage.getX()+(index*5),stage.getY());
+			if(placeToBe != position)
+				output = seekBehaviour.runSeek(position, linearSpeed, MAX_LINEAR, placeToBe);
 		}
 
 		// send influences to the environment

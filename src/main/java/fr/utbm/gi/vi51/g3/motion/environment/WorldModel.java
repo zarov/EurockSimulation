@@ -61,14 +61,14 @@ public class WorldModel extends AbstractEnvironment implements
 	 *            is the height of the world.
 	 */
 	public WorldModel(double width, double height, Set<Stand> standSet,
-			Set<Toilet> toiletSet) {
+			Set<Toilet> toiletSet, Set<Stage> stageSet) {
 		super(width, height, new SimulationTimeManager(500));
-		build(standSet, toiletSet);
+		build(standSet, toiletSet, stageSet);
 	}
 
-	private void build(Set<Stand> standSet, Set<Toilet> toiletSet) {
+	private void build(Set<Stand> standSet, Set<Toilet> toiletSet, Set<Stage> stageSet) {
 
-		buildStages();
+		buildStages(stageSet);
 		buildStands(standSet);
 		buildFlora();
 		buildBathrooms(toiletSet);
@@ -147,15 +147,11 @@ public class WorldModel extends AbstractEnvironment implements
 	// implantSituatedObject(B);
 	// }
 
-	private void buildStages() {
+	private void buildStages(Set<Stage> stageSet) {
 
 		System.out.println("Building stages ...");
-		Plan[] stagesOnPlan = Plan.values();
-
-		for (Plan sp : stagesOnPlan) {
-			Stage stage = new Stage(sp.position, sp.direction, sp.name,
-					sp.width, sp.height);
-			implantSituatedObject(stage);
+		for (Stage elem : stageSet) {
+			implantSituatedObject(elem);
 		}
 	}
 
@@ -310,27 +306,26 @@ public class WorldModel extends AbstractEnvironment implements
 							inf1.getAngularInfluence(), timeManager);
 				}
 
-				// double x1 = body1.getX();
-				// double y1 = body1.getY();
+				double x1 = body1.getX();
+				double y1 = body1.getY();
 
 				// Trivial collision detection
-				// for (int index2 = index1 + 1; index2 < influenceList.size();
-				// index2++) {
-				// MotionInfluence inf2 = influenceList.get(index2);
-				// AgentBody body2 = getAgentBodyFor(inf2.getEmitter());
-				// if (body2 != null) {
-				// double x2 = body2.getX();
-				// double y2 = body2.getY();
-				//
-				// double distance = new Vector2d(x2 - x1, y2 - y1)
-				// .length();
-				//
-				// if (distance < (body1.getSize() + body2.getSize())) {
-				// move.set(0, 0);
-				// break;
-				// }
-				// }
-				// }
+				for (int index2 = index1 + 1; index2 < influenceList.size();
+				index2++) {
+				MotionInfluence inf2 = influenceList.get(index2);
+				AgentBody body2 = getAgentBodyFor(inf2.getEmitter());
+				if (body2 != null) {
+				double x2 = body2.getX();
+				double y2 = body2.getY();
+				
+				double distance = new Vector2d(x2 - x1, y2 - y1).length();
+				
+				if (distance < (body1.getSize() + body2.getSize())) {
+				move.set(0, 0);
+				break;
+				}
+				}
+				}
 
 				actions.add(new AnimatAction(body1, move, rotation));
 

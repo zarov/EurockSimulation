@@ -49,7 +49,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 
 	private static final String IMG_DIR = "images/";
 
-	private static final int BOMB_TIMER = 120;
+	private static final int BOMB_TIMER = 1;
 
 	private static final Icon MAN_ICON;
 	private static final Icon WOMAN_ICON;
@@ -164,7 +164,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 	 * @param worldHeight
 	 */
 	public GUI(double worldWidth, double worldHeight) {
-		setTitle("VI51 Project - Eurockéennes simulation"); //$NON-NLS-1$
+		setTitle("VI51 Project - Eurockï¿½ennes simulation"); //$NON-NLS-1$
 
 		Container content = getContentPane();
 

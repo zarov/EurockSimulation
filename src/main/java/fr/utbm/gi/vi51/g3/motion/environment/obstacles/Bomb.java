@@ -13,8 +13,8 @@ public class Bomb extends AbstractObstacle {
 
 	private double timeBeforeExplosion;
 	private double lastTime;
-	private final int rangeKill = 100;
-	private final int rangeHurt = 200;
+	private final int rangeKill = 900;
+	private final int rangeHurt = 1000;
 
 	public Bomb(double size, Point2d position, double orientation, String name,
 			int timerValue, double initTime) {
