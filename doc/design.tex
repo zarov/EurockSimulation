@@ -138,7 +138,7 @@ Given the important size of the simulation, and to be coherent between everythin
 	\begin{center}
 		\includegraphics[width=0.72\textheight, angle=90]{img/classdiagram.png}
 	\end{center}
-	\caption{Decision making graph}
+	\caption{Class diagram}
 \end{figure}
 
 \newpage
@@ -191,8 +191,26 @@ Attendant movements are guided by their instant need. Implemented needs are thir
 	\begin{center}
 		\includegraphics[width=0.8\textwidth]{img/sellerbehaviour.png}
 	\end{center}
-	\caption{Attendant behavior graph}
+	\caption{Seller behavior graph}
 \end{figure}
+
+\paragraph{Medic Behaviour}
+
+\begin{itemize}
+	\item Get perception
+	\item Check if an attendant is hurt
+	\item In case one is, rush to him until he his healed or transported to safety
+\end{itemize}
+
+\paragraph{Bodyguard Behaviour}
+
+\begin{itemize}
+	\item Get Perception
+	\item Stay near stage
+	\item Check if an attendant has a drunk behaviour
+	\item Guide him out of the gig far from the stage
+	\item Tag team with medic to protect hurted attendant from the crowd
+\end{itemize}
 
 \newpage
 
@@ -299,7 +317,13 @@ test every of the bodies became a problem.
 
 Solution used to act on attendant needs from a foodstand was to delegate the task of applying need changes to the seller belonging to this stand. Indeed as an agent it was able to send a message to the attendant. In the case of toiletstand though, no agent was there to send the message to the agent allowing him to go elsewhere.\\
 
-The only way we have think of to solve this issue was to create a unique invisible Agent to which is assigned a set of all toilets of the map and whose unique live behaviour is to check the queue of every toiletstand and send a message to each attendants on top of those queues.
+The only way we have think of to solve this issue was to create a unique invisible Agent to which is assigned a set of all toilets of the map and whose unique live behaviour is to check the queue of every toilet stand and send a message to each attendants on top of those queues.
+
+\subsection{Smelly Object}
+
+Our first intuition about how to guide agents to the object in adequation to their need was to use the concept of smelly objects. The principle is that interesting objects emits a smell decreasing function of the distance. People interested in finding one object will detect the object proper smell and go in direction of the strongest smell.\\
+
+At last this technique involved too much complications, and according to attendant perceptions ranges and the numerous stands, agents are able to find their way to the appropriate stand thanks to their perceptions only.
 
 \section{Benchmark}
 
