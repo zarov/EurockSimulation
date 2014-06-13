@@ -7,6 +7,8 @@ import fr.utbm.gi.vi51.g3.framework.environment.AbstractSituatedObject;
 
 public class AbstractObstacle extends AbstractSituatedObject {
 
+	protected AABB Box;
+	
 	public AbstractObstacle(double size, Point2d position, double orientation) {
 		super(size, position, orientation);
 	}
@@ -20,7 +22,7 @@ public class AbstractObstacle extends AbstractSituatedObject {
 	 */
 	@Override
 	public AABB getBox() {
-		return null;
+		return this.Box;
 	}
 
 }

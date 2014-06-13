@@ -54,13 +54,19 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 	 *            the object to remove
 	 * @return
 	 */
+
 	public boolean remove(SituatedObject obj) {
 		QuadTreeNode node = find(obj);
+		
 
-		if ((node == null) || !node.getObject().equals(obj)) {
+		if ((node == null)) {
 			return false;
 		}
-
+		if(node.getObject() != null)
+		{
+		    if( !node.getObject().equals(obj))
+			{ return false;}
+		}
 		node.setObject(null);
 
 		return true;
@@ -84,7 +90,9 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 			// If he isn't, we delete his children from the stack
 			if (!node.getBox().contains(obj)) {
 				it.remove(4);
-			} else {
+			} 
+			else 
+			{
 				// If the node contains the object and is a leaf, then it can be
 				// only the correct node
 				if (node.isLeaf()) {
@@ -118,6 +126,27 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 		}
 
 		return null;
+	}
+	
+	public void removeAgent(AgentAddress address) {
+		NodeIterator it = new NodeIterator();
+		SituatedObject obj = null;
+
+		while (it.hasNext()) {
+			QuadTreeNode a = it.next();
+			
+			if(a != null)
+			{
+				obj = a.getObject();
+				// Check if a node is containing the right object
+				if ((obj != null) && obj.getClass().equals(AgentBody.class)
+						&& ((AgentBody) obj).getOwner().equals(address)) {
+					a.setObject(null);
+					
+				}
+			}
+		}
+		
 	}
 
 	/**
@@ -183,6 +212,7 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 							SituatedObject object = node.getObject();
 							if ((object != null)) {
 								AABB box = object.getBox();
+								
 								if ((box != null) && box.intersects(frustrum)) {
 									next = object.toPerception();
 								}
@@ -273,7 +303,9 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 		public void remove(int n) {
 			do {
 				s.pop();
+				n--;
 			} while (n > 0);
+			System.out.println("Done");
 		}
 	}
 

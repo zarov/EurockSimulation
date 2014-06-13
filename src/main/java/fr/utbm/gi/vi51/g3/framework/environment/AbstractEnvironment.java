@@ -129,7 +129,7 @@ public abstract class AbstractEnvironment implements Environment {
 	 */
 	@Override
 	public void killAgentBody(AgentBody a) {
-		worldObjects.remove(a);
+		worldObjects.removeAgent(a.getOwner());
 	}
 
 	/**
@@ -279,38 +279,35 @@ public abstract class AbstractEnvironment implements Environment {
 			}
 		}
 		long endTime = System.currentTimeMillis() - startTime;
-		//System.out.println(endTime);
+		System.out.println(endTime);
 	}
 
 	private void hurtPeople() {
-		List<Perception> kperc = worldObjects.cull(new AABB(bomb.getX()
-				+ bomb.getRangeKill(), bomb.getX() - bomb.getRangeKill(), bomb
-				.getY() + bomb.getRangeKill(), bomb.getY()
-				- bomb.getRangeKill()));
-		System.out.println(kperc.size());
+//		List<Perception> kperc = worldObjects.cull(new AABB(bomb.getX()
+//				+ bomb.getRangeKill(), bomb.getX() - bomb.getRangeKill(), bomb
+//				.getY() + bomb.getRangeKill(), bomb.getY()
+//				- bomb.getRangeKill()));
+		List<Perception> kperc = worldObjects.cull(bomb.getBox());
+		
 		for (Perception p : kperc) {
-			System.out.println("SHOULD DIE");
 			SituatedObject o = p.getPerceivedObject();
 			if (o instanceof AgentBody) {
 				AgentBody a = (AgentBody) o;
-				System.out.println("DEAD");
 				this.killAgentBody(a);
 			}
 		}
+		/*
 		List<Perception> hperc = worldObjects.cull(new AABB(bomb.getX()
 				+ bomb.getRangeHurt(), bomb.getX() - bomb.getRangeHurt(), bomb
 				.getY() + bomb.getRangeHurt(), bomb.getY()
 				- bomb.getRangeHurt()));
-		System.out.println(hperc.size());
 		for (Perception p : hperc) {
-			System.out.println("SHOULD BE HURT");
 			SituatedObject o = p.getPerceivedObject();
 			if (o instanceof AgentBody) {
 				AgentBody a = (AgentBody) o;
-				System.out.println("HURT");
 				a.hurtAgent();
 			}
-		}
+		}*/
 
 	}
 

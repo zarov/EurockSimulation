@@ -41,6 +41,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	private final long perceptionRange;
 	private final AgentAddress owner;
 	protected boolean isOK;
+	protected AABB Box;
 
 	private MotionInfluence motionInfluence = null;
 	private List<Perception> perceptions = Collections.emptyList();
@@ -65,6 +66,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 				maxAngularAcceleration);
 		this.owner = owner;
 		this.perceptionRange = perceptionRange;
+		this.Box = null;
 	}
 
 	@Override
@@ -73,6 +75,7 @@ public class AgentBody extends AbstractMobileObject implements Body {
 				+ (perceptionRange / 2), getY() - (perceptionRange / 2), getY()
 				+ (perceptionRange / 2));
 	}
+	
 
 	/**
 	 * {@inheritDoc}
@@ -244,6 +247,10 @@ public class AgentBody extends AbstractMobileObject implements Body {
 	 */
 	@Override
 	public AABB getBox() {
-		return null;
+		
+		return this.Box= new AABB(this.getPosition().x - this.getSize()/2,
+	            this.getPosition().x + this.getSize()/2,
+	            this.getPosition().y - this.getSize()/2,
+	            this.getPosition().y + this.getSize()/2);
 	}
 }
