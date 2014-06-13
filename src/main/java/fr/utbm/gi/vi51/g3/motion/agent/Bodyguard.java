@@ -10,14 +10,19 @@ import org.janusproject.kernel.status.Status;
 import org.janusproject.kernel.status.StatusFactory;
 
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
+import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringAlignBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringBehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFaceBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Gate;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 
 public class Bodyguard extends Vigil {
@@ -63,16 +68,51 @@ public class Bodyguard extends Vigil {
 		Vector2d orientation = getDirection();
 		double linearSpeed = getCurrentLinearSpeed();
 		double angularSpeed = getCurrentAngularSpeed();
+		
+		Point2d seekTarget = null;
+		Point2d fleeTarget = null;
+		double fleeTargetSize = 0;
+		double distFromSeekTarget = 3000;
+		double distFromFleeTarget = 40;
 
 		BehaviourOutput output = null;
 		List<Perception> perceptions = getPerceivedObjects();
 
 		if (!perceptions.isEmpty()) {
 			for (Perception p : perceptions) {
-				if (p.getPerceivedObject() instanceof Bomb) {
+				SituatedObject o = p.getPerceivedObject();
+				Vector2d vec = new Vector2d(position);
+				vec.sub(o.getPosition());
+				double dist = vec.length();
+				if (o instanceof Bomb) {
 					output = fleeBehaviour.runFlee(position, linearSpeed, 0.5,
 							p.getPerceivedObject().getPosition());
 				}
+				else if (o instanceof Stage || o instanceof Gate || o instanceof Flora || o instanceof Barrier) {
+					if (dist < distFromFleeTarget) {
+						distFromFleeTarget = dist;
+						fleeTarget = o.getPosition();
+						fleeTargetSize = o.getSize();
+					}
+				}
+			}
+		}
+		
+		if (fleeTarget != null) {
+			BehaviourOutput negativeOutput = fleeBehaviour.runFlee(position,
+					linearSpeed, getMaxLinearAcceleration(), fleeTarget);
+			negativeOutput.getLinear().normalize();
+			negativeOutput.getLinear().scale(fleeTargetSize / 4);
+			Vector2d newLinear;
+			if (output != null) {
+				newLinear = output.getLinear();
+				newLinear.add(negativeOutput.getLinear());
+				newLinear.normalize();
+				newLinear.scale(getMaxLinearAcceleration());
+				output.setLinear(newLinear);
+			} else {
+				output = new SteeringBehaviourOutput();
+				output.setLinear(negativeOutput.getLinear());
 			}
 		}
 		
