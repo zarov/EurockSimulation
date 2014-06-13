@@ -164,7 +164,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 	 * @param worldHeight
 	 */
 	public GUI(double worldWidth, double worldHeight) {
-		setTitle("VI51 Project - EurockÃˆennes simulation"); //$NON-NLS-1$
+		setTitle("VI51 Project - Eurockéennes simulation"); //$NON-NLS-1$
 
 		Container content = getContentPane();
 
