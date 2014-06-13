@@ -3,6 +3,7 @@ package fr.utbm.gi.vi51.g3.motion.agent;
 import java.util.List;
 
 import javax.vecmath.Point2d;
+import javax.vecmath.Vector2d;
 
 import org.arakhne.afc.vmutil.locale.Locale;
 import org.janusproject.kernel.address.AgentAddress;
@@ -13,13 +14,16 @@ import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Animat;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
+import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedMessage;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.BehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.FleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.SeekBehaviour;
+import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringBehaviourOutput;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringFleeBehaviour;
 import fr.utbm.gi.vi51.g3.motion.behaviour.motionBehaviour.steering.SteeringSeekBehaviour;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Gate;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.StandAction;
 
@@ -70,10 +74,16 @@ public class Seller extends Animat<AgentBody> {
 		List<Perception> perc = getPerceivedObjects();
 		BehaviourOutput output = null;
 
+		Point2d seekTarget = null;
+		Point2d fleeTarget = null;
+		double fleeTargetSize = 0;
+
 		for (Perception p : perc) {
 			if (p.getPerceivedObject() instanceof Bomb) {
-				output = fleeBehaviour.runFlee(position, linearSpeed, 0.5, p
-						.getPerceivedObject().getPosition());
+				SituatedObject bomb = p.getPerceivedObject();
+				seekTarget = Gate.staticPosition;
+				fleeTarget = bomb.getPosition();
+				fleeTargetSize = bomb.getSize();
 			} else {
 				AgentAddress clientToServe = stand.getNextClient();
 				if (clientToServe != null) {
@@ -85,9 +95,26 @@ public class Seller extends Animat<AgentBody> {
 				}
 			}
 		}
-		if (output == null) {
-			output = seekBehaviour.runSeek(position, linearSpeed, 0.5,
-					stand.getPosition());
+		if (seekTarget == null) {
+			seekTarget = stand.getPosition();
+		}
+		output = seekBehaviour.runSeek(position, linearSpeed, 0.5, seekTarget);
+		if (fleeTarget != null) {
+			BehaviourOutput negativeOutput = fleeBehaviour.runFlee(position,
+					linearSpeed, getMaxLinearAcceleration(), fleeTarget);
+			negativeOutput.getLinear().normalize();
+			negativeOutput.getLinear().scale(fleeTargetSize / 4);
+			Vector2d newLinear;
+			if (output != null) {
+				newLinear = output.getLinear();
+				newLinear.add(negativeOutput.getLinear());
+				newLinear.normalize();
+				newLinear.scale(getMaxLinearAcceleration());
+				output.setLinear(newLinear);
+			} else {
+				output = new SteeringBehaviourOutput();
+				output.setLinear(negativeOutput.getLinear());
+			}
 		}
 
 		influenceSteering(output.getLinear(), output.getAngular());

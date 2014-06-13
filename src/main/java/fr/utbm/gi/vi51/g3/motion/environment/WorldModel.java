@@ -22,7 +22,6 @@ package fr.utbm.gi.vi51.g3.motion.environment;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,16 +37,11 @@ import fr.utbm.gi.vi51.g3.framework.environment.EnvironmentEvent;
 import fr.utbm.gi.vi51.g3.framework.environment.MotionInfluence;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
-import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
-import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedType;
-import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Barrier;
-import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Gate;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.StandAction;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
 
 /**
@@ -66,23 +60,23 @@ public class WorldModel extends AbstractEnvironment implements
 	 * @param height
 	 *            is the height of the world.
 	 */
-	public WorldModel(double width, double height, Set<Stand> standSet) {
+	public WorldModel(double width, double height, Set<Stand> standSet,
+			Set<Toilet> toiletSet) {
 		super(width, height, new SimulationTimeManager(500));
-		build(standSet);
+		build(standSet, toiletSet);
 	}
 
-	private void build(Set<Stand> standSet) {
+	private void build(Set<Stand> standSet, Set<Toilet> toiletSet) {
 
 		buildStages();
 		buildStands(standSet);
 		buildFlora();
-		buildBathrooms();
+		buildBathrooms(toiletSet);
 		buildBarriers();
 		
 		Point2d a = new Point2d(1780, 50);
 		Gate g = new Gate(15, a, 15, "Entry");
 		implantSituatedObject(g);
-		
 
 	}
 
@@ -93,61 +87,65 @@ public class WorldModel extends AbstractEnvironment implements
 	
 	}
 
-	private void gate(int x, int y, int height, int width, int size) {
+	// private void gate(int x, int y, int height, int width, int size) {
+	//
+	// System.out.println("Building gates ...");
+	// int saveX = x;
+	// ArrayList<Point2d> gate = new ArrayList<Point2d>();
+	//
+	// for (int i = 0; i < height; i++) {
+	// for (int j = 0; j < width; j++) {
+	// gate.add(new Point2d(x, y));
+	// x += 25;
+	// }
+	//
+	// y += 35;
+	// x = saveX;
+	// }
+	//
+	// for (Point2d a : gate) {
+	// Barrier b = new Barrier(size, a);
+	// implantSituatedObject(b);
+	// }
+	// }
 
-		System.out.println("Building gates ...");
-		int saveX = x;
-		ArrayList<Point2d> gate = new ArrayList<Point2d>();
-
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				gate.add(new Point2d(x, y));
-				x += 25;
-			}
-
-			y += 35;
-			x = saveX;
-		}
-
-		for (Point2d a : gate) {
-			Barrier b = new Barrier(size, a);
-			implantSituatedObject(b);
-		}
-	}
-
-	private void buildBathrooms() {
+	private void buildBathrooms(Set<Toilet> toiletSet) {
 
 		System.out.println("Building bathrooms ...");
-		AttendantGender male = AttendantGender.MAN;
-		AttendantGender female = AttendantGender.WOMAN;
 
-		setBathrooms(5, 90, male);
-		setBathrooms(5, 150, female);
-
-		setBathrooms(500, 740, male);
-		setBathrooms(580, 740, female);
-
-		setBathrooms(980, 690, male);
-		setBathrooms(1050, 740, female);
-
-		setBathrooms(900, 20, male);
-		setBathrooms(980, 20, female);
-
-		setBathrooms(1420, 740, male);
-		setBathrooms(1500, 740, female);
-
-		setBathrooms(1700, 420, male);
-		setBathrooms(1700, 490, female);
+		for (Toilet elem : toiletSet) {
+			implantSituatedObject(elem);
+		}
+		// AttendantGender male = AttendantGender.MAN;
+		// AttendantGender female = AttendantGender.WOMAN;
+		//
+		// setBathrooms(5, 90, male);
+		// setBathrooms(5, 150, female);
+		//
+		// setBathrooms(500, 740, male);
+		// setBathrooms(580, 740, female);
+		//
+		// setBathrooms(980, 690, male);
+		// setBathrooms(1050, 740, female);
+		//
+		// setBathrooms(900, 20, male);
+		// setBathrooms(980, 20, female);
+		//
+		// setBathrooms(1420, 740, male);
+		// setBathrooms(1500, 740, female);
+		//
+		// setBathrooms(1700, 420, male);
+		// setBathrooms(1700, 490, female);
 	}
 
-	private void setBathrooms(int x, int y, AttendantGender a) {
-		Set<StandAction> actions = new HashSet<StandAction>();
-		actions.add(new StandAction(NeedType.PEE, -6));
-
-		Point2d BathR = new Point2d(x, y);
-		Toilet B = new Toilet(15, BathR, 15, "TOILET", a, actions);
-		implantSituatedObject(B);
-	}
+	// private void setBathrooms(int x, int y, AttendantGender a) {
+	// Set<StandAction> actions = new HashSet<StandAction>();
+	// actions.add(new StandAction(NeedType.PEE, -6));
+	//
+	// Point2d BathR = new Point2d(x, y);
+	// Toilet B = new Toilet(15, BathR, 15, "TOILET", a, actions);
+	// implantSituatedObject(B);
+	// }
 
 	private void buildStages() {
 
@@ -312,26 +310,27 @@ public class WorldModel extends AbstractEnvironment implements
 							inf1.getAngularInfluence(), timeManager);
 				}
 
-				double x1 = body1.getX();
-				double y1 = body1.getY();
+				// double x1 = body1.getX();
+				// double y1 = body1.getY();
 
 				// Trivial collision detection
-				for (int index2 = index1 + 1; index2 < influenceList.size(); index2++) {
-					MotionInfluence inf2 = influenceList.get(index2);
-					AgentBody body2 = getAgentBodyFor(inf2.getEmitter());
-					if (body2 != null) {
-						double x2 = body2.getX();
-						double y2 = body2.getY();
-
-						double distance = new Vector2d(x2 - x1, y2 - y1)
-								.length();
-
-						if (distance < (body1.getSize() + body2.getSize())) {
-							move.set(0, 0);
-							break;
-						}
-					}
-				}
+				// for (int index2 = index1 + 1; index2 < influenceList.size();
+				// index2++) {
+				// MotionInfluence inf2 = influenceList.get(index2);
+				// AgentBody body2 = getAgentBodyFor(inf2.getEmitter());
+				// if (body2 != null) {
+				// double x2 = body2.getX();
+				// double y2 = body2.getY();
+				//
+				// double distance = new Vector2d(x2 - x1, y2 - y1)
+				// .length();
+				//
+				// if (distance < (body1.getSize() + body2.getSize())) {
+				// move.set(0, 0);
+				// break;
+				// }
+				// }
+				// }
 
 				actions.add(new AnimatAction(body1, move, rotation));
 

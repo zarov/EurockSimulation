@@ -27,7 +27,6 @@ import javax.swing.WindowConstants;
 import javax.vecmath.Point2d;
 
 import org.arakhne.afc.vmutil.Resources;
-import org.arakhne.afc.vmutil.locale.Locale;
 
 import fr.utbm.gi.vi51.g3.framework.FrameworkLauncher;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
@@ -36,7 +35,6 @@ import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
 import fr.utbm.gi.vi51.g3.framework.gui.FrameworkGUI;
 import fr.utbm.gi.vi51.g3.framework.tree.QuadTree;
 import fr.utbm.gi.vi51.g3.framework.tree.QuadTreeNode;
-import fr.utbm.gi.vi51.g3.motion.MainProgram;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelEvent;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelState;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModelStateProvider;
@@ -166,7 +164,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 	 * @param worldHeight
 	 */
 	public GUI(double worldWidth, double worldHeight) {
-		setTitle(Locale.getString(MainProgram.class, "PROGRAM_NAME")); //$NON-NLS-1$
+		setTitle("VI51 Project - Eurockéennes simulation"); //$NON-NLS-1$
 
 		Container content = getContentPane();
 
@@ -385,13 +383,13 @@ public class GUI extends JFrame implements FrameworkGUI {
 			// g2d.setColor(Color.gray);
 			switch (objectType) {
 				case "TREE":
-					TREE_ICON.paintIcon(this, g2d, x - (ICON_PEOPLE_WIDTH / 2),
-							y - (ICON_PEOPLE_HEIGHT / 2));
+				TREE_ICON.paintIcon(this, g2d, x - (ICON_STAND_SIZE / 2), y
+						- (ICON_STAND_SIZE / 2));
 					break;
 				case "BARRIER":
 					BARRIER_ICON.paintIcon(this, g2d, x
-							- (ICON_PEOPLE_WIDTH / 2), y
-							- (ICON_PEOPLE_HEIGHT / 2));
+ - (ICON_STAND_SIZE / 2), y
+						- (ICON_STAND_SIZE / 2));
 					break;
 				
 				case "GATE":
@@ -434,23 +432,22 @@ public class GUI extends JFrame implements FrameworkGUI {
 
 				case "FOODSTAND":
 					FOODSTAND_ICON.paintIcon(this, g2d, x
-							- (ICON_PEOPLE_WIDTH / 2), y
-							- (ICON_PEOPLE_HEIGHT / 2));
+ - (ICON_STAND_SIZE / 2),
+						y - (ICON_STAND_SIZE / 2));
 					break;
 				case "DRINKSTAND":
 					DRINKSTAND_ICON.paintIcon(this, g2d, x
-							- (ICON_PEOPLE_WIDTH / 2), y
-							- (ICON_PEOPLE_HEIGHT / 2));
+ - (ICON_STAND_SIZE / 2),
+						y - (ICON_STAND_SIZE / 2));
 					break;
 				case "TOILET_MAN":
 					TOILET_MAN_ICON.paintIcon(this, g2d, x
-							- (ICON_PEOPLE_WIDTH / 2), y
-							- (ICON_PEOPLE_HEIGHT / 2));
+ - (ICON_STAND_SIZE / 2),
+						y - (ICON_STAND_SIZE / 2));
 					break;
 				case "TOILET_WOMAN":
 					TOILET_WOMAN_ICON.paintIcon(this, g2d, x
-							- (ICON_PEOPLE_WIDTH / 2), y
-							- (ICON_PEOPLE_HEIGHT / 2));
+						- (ICON_STAND_SIZE / 2), y - (ICON_STAND_SIZE / 2));
 					break;
 				default:
 					break;

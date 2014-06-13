@@ -113,7 +113,7 @@ public class Attendant extends Animat<AgentBody> {
 			// System.out.println((((NeedMessage) msg).getNeed()) + " - "
 			// + ((NeedMessage) msg).getAction());
 		}
-		regularNeedUpdate();
+		// regularNeedUpdate();
 
 		Class<?> targetClass = computeTargetClass();
 		BehaviourOutput output = null;
@@ -135,7 +135,7 @@ public class Attendant extends Animat<AgentBody> {
 				fleeTargetSize = o.getSize();
 				break;
 			} else if (isWaiting) {
-				return StatusFactory.ok(this);
+				// do nothing;
 			} else {
 				// define the target type in function of the higher need
 				if (o.getClass() == targetClass) {
@@ -166,7 +166,9 @@ public class Attendant extends Animat<AgentBody> {
 				}
 
 				// Collision Avoidance
-				if (o instanceof Stage) {
+//				if (o instanceof AbstractObstacle
+//						|| o instanceof AbstractSmellyObject) {
+				if (o instanceof Stage || o instanceof Gate) {
 					if (dist < distFromFleeTarget) {
 						distFromFleeTarget = dist;
 						fleeTarget = o.getPosition();
@@ -179,7 +181,7 @@ public class Attendant extends Animat<AgentBody> {
 		if (seekTarget != null) {
 			output = seekBehaviour.runSeek(position, linearSpeed,
 					getMaxLinearAcceleration(), seekTarget);
-		} else {
+		} else if (!isWaiting) {
 			output = wanderBehaviour.runWander(position, orientation,
 					linearSpeed, getMaxLinearAcceleration(), angularSpeed,
 					getMaxAngularAcceleration());
@@ -188,7 +190,7 @@ public class Attendant extends Animat<AgentBody> {
 			BehaviourOutput negativeOutput = fleeBehaviour.runFlee(position,
 					linearSpeed, getMaxLinearAcceleration(), fleeTarget);
 			negativeOutput.getLinear().normalize();
-			negativeOutput.getLinear().scale((fleeTargetSize * 2) / 3);
+			negativeOutput.getLinear().scale(fleeTargetSize / 4);
 			Vector2d newLinear;
 			if (output != null) {
 				newLinear = output.getLinear();

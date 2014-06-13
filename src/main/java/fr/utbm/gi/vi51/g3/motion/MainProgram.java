@@ -25,18 +25,18 @@ import java.util.Set;
 
 import javax.vecmath.Point2d;
 
-import org.arakhne.afc.vmutil.locale.Locale;
-
 import fr.utbm.gi.vi51.g3.framework.FrameworkLauncher;
 import fr.utbm.gi.vi51.g3.framework.environment.Environment;
 import fr.utbm.gi.vi51.g3.framework.gui.FrameworkGUI;
 import fr.utbm.gi.vi51.g3.motion.agent.Attendant;
 import fr.utbm.gi.vi51.g3.motion.agent.AttendantGender;
+import fr.utbm.gi.vi51.g3.motion.agent.DamePipi;
 import fr.utbm.gi.vi51.g3.motion.agent.Seller;
 import fr.utbm.gi.vi51.g3.motion.behaviour.decisionBehaviour.NeedType;
 import fr.utbm.gi.vi51.g3.motion.environment.WorldModel;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.StandAction;
+import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
 import fr.utbm.gi.vi51.g3.motion.gui.GUI;
 
 public class MainProgram {
@@ -53,17 +53,15 @@ public class MainProgram {
 	 */
 	public static void main(String[] argv) {
 
-		System.out
-				.println(Locale.getString(MainProgram.class, "INTRO_MESSAGE")); //$NON-NLS-1$
-
 		Set<Stand> standSet = initStands();
+		Set<Toilet> toiletSet = initToilets();
 
 		System.out.println("--- GUI initialization");
 		FrameworkGUI gui = new GUI(WORLD_SIZE_X, WORLD_SIZE_Y);
 
 		System.out.println("--- Environment initialization");
 		Environment environment = new WorldModel(WORLD_SIZE_X, WORLD_SIZE_Y,
-				standSet);
+				standSet, toiletSet);
 
 		FrameworkLauncher.launchEnvironment(environment, gui, EXECUTION_DELAY);
 
@@ -77,6 +75,8 @@ public class MainProgram {
 		for (Stand elem : standSet) {
 			FrameworkLauncher.launchAgent(new Seller(elem));
 		}
+
+		FrameworkLauncher.launchAgent(new DamePipi(toiletSet));
 		// Worker c = new Worker(WorkerTask.BODYGUARD);
 		// FrameworkLauncher.launchAgent(c);
 		//
@@ -85,6 +85,54 @@ public class MainProgram {
 		//
 
 		FrameworkLauncher.startSimulation();
+	}
+
+	public static Set<Toilet> initToilets() {
+		Set<Toilet> toiletSet = new HashSet<Toilet>();
+		Set<StandAction> actions = new HashSet<StandAction>();
+		actions.add(new StandAction(NeedType.PEE, -6));
+		AttendantGender a = AttendantGender.MAN;
+
+		Point2d pos = new Point2d(5, 90);
+		Toilet toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+		pos = new Point2d(500, 740);
+		toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+		pos = new Point2d(980, 690);
+		toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+		pos = new Point2d(900, 20);
+		toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+		pos = new Point2d(1420, 740);
+		toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+		pos = new Point2d(1700, 420);
+		toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+
+		a = AttendantGender.WOMAN;
+		pos = new Point2d(5, 150);
+		toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+		pos = new Point2d(580, 740);
+		toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+		pos = new Point2d(1050, 740);
+		toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+		pos = new Point2d(980, 20);
+		toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+		pos = new Point2d(1500, 740);
+		toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+		pos = new Point2d(1700, 490);
+		toilet = new Toilet(15, pos, 15, "TOILET", a, actions);
+		toiletSet.add(toilet);
+
+		return toiletSet;
 	}
 
 	public static Set<Stand> initStands() {
@@ -152,6 +200,7 @@ public class MainProgram {
 		pos = new Point2d(1550, 350);
 		stand = new Stand(15, pos, 15, "FOODSTAND", actions);
 		standList.add(stand);
+
 		pos = new Point2d(1450, 280);
 		stand = new Stand(15, pos, 15, "FOODSTAND", actions);
 		standList.add(stand);
