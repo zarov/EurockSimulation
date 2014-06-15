@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import org.janusproject.kernel.address.AgentAddress;
-
 import fr.utbm.gi.vi51.g3.framework.environment.AABB;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.Perception;
@@ -57,15 +55,14 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 
 	public boolean remove(SituatedObject obj) {
 		QuadTreeNode node = find(obj);
-		
 
 		if ((node == null)) {
 			return false;
 		}
-		if(node.getObject() != null)
-		{
-		    if( !node.getObject().equals(obj))
-			{ return false;}
+		if (node.getObject() != null) {
+			if (!node.getObject().equals(obj)) {
+				return false;
+			}
 		}
 		node.setObject(null);
 
@@ -90,9 +87,7 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 			// If he isn't, we delete his children from the stack
 			if (!node.getBox().contains(obj)) {
 				it.remove(4);
-			} 
-			else 
-			{
+			} else {
 				// If the node contains the object and is a leaf, then it can be
 				// only the correct node
 				if (node.isLeaf()) {
@@ -105,48 +100,14 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 	}
 
 	/**
-	 * Find the node containing the agent, with the address of the Agent.
+	 * Move an agent in the quadtree
 	 *
-	 * @param address
-	 *            the address to find
-	 * @return
+	 * @param agent
 	 */
-	public AgentBody find(AgentAddress address) {
-		NodeIterator it = new NodeIterator();
-		SituatedObject obj = null;
-
-		while (it.hasNext()) {
-			obj = it.next().getObject();
-
-			// Check if a node is containing the right object
-			if ((obj != null) && obj.getClass().equals(AgentBody.class)
-					&& ((AgentBody) obj).getOwner().equals(address)) {
-				return (AgentBody) obj;
-			}
-		}
-
-		return null;
-	}
-	
-	public void removeAgent(AgentAddress address) {
-		NodeIterator it = new NodeIterator();
-		SituatedObject obj = null;
-
-		while (it.hasNext()) {
-			QuadTreeNode a = it.next();
-			
-			if(a != null)
-			{
-				obj = a.getObject();
-				// Check if a node is containing the right object
-				if ((obj != null) && obj.getClass().equals(AgentBody.class)
-						&& ((AgentBody) obj).getOwner().equals(address)) {
-					a.setObject(null);
-					
-				}
-			}
-		}
-		
+	public void moveAgent(AgentBody agent) {
+		QuadTreeNode node = find(agent);
+		node.setObject(null);
+		insert(agent);
 	}
 
 	/**
@@ -212,7 +173,6 @@ public class QuadTree implements Tree<QuadTreeNode>, Cloneable {
 							SituatedObject object = node.getObject();
 							if ((object != null)) {
 								AABB box = object.getBox();
-								
 								if ((box != null) && box.intersects(frustrum)) {
 									next = object.toPerception();
 								}

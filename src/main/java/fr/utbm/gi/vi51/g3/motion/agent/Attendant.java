@@ -129,7 +129,7 @@ public class Attendant extends Animat<AgentBody> {
 			Vector2d vec = new Vector2d(position);
 			vec.sub(o.getPosition());
 			double dist = vec.length();
-			if (o instanceof Bomb || targetClass == Gate.class) {
+			if ((o instanceof Bomb) || (targetClass == Gate.class)) {
 				seekTarget = Gate.staticPosition;
 				fleeTarget = o.getPosition();
 				fleeTargetSize = o.getSize();
@@ -166,9 +166,9 @@ public class Attendant extends Animat<AgentBody> {
 				}
 
 				// Collision Avoidance
-//				if (o instanceof AbstractObstacle
-//						|| o instanceof AbstractSmellyObject) {
-				if (o instanceof Stage || o instanceof Gate) {
+				// if (o instanceof AbstractObstacle
+				// || o instanceof AbstractSmellyObject) {
+				if ((o instanceof Stage) || (o instanceof Gate)) {
 					if (dist < distFromFleeTarget) {
 						distFromFleeTarget = dist;
 						fleeTarget = o.getPosition();
@@ -212,7 +212,8 @@ public class Attendant extends Animat<AgentBody> {
 		// System.out.println(endTime);
 		return StatusFactory.ok(this);
 	}
-//
+
+	//
 	// private Point2d getStageNearestSidePoint(Vector2d vec, int width, int
 	// height) {
 	// Point2d newTarget = new Point2d();
@@ -227,21 +228,21 @@ public class Attendant extends Animat<AgentBody> {
 	// newTarget.y = vec.y + (vec.y > 0 ? -height / 2 : height / 2);
 	// }
 	//
-		// if (vec.getX() > vec.getY()) {
-		// if (vec.getX() > 0) {
-		// newTarget.x = vec.getX() - (width / 2);
-		// } else {
-		// newTarget.x = vec.getX() + (width / 2);
-		// }
-		// newTarget.y = vec.getY() / 2;
-		// } else {
-		// if (vec.getY() > 0) {
-		// newTarget.y = vec.getY() - height;
-		// } else {
-		// newTarget.y = vec.getY() + height;
-		// }
-		// newTarget.x = vec.getX() / 2;
-		// }
+	// if (vec.getX() > vec.getY()) {
+	// if (vec.getX() > 0) {
+	// newTarget.x = vec.getX() - (width / 2);
+	// } else {
+	// newTarget.x = vec.getX() + (width / 2);
+	// }
+	// newTarget.y = vec.getY() / 2;
+	// } else {
+	// if (vec.getY() > 0) {
+	// newTarget.y = vec.getY() - height;
+	// } else {
+	// newTarget.y = vec.getY() + height;
+	// }
+	// newTarget.x = vec.getX() / 2;
+	// }
 	// return newTarget;
 	// }
 
@@ -263,18 +264,18 @@ public class Attendant extends Animat<AgentBody> {
 		NeedType higherNeed = computeHigherNeed();
 		if (higherNeed != null) {
 			switch (higherNeed.getName()) {
-			case "HUNGER":
-				return Stand.class;
-			case "THIRST":
-				return Stand.class;
-			case "PEE":
-				return Toilet.class;
-			case "SEEGIG":
-				return Stage.class;
-			case "EXIT":
-				return Gate.class;
-			default:
-				return Stage.class;
+				case "HUNGER":
+					return Stand.class;
+				case "THIRST":
+					return Stand.class;
+				case "PEE":
+					return Toilet.class;
+				case "SEEGIG":
+					return Stage.class;
+				case "EXIT":
+					return Gate.class;
+				default:
+					return Stage.class;
 			}
 		} else {
 			return Stage.class;

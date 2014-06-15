@@ -39,7 +39,6 @@ import fr.utbm.gi.vi51.g3.framework.environment.Perception;
 import fr.utbm.gi.vi51.g3.framework.time.SimulationTimeManager;
 import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Flora;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Gate;
-import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Plan;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stage;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Stand;
 import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
@@ -53,7 +52,6 @@ import fr.utbm.gi.vi51.g3.motion.environment.smellyObjects.Toilet;
 public class WorldModel extends AbstractEnvironment implements
 		WorldModelStateProvider {
 
-
 	/**
 	 * @param width
 	 *            is the width of the world.
@@ -66,14 +64,15 @@ public class WorldModel extends AbstractEnvironment implements
 		build(standSet, toiletSet, stageSet);
 	}
 
-	private void build(Set<Stand> standSet, Set<Toilet> toiletSet, Set<Stage> stageSet) {
+	private void build(Set<Stand> standSet, Set<Toilet> toiletSet,
+			Set<Stage> stageSet) {
 
 		buildStages(stageSet);
 		buildStands(standSet);
 		buildFlora();
 		buildBathrooms(toiletSet);
 		buildBarriers();
-		
+
 		Point2d a = new Point2d(1780, 50);
 		Gate g = new Gate(15, a, 15, "Entry");
 		implantSituatedObject(g);
@@ -82,9 +81,9 @@ public class WorldModel extends AbstractEnvironment implements
 
 	private void buildBarriers() {
 		// TODO appel de gate() fais planter le QuadTree, pourquoi ?
-//		 gate(120, 210, 17, 1, 15);
-//		 gate(145, 210, 1, 7, 15);
-	
+		// gate(120, 210, 17, 1, 15);
+		// gate(145, 210, 1, 7, 15);
+
 	}
 
 	// private void gate(int x, int y, int height, int width, int size) {
@@ -241,7 +240,6 @@ public class WorldModel extends AbstractEnvironment implements
 	// implantSituatedObject(FOOD);
 	// }
 
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -266,8 +264,7 @@ public class WorldModel extends AbstractEnvironment implements
 		List<Perception> perceptions = null;
 
 		if (body != null) {
-			perceptions = getState().getWorldObjects()
-.cull(body.getFrustrum());
+			perceptions = getState().getWorldObjects().cull(body.getFrustrum());
 			if (bomb != null) {
 				perceptions.add(bomb.toPerception());
 			}
@@ -286,12 +283,15 @@ public class WorldModel extends AbstractEnvironment implements
 				influences);
 		List<AnimatAction> actions = new ArrayList<AnimatAction>(
 				influenceList.size());
-		
+
 		// Compute actions
 		for (int index1 = 0; index1 < influenceList.size(); index1++) {
 			MotionInfluence inf1 = influenceList.get(index1);
 			AgentBody body1 = (AgentBody) inf1.getInfluencedObject();
+
 			if (body1 != null) {
+				// Remove the body from the QuadTree
+				worldObjects.remove(body1);
 				Vector2d move;
 				double rotation;
 				if (inf1.getType() == DynamicType.STEEERING) {
@@ -310,21 +310,21 @@ public class WorldModel extends AbstractEnvironment implements
 				double y1 = body1.getY();
 
 				// Trivial collision detection
-				for (int index2 = index1 + 1; index2 < influenceList.size();
-				index2++) {
-				MotionInfluence inf2 = influenceList.get(index2);
-				AgentBody body2 = getAgentBodyFor(inf2.getEmitter());
-				if (body2 != null) {
-				double x2 = body2.getX();
-				double y2 = body2.getY();
-				
-				double distance = new Vector2d(x2 - x1, y2 - y1).length();
-				
-				if (distance < (body1.getSize() + body2.getSize())) {
-				move.set(0, 0);
-				break;
-				}
-				}
+				for (int index2 = index1 + 1; index2 < influenceList.size(); index2++) {
+					MotionInfluence inf2 = influenceList.get(index2);
+					AgentBody body2 = getAgentBodyFor(inf2.getEmitter());
+					if (body2 != null) {
+						double x2 = body2.getX();
+						double y2 = body2.getY();
+
+						double distance = new Vector2d(x2 - x1, y2 - y1)
+								.length();
+
+						if (distance < (body1.getSize() + body2.getSize())) {
+							move.set(0, 0);
+							break;
+						}
+					}
 				}
 
 				actions.add(new AnimatAction(body1, move, rotation));
@@ -337,6 +337,8 @@ public class WorldModel extends AbstractEnvironment implements
 			AgentBody body = action.getObjectToMove();
 			if (body != null) {
 				move(body, action.getTranslation(), action.getRotation());
+				// Add the body from the QuadTree
+				worldObjects.insert(body);
 			}
 		}
 	}
@@ -349,6 +351,6 @@ public class WorldModel extends AbstractEnvironment implements
 	@Override
 	public void killAgentBody(AgentAddress agent) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

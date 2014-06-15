@@ -45,7 +45,7 @@ import fr.utbm.gi.vi51.g3.motion.environment.obstacles.Bomb;
  */
 public abstract class AbstractEnvironment implements Environment {
 
-	private final QuadTree worldObjects;
+	protected final QuadTree worldObjects;
 	protected Bomb bomb = null;
 	private final SimulationTimeManager timeManager;
 	private final double width;
@@ -92,8 +92,8 @@ public abstract class AbstractEnvironment implements Environment {
 				// this.worldObjects.insert(body);
 
 				/* Gate */
-				double x = 1730 + Math.random() * ((1780 - 1730) + 1);
-				double y = 20 + Math.random() * ((200 - 20) + 1);
+				double x = 1730 + (Math.random() * ((1780 - 1730) + 1));
+				double y = 20 + (Math.random() * ((200 - 20) + 1));
 
 				body.setPosition(x, y);
 				body.setAngle(RandomNumber.nextDouble() * 2. * Math.PI);
@@ -129,7 +129,7 @@ public abstract class AbstractEnvironment implements Environment {
 	 */
 	@Override
 	public void killAgentBody(AgentBody a) {
-		worldObjects.removeAgent(a.getOwner());
+		worldObjects.remove(a);
 	}
 
 	/**
@@ -284,7 +284,7 @@ public abstract class AbstractEnvironment implements Environment {
 
 	private void hurtPeople() {
 		List<Perception> kperc = worldObjects.cull(bomb.getFrustum());
-		
+
 		for (Perception p : kperc) {
 			SituatedObject o = p.getPerceivedObject();
 			if (o instanceof AgentBody) {
@@ -292,9 +292,9 @@ public abstract class AbstractEnvironment implements Environment {
 				this.killAgentBody(a);
 			}
 		}
-		
+
 		List<Perception> hperc = worldObjects.cull(bomb.getFrustum());
-		
+
 		for (Perception p : kperc) {
 			SituatedObject o = p.getPerceivedObject();
 			if (o instanceof AgentBody) {
