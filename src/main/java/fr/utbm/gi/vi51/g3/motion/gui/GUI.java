@@ -337,7 +337,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 //				double h = hop.getYup()-hop.getYlow();
 //				g2d.fillRect((int) x, (int)y, (int)w,(int) h);
 				
-				g2d.setColor(new Color(150, 150, 150,90));
+				g2d.setColor(new Color(255, 0, 0,50));
 				AABB Frust = environment.getBomb().getFrustum();
 				int x1 = (int) environment.getBomb().getPosition().x + (ICON_BOMB_SIZE / 2);
 				int y1= (int) environment.getBomb().getPosition().y + (ICON_BOMB_SIZE / 2);
