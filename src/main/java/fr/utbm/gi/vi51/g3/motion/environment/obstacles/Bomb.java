@@ -45,4 +45,12 @@ public class Bomb extends AbstractObstacle {
 	public int getRangeHurt() {
 		return rangeHurt;
 	}
+	
+	public AABB getFrustum() {
+		return new AABB(this.getPosition().x-rangeKill/2, this.getPosition().x+rangeKill/2, this.getPosition().y-rangeKill/2,this.getPosition().y+rangeKill/2);
+	}
+	
+	public AABB getBox() {
+		return new AABB(this.getPosition().x-this.getSize()/2, this.getPosition().x+this.getSize()/2, this.getPosition().y-this.getSize()/2,this.getPosition().y+this.getSize()/2);
+	}
 }

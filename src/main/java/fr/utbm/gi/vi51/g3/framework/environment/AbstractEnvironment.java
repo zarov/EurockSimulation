@@ -283,11 +283,7 @@ public abstract class AbstractEnvironment implements Environment {
 	}
 
 	private void hurtPeople() {
-//		List<Perception> kperc = worldObjects.cull(new AABB(bomb.getX()
-//				+ bomb.getRangeKill(), bomb.getX() - bomb.getRangeKill(), bomb
-//				.getY() + bomb.getRangeKill(), bomb.getY()
-//				- bomb.getRangeKill()));
-		List<Perception> kperc = worldObjects.cull(bomb.getBox());
+		List<Perception> kperc = worldObjects.cull(bomb.getFrustum());
 		
 		for (Perception p : kperc) {
 			SituatedObject o = p.getPerceivedObject();
@@ -296,18 +292,16 @@ public abstract class AbstractEnvironment implements Environment {
 				this.killAgentBody(a);
 			}
 		}
-		/*
-		List<Perception> hperc = worldObjects.cull(new AABB(bomb.getX()
-				+ bomb.getRangeHurt(), bomb.getX() - bomb.getRangeHurt(), bomb
-				.getY() + bomb.getRangeHurt(), bomb.getY()
-				- bomb.getRangeHurt()));
-		for (Perception p : hperc) {
+		
+		List<Perception> hperc = worldObjects.cull(bomb.getFrustum());
+		
+		for (Perception p : kperc) {
 			SituatedObject o = p.getPerceivedObject();
 			if (o instanceof AgentBody) {
 				AgentBody a = (AgentBody) o;
 				a.hurtAgent();
 			}
-		}*/
+		}
 
 	}
 

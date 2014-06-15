@@ -1,6 +1,7 @@
 package fr.utbm.gi.vi51.g3.motion.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -29,6 +30,7 @@ import javax.vecmath.Point2d;
 import org.arakhne.afc.vmutil.Resources;
 
 import fr.utbm.gi.vi51.g3.framework.FrameworkLauncher;
+import fr.utbm.gi.vi51.g3.framework.environment.AABB;
 import fr.utbm.gi.vi51.g3.framework.environment.AgentBody;
 import fr.utbm.gi.vi51.g3.framework.environment.EnvironmentEvent;
 import fr.utbm.gi.vi51.g3.framework.environment.SituatedObject;
@@ -49,7 +51,7 @@ public class GUI extends JFrame implements FrameworkGUI {
 
 	private static final String IMG_DIR = "images/";
 
-	private static final int BOMB_TIMER = 30;
+	private static final int BOMB_TIMER =1;
 
 	private static final Icon MAN_ICON;
 	private static final Icon WOMAN_ICON;
@@ -324,6 +326,27 @@ public class GUI extends JFrame implements FrameworkGUI {
 				g2d.drawString(Integer.toString((int) environment.getBomb()
 						.getTimeBeforeExplosion()), (int) environment.getBomb()
 						.getX(), (int) environment.getBomb().getY());
+				
+//				g2d.setColor(new Color(150, 150, 150,70));
+//				AABB hop = environment.getBomb().getFrustum();
+//				int erfx = (int) environment.getBomb().getPosition().x;
+//				double x = hop.getXlow();
+//				double y = hop.getYlow();
+//				
+//				double w = hop.getXup()-hop.getXlow();
+//				double h = hop.getYup()-hop.getYlow();
+//				g2d.fillRect((int) x, (int)y, (int)w,(int) h);
+				
+				g2d.setColor(new Color(150, 150, 150,90));
+				AABB Frust = environment.getBomb().getFrustum();
+				int x1 = (int) environment.getBomb().getPosition().x + (ICON_BOMB_SIZE / 2);
+				int y1= (int) environment.getBomb().getPosition().y + (ICON_BOMB_SIZE / 2);
+				g2d.fillOval(x1-50, y1-50, 100, 100);
+				
+				g2d.setColor(new Color(150, 150, 150,50));
+				g2d.fillOval(x1-100, y1-100, 200, 200);
+				
+				 
 			}
 		}
 
